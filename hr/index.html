@@ -148,6 +148,7 @@
   .tbl td:first-child{text-align:left;font-weight:600;color:var(--ink)}
   .tbl tr:last-child td{border-bottom:none}
   .sat{font-family:var(--gr);font-weight:500}
+  .pend{font-size:11.5px;letter-spacing:.02em;color:var(--ink-3);background:var(--paper-2,#f4f2ee);border:1px solid var(--line);border-radius:99px;padding:3px 9px;white-space:nowrap}
   .sat::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--trace);margin-right:6px;vertical-align:middle}
 
   /* 병원 드릴다운(만족도) */
@@ -1173,14 +1174,32 @@
     const tb=$('#eval-table');
     if(!hasCache('ev')) tb.innerHTML='<tr><td colspan="8" class="loading">불러오는 중…</td></tr>';
     try{
-      await swr('ev', async ()=>{ const r=await call('getEvaluations',TOKEN); return Array.isArray(r)?r:[]; }, renderEvals);
+      await swr('ev', async ()=>{
+        const [ev, cd] = await Promise.all([ call('getEvaluations',TOKEN), call('getCandidates',TOKEN,'전체','') ]);
+        return { evals: Array.isArray(ev)?ev:[], cands: Array.isArray(cd)?cd:[] };
+      }, renderEvals);
     }catch(err){ authFail(err); tb.innerHTML='<tr><td colspan="8" class="empty-row">불러오지 못했습니다.</td></tr>'; }
   }
-  function renderEvals(list){
+  function renderEvals(data){
     const tb=$('#eval-table');
     evSelReset();
-    if(!list.length){ tb.innerHTML='<tr><td colspan="8" class="empty-row">작성된 평가가 없습니다. <b>＋ 평가 작성</b>으로 시작하세요.</td></tr>'; return; }
-    tb.innerHTML=list.map(e=>`<tr>
+    const list  = Array.isArray(data) ? data : (data.evals||[]);
+    const cands = Array.isArray(data) ? []   : (data.cands||[]);
+    const evaluated = new Set(list.map(e=>String(e.candidateId)));
+    // 이력서 관리 연동: 평가가 없는 서류·면접 상태 지원자 → 평가 대기 행
+    const pending = cands.filter(c=>!evaluated.has(String(c.id)) && (c.status==='서류'||c.status==='면접'));
+    if(!list.length && !pending.length){ tb.innerHTML='<tr><td colspan="8" class="empty-row">작성된 평가가 없습니다. 이력서 관리에 지원자가 등록되면 여기에 자동으로 표시됩니다.</td></tr>'; return; }
+    const pendRows = pending.map(c=>`<tr class="pend-row">
+      <td class="ck"></td>
+      <td class="hname">${esc(c.name)}</td>
+      <td>${c.hospital?esc(c.hospital):'<span class="muted">–</span>'}</td>
+      <td>${c.job?esc(c.job):'<span class="muted">–</span>'}</td>
+      <td class="r"><span class="pend">평가 대기</span></td>
+      <td><span class="muted">–</span></td>
+      <td class="r muted">–</td>
+      <td class="r"><span class="act"><button data-ewrite="${esc(c.id)}">평가 작성</button></span></td>
+    </tr>`).join('');
+    const evRows = list.map(e=>`<tr>
       <td class="ck"><input type="checkbox" class="ev-ck" data-id="${esc(e.id)}" data-name="${esc(e.name)}"></td>
       <td class="hname">${esc(e.name)}</td>
       <td>${e.hospital?esc(e.hospital):'<span class="muted">–</span>'}</td>
@@ -1190,6 +1209,7 @@
       <td class="r muted">${esc(e.date)}</td>
       <td class="r"><span class="act"><button data-eedit='${esc(JSON.stringify(e))}'>보기</button><button class="del" data-edel="${esc(e.id)}" data-name="${esc(e.name)}">삭제</button></span></td>
     </tr>`).join('');
+    tb.innerHTML = pendRows + evRows;
   }
   function renderRubric(scores){
     evalScores=Object.assign({},scores||{});
@@ -1275,7 +1295,8 @@
     updateOverall();
   });
   $('#eval-table').addEventListener('click', async e=>{
-    const ed=e.target.closest('[data-eedit]'); const dl=e.target.closest('[data-edel]');
+    const ed=e.target.closest('[data-eedit]'); const dl=e.target.closest('[data-edel]'); const wr=e.target.closest('[data-ewrite]');
+    if(wr){ await openEModal(null); $('#em-candidate').value=wr.getAttribute('data-ewrite'); emDirectToggle(); return; }
     if(ed){ openEModal(JSON.parse(ed.getAttribute('data-eedit'))); return; }
     if(dl){
       const ok=await confirmAction('평가를 삭제할까요?', `'${dl.dataset.name}'의 평가를 삭제합니다.`);
