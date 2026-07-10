@@ -794,7 +794,7 @@
     try{
       const r=await call('login', pw);
       if(!r||!r.ok){ setLoginErr('비밀번호가 올바르지 않습니다.'); return; }
-      TOKEN=r.token; enterApp();
+      TOKEN=r.token; try{ localStorage.setItem('hr2_token', TOKEN); }catch(_){} enterApp();
     }catch(e){ setLoginErr(String((e&&e.message)||e)); }
     finally{ $('#enter').disabled=false; $('#enter').textContent='입장'; }
   }
@@ -1747,6 +1747,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   $$('.nav-item').forEach(btn=>btn.addEventListener('click',()=>{
     $$('.nav-item').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
     const v=btn.dataset.view, t=btn.dataset.title;
+    try{ localStorage.setItem('hr2_view', v); }catch(_){}
     Object.values(views).forEach(s=>{ if(s) s.style.display='none'; }); if(views[v]) views[v].style.display='';
     if(v==='dash') loadDashboard();
     else if(v==='hospitals') loadHospitals();
@@ -1791,7 +1792,17 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   $('#menu').addEventListener('click', ()=>app.classList.toggle('menu'));
   $('#scrim').addEventListener('click', ()=>app.classList.remove('menu'));
   $('#logout').addEventListener('click', logout);
-  function logout(){ app.classList.remove('on','ready','menu'); $('#login').style.display=''; $('#pw').value=''; setLoginErr(''); TOKEN=null; invalidateAll(); }
+  function logout(){ app.classList.remove('on','ready','menu'); $('#login').style.display=''; $('#pw').value=''; setLoginErr(''); TOKEN=null; try{ localStorage.removeItem('hr2_token'); localStorage.removeItem('hr2_view'); }catch(_){} invalidateAll(); }
+
+  /* ═══ 새로고침 세션 복원: 저장된 토큰이 있으면 로그인 없이 바로 입장, 보던 화면 복원 ═══ */
+  (function restoreSession(){
+    let tk=null, v=null;
+    try{ tk=localStorage.getItem('hr2_token'); v=localStorage.getItem('hr2_view'); }catch(_){}
+    if(!tk) return;                                   // 저장된 세션 없음 → 평소처럼 로그인 화면
+    TOKEN=tk;
+    enterApp();                                       // 대시보드 로드 (토큰 만료 시 authFail → 자동 로그아웃)
+    if(v && v!=='dash') setTimeout(()=>gotoView(v), 0);   // 보던 메뉴로 복원
+  })();
 </script>
 </body>
 </html>
