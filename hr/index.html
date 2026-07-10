@@ -413,6 +413,7 @@
         <div class="actions">
           <input type="file" id="pdf-input" accept="application/pdf,.pdf,.docx" style="display:none">
           <button class="btn-sm ghost" id="import-pdf">이력서 가져오기 (PDF·DOCX)</button>
+          <button class="btn-sm danger" id="cd-del-sel" style="display:none">선택 삭제 (<span id="cd-sel-cnt">0</span>)</button>
           <button class="btn-sm" id="add-candidate">＋ 지원자 추가</button>
         </div>
       </div>
@@ -428,8 +429,8 @@
       </div>
       <div class="tbl-scroll">
         <table class="htbl">
-          <thead><tr><th>이름</th><th>병원</th><th>직무</th><th>지원경로</th><th>상태</th><th class="r">등록일</th><th class="r">관리</th></tr></thead>
-          <tbody id="cand-table"><tr><td colspan="7" class="loading">불러오는 중…</td></tr></tbody>
+          <thead><tr><th class="ck"><input type="checkbox" id="cd-checkall" title="전체 선택"></th><th>이름</th><th>병원</th><th>직무</th><th>지원경로</th><th>상태</th><th class="r">등록일</th><th class="r">관리</th></tr></thead>
+          <tbody id="cand-table"><tr><td colspan="8" class="loading">불러오는 중…</td></tr></tbody>
         </table>
       </div>
     </section>
@@ -438,12 +439,15 @@
     <section class="page" id="view-evals" style="display:none">
       <div class="head">
         <div><div class="eyebrow">Recruitment</div><h1>면접 평가</h1></div>
-        <div class="actions"><button class="btn-sm" id="add-eval">＋ 평가 작성</button></div>
+        <div class="actions">
+          <button class="btn-sm danger" id="ev-del-sel" style="display:none">선택 삭제 (<span id="ev-sel-cnt">0</span>)</button>
+          <button class="btn-sm" id="add-eval">＋ 평가 작성</button>
+        </div>
       </div>
       <div class="tbl-scroll">
         <table class="htbl">
-          <thead><tr><th>지원자</th><th>병원</th><th>직무</th><th class="r">종합</th><th>평가자</th><th class="r">평가일</th><th class="r">관리</th></tr></thead>
-          <tbody id="eval-table"><tr><td colspan="7" class="loading">불러오는 중…</td></tr></tbody>
+          <thead><tr><th class="ck"><input type="checkbox" id="ev-checkall" title="전체 선택"></th><th>지원자</th><th>병원</th><th>직무</th><th class="r">종합</th><th>평가자</th><th class="r">평가일</th><th class="r">관리</th></tr></thead>
+          <tbody id="eval-table"><tr><td colspan="8" class="loading">불러오는 중…</td></tr></tbody>
         </table>
       </div>
     </section>
@@ -974,20 +978,22 @@
   async function loadCandidates(){
     const tb=$('#cand-table');
     const key='cand:'+candFilter.status+':'+candFilter.hospitalId;
-    if(!hasCache(key)) tb.innerHTML='<tr><td colspan="7" class="loading">불러오는 중…</td></tr>';
+    if(!hasCache(key)) tb.innerHTML='<tr><td colspan="8" class="loading">불러오는 중…</td></tr>';
     try{
       await swr(key, async ()=>{
         const r = await Promise.all([ensureHospitals(), call('getCandidates', TOKEN, candFilter.status, candFilter.hospitalId)]);
         return Array.isArray(r[1]) ? r[1] : [];
       }, list=>renderCandidates(key, list));
-    }catch(e){ authFail(e); tb.innerHTML='<tr><td colspan="7" class="empty-row">불러오지 못했습니다.</td></tr>'; }
+    }catch(e){ authFail(e); tb.innerHTML='<tr><td colspan="8" class="empty-row">불러오지 못했습니다.</td></tr>'; }
   }
   function renderCandidates(key, list){
     if(key!=='cand:'+candFilter.status+':'+candFilter.hospitalId) return;   // 필터 변경 후 늦게 온 응답 무시
     const tb=$('#cand-table');
-    if(!list.length){ tb.innerHTML='<tr><td colspan="7" class="empty-row">해당 조건의 지원자가 없습니다. <b>＋ 지원자 추가</b>로 등록하세요.</td></tr>'; return; }
+    cdSelReset();
+    if(!list.length){ tb.innerHTML='<tr><td colspan="8" class="empty-row">해당 조건의 지원자가 없습니다. <b>＋ 지원자 추가</b>로 등록하세요.</td></tr>'; return; }
     const STAT=['서류','면접','배치','보류','탈락'];
     tb.innerHTML = list.map(c=>`<tr>
+      <td class="ck"><input type="checkbox" class="cd-ck" data-id="${esc(c.id)}" data-name="${esc(c.name)}"></td>
       <td class="hname">${esc(c.name)}</td>
       <td>${c.hospital?esc(c.hospital):'<span class="muted">–</span>'}</td>
       <td>${c.job?esc(c.job):'<span class="muted">–</span>'}</td>
@@ -1165,15 +1171,17 @@
   $('#em-candidate').addEventListener('change', emDirectToggle);
   async function loadEvals(){
     const tb=$('#eval-table');
-    if(!hasCache('ev')) tb.innerHTML='<tr><td colspan="7" class="loading">불러오는 중…</td></tr>';
+    if(!hasCache('ev')) tb.innerHTML='<tr><td colspan="8" class="loading">불러오는 중…</td></tr>';
     try{
       await swr('ev', async ()=>{ const r=await call('getEvaluations',TOKEN); return Array.isArray(r)?r:[]; }, renderEvals);
-    }catch(err){ authFail(err); tb.innerHTML='<tr><td colspan="7" class="empty-row">불러오지 못했습니다.</td></tr>'; }
+    }catch(err){ authFail(err); tb.innerHTML='<tr><td colspan="8" class="empty-row">불러오지 못했습니다.</td></tr>'; }
   }
   function renderEvals(list){
     const tb=$('#eval-table');
-    if(!list.length){ tb.innerHTML='<tr><td colspan="7" class="empty-row">작성된 평가가 없습니다. <b>＋ 평가 작성</b>으로 시작하세요.</td></tr>'; return; }
+    evSelReset();
+    if(!list.length){ tb.innerHTML='<tr><td colspan="8" class="empty-row">작성된 평가가 없습니다. <b>＋ 평가 작성</b>으로 시작하세요.</td></tr>'; return; }
     tb.innerHTML=list.map(e=>`<tr>
+      <td class="ck"><input type="checkbox" class="ev-ck" data-id="${esc(e.id)}" data-name="${esc(e.name)}"></td>
       <td class="hname">${esc(e.name)}</td>
       <td>${e.hospital?esc(e.hospital):'<span class="muted">–</span>'}</td>
       <td>${e.job?esc(e.job):'<span class="muted">–</span>'}</td>
@@ -1200,6 +1208,7 @@
   function showAiBox(comment){ $('#em-ai-box').innerHTML='<span class="ai-lab">AI 총평</span>'+esc(comment); $('#em-ai-box').style.display=''; }
   async function openEModal(ev){
     $('#em-err').classList.remove('on'); $('#em-ai-box').style.display='none'; evalAi={comment:'',overall:null};
+    if(!ev) candListCache=null;   // 새 평가 작성 시 지원자 목록 최신화 (자동등록분 즉시 반영)
     await Promise.all([ensureRubric(), ensureCandidateOptions()]);
     if(ev){
       $('#em-title').textContent='면접 평가'; $('#em-id').value=ev.id;
@@ -1397,6 +1406,43 @@
   }
   $('#add-contract').addEventListener('click', ()=>openCnModal(null));
   $('#cn-save').addEventListener('click', saveContract);
+
+  /* ── 공용 일괄 선택 삭제 ── */
+  function makeBulkDelete(opt){
+    // opt: {tbl, ckClass, checkall, btn, cnt, unit, api, after}
+    function reset(){ const ca=$(opt.checkall); if(ca){ ca.checked=false; ca.indeterminate=false; } sync(); }
+    function sync(){
+      const cks=$$(opt.tbl+' .'+opt.ckClass);
+      const sel=[].filter.call(cks, c=>c.checked);
+      const btn=$(opt.btn);
+      if(btn){ btn.style.display=sel.length?'':'none'; $(opt.cnt).textContent=sel.length; }
+      const ca=$(opt.checkall);
+      if(ca){ ca.checked=cks.length>0 && sel.length===cks.length; ca.indeterminate=sel.length>0 && sel.length<cks.length; }
+    }
+    $(opt.checkall).addEventListener('change', e=>{ $$(opt.tbl+' .'+opt.ckClass).forEach(c=>c.checked=e.target.checked); sync(); });
+    $(opt.tbl).addEventListener('change', e=>{ if(e.target.closest('.'+opt.ckClass)) sync(); });
+    $(opt.btn).addEventListener('click', async ()=>{
+      const sel=[].filter.call($$(opt.tbl+' .'+opt.ckClass), c=>c.checked);
+      if(!sel.length) return;
+      const names=sel.slice(0,3).map(c=>c.dataset.name).join(', ')+(sel.length>3?` 외 ${sel.length-3}건`:'');
+      const ok=await confirmAction(`${opt.unit} ${sel.length}건을 삭제할까요?`, `${names}을(를) 삭제합니다. 되돌릴 수 없습니다.`);
+      if(!ok) return;
+      const btn=$(opt.btn); btn.disabled=true;
+      let done=0, fail=0;
+      for(const c of sel){
+        try{ await call(opt.api, TOKEN, c.dataset.id); done++; toast(`삭제 중… ${done}/${sel.length}`); }
+        catch(err){ fail++; }
+      }
+      btn.disabled=false;
+      toast(fail?`${done}건 삭제, ${fail}건 실패`:`${done}건이 삭제되었습니다.`);
+      opt.after();
+    });
+    return reset;
+  }
+  const cdSelReset = makeBulkDelete({ tbl:'#cand-table', ckClass:'cd-ck', checkall:'#cd-checkall', btn:'#cd-del-sel', cnt:'#cd-sel-cnt',
+    unit:'지원자', api:'deleteCandidate', after:()=>{ candListCache=null; invalidate('cand','ev','ct','dash'); loadCandidates(); } });
+  const evSelReset = makeBulkDelete({ tbl:'#eval-table', ckClass:'ev-ck', checkall:'#ev-checkall', btn:'#ev-del-sel', cnt:'#ev-sel-cnt',
+    unit:'면접 평가', api:'deleteEvaluation', after:()=>{ invalidate('ev','dash'); loadEvals(); } });
 
   /* ── 계약 일괄 선택 삭제 ── */
   function ctSelReset(){
