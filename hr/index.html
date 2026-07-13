@@ -102,8 +102,6 @@
   .btn-sm:hover{background:#000}.btn-sm:active{transform:translateY(1px)}
   .btn-sm.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}.btn-sm.ghost:hover{background:var(--panel)}
   .btn-sm.danger{background:var(--danger);border-color:var(--danger)}.btn-sm.danger:hover{background:#9a1d12}
-  .htbl th.ck,.htbl td.ck{width:36px;text-align:center;padding-right:0}
-  .htbl .ck input{width:15px;height:15px;accent-color:var(--ink);cursor:pointer;vertical-align:middle}
   .btn-sm:focus-visible{outline:2px solid var(--trace);outline-offset:2px}
 
   /* KPI */
@@ -148,7 +146,6 @@
   .tbl td:first-child{text-align:left;font-weight:600;color:var(--ink)}
   .tbl tr:last-child td{border-bottom:none}
   .sat{font-family:var(--gr);font-weight:500}
-  .pend{font-size:11.5px;letter-spacing:.02em;color:var(--ink-3);background:var(--paper-2,#f4f2ee);border:1px solid var(--line);border-radius:99px;padding:3px 9px;white-space:nowrap}
   .sat::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--trace);margin-right:6px;vertical-align:middle}
 
   /* 병원 드릴다운(만족도) */
@@ -214,6 +211,7 @@
   .st-sel[data-s="면접"]{border-color:var(--ink);color:var(--ink)}
   .st-sel[data-s="배치"]{border-color:var(--trace);color:var(--trace-ink);background-color:var(--trace-wash)}
   .st-sel[data-s="보류"],.st-sel[data-s="탈락"]{color:var(--ink-3)}
+  .ev-wait{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--ink-3);border:1px dashed var(--line);background:#fff;border-radius:100px;padding:4px 11px}
   .field textarea{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:var(--r);background:#fff;font-size:14px;font-family:inherit;color:var(--ink);outline:none;resize:vertical;min-height:64px}
   .field textarea:focus{border-color:var(--ink);box-shadow:0 0 0 3px var(--trace-wash)}
 
@@ -414,7 +412,6 @@
         <div class="actions">
           <input type="file" id="pdf-input" accept="application/pdf,.pdf,.docx" style="display:none">
           <button class="btn-sm ghost" id="import-pdf">이력서 가져오기 (PDF·DOCX)</button>
-          <button class="btn-sm danger" id="cd-del-sel" style="display:none">선택 삭제 (<span id="cd-sel-cnt">0</span>)</button>
           <button class="btn-sm" id="add-candidate">＋ 지원자 추가</button>
         </div>
       </div>
@@ -430,8 +427,8 @@
       </div>
       <div class="tbl-scroll">
         <table class="htbl">
-          <thead><tr><th class="ck"><input type="checkbox" id="cd-checkall" title="전체 선택"></th><th>이름</th><th>병원</th><th>직무</th><th>지원경로</th><th>상태</th><th class="r">등록일</th><th class="r">관리</th></tr></thead>
-          <tbody id="cand-table"><tr><td colspan="8" class="loading">불러오는 중…</td></tr></tbody>
+          <thead><tr><th>이름</th><th>병원</th><th>직무</th><th>지원경로</th><th>상태</th><th class="r">등록일</th><th class="r">관리</th></tr></thead>
+          <tbody id="cand-table"><tr><td colspan="7" class="loading">불러오는 중…</td></tr></tbody>
         </table>
       </div>
     </section>
@@ -440,15 +437,12 @@
     <section class="page" id="view-evals" style="display:none">
       <div class="head">
         <div><div class="eyebrow">Recruitment</div><h1>면접 평가</h1></div>
-        <div class="actions">
-          <button class="btn-sm danger" id="ev-del-sel" style="display:none">선택 삭제 (<span id="ev-sel-cnt">0</span>)</button>
-          <button class="btn-sm" id="add-eval">＋ 평가 작성</button>
-        </div>
+        <div class="actions"><button class="btn-sm" id="add-eval">＋ 평가 작성</button></div>
       </div>
       <div class="tbl-scroll">
         <table class="htbl">
-          <thead><tr><th class="ck"><input type="checkbox" id="ev-checkall" title="전체 선택"></th><th>지원자</th><th>병원</th><th>직무</th><th class="r">종합</th><th>평가자</th><th class="r">평가일</th><th class="r">관리</th></tr></thead>
-          <tbody id="eval-table"><tr><td colspan="8" class="loading">불러오는 중…</td></tr></tbody>
+          <thead><tr><th>지원자</th><th>병원</th><th>직무</th><th class="r">종합</th><th>평가자</th><th class="r">평가일</th><th class="r">관리</th></tr></thead>
+          <tbody id="eval-table"><tr><td colspan="7" class="loading">불러오는 중…</td></tr></tbody>
         </table>
       </div>
     </section>
@@ -461,7 +455,6 @@
           <input type="file" id="ct-xlsx-input" accept=".xlsx,.xls,.csv" style="display:none">
           <button class="btn-sm ghost" id="ct-template">엑셀 양식 받기</button>
           <button class="btn-sm ghost" id="ct-bulk">엑셀 일괄등록</button>
-          <button class="btn-sm danger" id="ct-del-sel" style="display:none">선택 삭제 (<span id="ct-sel-cnt">0</span>)</button>
           <button class="btn-sm" id="add-contract">＋ 계약 등록</button>
         </div>
       </div>
@@ -475,8 +468,8 @@
       </div>
       <div class="tbl-scroll">
         <table class="htbl">
-          <thead><tr><th class="ck"><input type="checkbox" id="ct-checkall" title="전체 선택"></th><th>지원자</th><th>병원</th><th class="r">시작일</th><th class="r">파견 만료(2년)</th><th class="r">남은기간</th><th>상태</th><th class="r">관리</th></tr></thead>
-          <tbody id="contract-table"><tr><td colspan="8" class="loading">불러오는 중…</td></tr></tbody>
+          <thead><tr><th>지원자</th><th>병원</th><th class="r">시작일</th><th class="r">파견 만료(2년)</th><th class="r">남은기간</th><th>상태</th><th class="r">관리</th></tr></thead>
+          <tbody id="contract-table"><tr><td colspan="7" class="loading">불러오는 중…</td></tr></tbody>
         </table>
       </div>
     </section>
@@ -647,14 +640,6 @@
     <p class="m-sub">저장하면 현황의 '이번 달 면접'에 반영됩니다.</p>
     <input type="hidden" id="em-id">
     <div class="field"><label for="em-candidate">지원자 *</label><select id="em-candidate"><option value="">선택</option></select></div>
-    <div id="em-direct" style="display:none">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 14px">
-        <div class="field"><label for="em-d-name">이름 *</label><input id="em-d-name" placeholder="지원자 이름" autocomplete="off"></div>
-        <div class="field"><label for="em-d-hospital">병원</label><select id="em-d-hospital"><option value="">선택 (선택사항)</option></select></div>
-      </div>
-      <div class="field"><label for="em-d-job">직무</label><input id="em-d-job" placeholder="예: 중환자실 보조 (선택사항)"></div>
-      <p class="m-sub" style="margin:-4px 0 14px">직접 입력한 지원자는 이력서 관리에 <b>면접</b> 상태로 자동 등록됩니다.</p>
-    </div>
     <div class="field"><label for="em-notes">면접 메모</label><textarea id="em-notes" placeholder="면접에서 관찰한 내용을 자유롭게 적으세요. AI 채점의 근거가 됩니다."></textarea></div>
     <button class="btn-sm ghost ai-btn" id="em-ai">AI 자동 채점</button>
     <div id="em-ai-box" class="ai-box" style="display:none"></div>
@@ -799,7 +784,7 @@
     try{
       const r=await call('login', pw);
       if(!r||!r.ok){ setLoginErr('비밀번호가 올바르지 않습니다.'); return; }
-      TOKEN=r.token; try{ localStorage.setItem('hr2_token', TOKEN); }catch(_){} enterApp();
+      TOKEN=r.token; try{ localStorage.setItem('hr2_token', TOKEN); }catch(_){ } enterApp();
     }catch(e){ setLoginErr(String((e&&e.message)||e)); }
     finally{ $('#enter').disabled=false; $('#enter').textContent='입장'; }
   }
@@ -973,28 +958,74 @@
     if($('#po-hospital')) $('#po-hospital').innerHTML = '<option value="">선택</option>'+opts;
     if($('#filter-hospital3')) $('#filter-hospital3').innerHTML = '<option value="">전체 병원</option>'+hospitalCache.map(h=>`<option value="${esc(h['병원명'])}">${esc(h['병원명'])}</option>`).join('');
     if($('#sv-hospital')) $('#sv-hospital').innerHTML = '<option value="">선택</option>'+opts;
-    if($('#em-d-hospital')) $('#em-d-hospital').innerHTML = '<option value="">선택 (선택사항)</option>'+opts;
     return hospitalCache;
   }
+  /* HEAL:BEGIN ═══ 이름·직무 자동 교정 ═══
+     이력서 자동등록이 파일명 순서를 잘못 해석해 이름↔직무가 뒤바뀐 행을
+     불러올 때마다 감지해 화면과 시트 양쪽에서 자동 복구한다.
+     조건이 매우 보수적이어서(직무칸=사람 이름 && 이름칸≠사람 이름) 오탐이 없다. */
+  const JOB_HINTS=['병동','외래','이송','공급','멸균','미화','조리','배식','세척','식당','주방','원무','간호','간병','조무','보조','어시','코디','검사','검진','채혈','촬영','영상','방사선','초음파','안내','주차','경비','시설','약제','약국','약무','수술','중환자','환자','응급','진료','접수','수납','상담','심사','보험','행정','사무','총무','서무','경리','회계','전산','린넨','세탁','영양','물리','재활','치과','내시경','당직','야간','주간','파트','헬퍼','도우미','기사','운전','청소','소독','콜','ICU','ER','OR','CT','MRI','NICU','CICU'];
+  const SURNAMES='김이박최정강조윤장임한오서신권황안송류전홍고문양손배백허유남심노하곽성차주우구민나진지엄채원천방공현함변염여추도소석선설마길연위표명기반라왕금옥육인맹제모탁국어은편용예경봉사부';
+  const COMPOUND_SUR=['남궁','황보','제갈','사공','선우','서문','독고','동방'];
+  function looksJob(s){
+    s=String(s==null?'':s).trim(); if(!s) return false;
+    if(/[\s0-9()/·,+&]/.test(s)) return true;                                  // 공백·숫자·기호 → 설명형 직무
+    const u=s.toUpperCase();
+    if(JOB_HINTS.some(w=>u.indexOf(w)>=0)) return true;
+    if(/(부장|팀장|실장|과장|주임|대리|차장|반장|소장)$/.test(s)) return true;
+    return s.length>=3 && /[가-힣](실|팀|과|부|반|계)$/.test(s);               // ○○실, ○○팀 …
+  }
+  function looksHosp(s){ return /(병원|의원|의료원|한의원|치과|보건소|클리닉|요양원)/.test(String(s==null?'':s)); }
+  function looksName(s){
+    s=String(s==null?'':s).trim();
+    if(!/^[가-힣]{2,4}$/.test(s)) return false;
+    if(looksJob(s)||looksHosp(s)) return false;
+    if(s.length===4) return COMPOUND_SUR.some(p=>s.indexOf(p)===0);
+    return SURNAMES.indexOf(s.charAt(0))>=0;
+  }
+  const HEALED=new Set();
+  function healCandidates(list){
+    (list||[]).forEach(c=>{
+      if(!c) return;
+      const nm=String(c.name==null?'':c.name).trim(), jb=String(c.job==null?'':c.job).trim();
+      if(!jb || !looksName(jb) || looksName(nm)) return;
+      c.name=jb;
+      c.job=(nm && nm!==jb && !looksHosp(nm)) ? nm : '';
+      if(!c.hospitalId && c.hospital && hospitalCache){                        // 병원ID 미연결 행도 함께 복구 → 병원 필터에 잡히게
+        const h=hospitalCache.find(x=>String(x['병원명']).trim()===String(c.hospital).trim());
+        if(h) c.hospitalId=h['병원ID'];
+      }
+      if(c.id!=null && !HEALED.has(c.id)){ HEALED.add(c.id); persistHeal(c); }
+    });
+    return list;
+  }
+  async function persistHeal(c){
+    try{
+      await call('updateCandidate', TOKEN, c.id, { 이름:c.name, 연락처:c.tel||'', 병원ID:c.hospitalId||'',
+        병원명:(c.hospitalId?'':(c.hospital||'')), 직무:c.job||'', 지원경로:c.source||'', 상태:c.status||'서류', 메모:c.memo||'' });
+      candListCache=null; invalidate('ev','ct');
+      toast('이름·직무 자동 교정: '+c.name);
+    }catch(_){ HEALED.delete(c.id); }                                          // 실패 시 다음 로드에서 재시도
+  }
+  /* HEAL:END */
+
   async function loadCandidates(){
     const tb=$('#cand-table');
     const key='cand:'+candFilter.status+':'+candFilter.hospitalId;
-    if(!hasCache(key)) tb.innerHTML='<tr><td colspan="8" class="loading">불러오는 중…</td></tr>';
+    if(!hasCache(key)) tb.innerHTML='<tr><td colspan="7" class="loading">불러오는 중…</td></tr>';
     try{
       await swr(key, async ()=>{
         const r = await Promise.all([ensureHospitals(), call('getCandidates', TOKEN, candFilter.status, candFilter.hospitalId)]);
-        return Array.isArray(r[1]) ? r[1] : [];
+        return healCandidates(Array.isArray(r[1]) ? r[1] : []);
       }, list=>renderCandidates(key, list));
-    }catch(e){ authFail(e); tb.innerHTML='<tr><td colspan="8" class="empty-row">불러오지 못했습니다.</td></tr>'; }
+    }catch(e){ authFail(e); tb.innerHTML='<tr><td colspan="7" class="empty-row">불러오지 못했습니다.</td></tr>'; }
   }
   function renderCandidates(key, list){
     if(key!=='cand:'+candFilter.status+':'+candFilter.hospitalId) return;   // 필터 변경 후 늦게 온 응답 무시
     const tb=$('#cand-table');
-    cdSelReset();
-    if(!list.length){ tb.innerHTML='<tr><td colspan="8" class="empty-row">해당 조건의 지원자가 없습니다. <b>＋ 지원자 추가</b>로 등록하세요.</td></tr>'; return; }
+    if(!list.length){ tb.innerHTML='<tr><td colspan="7" class="empty-row">해당 조건의 지원자가 없습니다. <b>＋ 지원자 추가</b>로 등록하세요.</td></tr>'; return; }
     const STAT=['서류','면접','배치','보류','탈락'];
     tb.innerHTML = list.map(c=>`<tr>
-      <td class="ck"><input type="checkbox" class="cd-ck" data-id="${esc(c.id)}" data-name="${esc(c.name)}"></td>
       <td class="hname">${esc(c.name)}</td>
       <td>${c.hospital?esc(c.hospital):'<span class="muted">–</span>'}</td>
       <td>${c.job?esc(c.job):'<span class="muted">–</span>'}</td>
@@ -1155,52 +1186,45 @@
   /* 면접 평가 */
   async function ensureRubric(){ if(!rubricCache) rubricCache=await call('getRubric',TOKEN); return rubricCache; }
   async function getCandListCached(){
-    if(!candListCache){ const r=await call('getCandidates',TOKEN,'전체',''); candListCache=Array.isArray(r)?r:[]; }
+    if(!candListCache){ const r=await call('getCandidates',TOKEN,'전체',''); candListCache=healCandidates(Array.isArray(r)?r:[]); }
     return candListCache;
   }
   async function ensureCandidateOptions(){
     const list=await getCandListCached();
-    $('#em-candidate').innerHTML='<option value="">선택</option><option value="__direct__">✎ 직접 입력 (미등록 지원자)</option>'
-      +list.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}${c.hospital?' ('+esc(c.hospital)+')':''}</option>`).join('');
-    await ensureHospitals();
+    $('#em-candidate').innerHTML='<option value="">선택</option>'+list.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}${c.hospital?' ('+esc(c.hospital)+')':''}</option>`).join('');
   }
-  function emDirectToggle(){
-    const on=$('#em-candidate').value==='__direct__';
-    $('#em-direct').style.display=on?'':'none';
-    if(on) setTimeout(()=>$('#em-d-name').focus(),50);
-  }
-  $('#em-candidate').addEventListener('change', emDirectToggle);
   async function loadEvals(){
     const tb=$('#eval-table');
-    if(!hasCache('ev')) tb.innerHTML='<tr><td colspan="8" class="loading">불러오는 중…</td></tr>';
+    if(!hasCache('ev')) tb.innerHTML='<tr><td colspan="7" class="loading">불러오는 중…</td></tr>';
     try{
       await swr('ev', async ()=>{
-        const [ev, cd] = await Promise.all([ call('getEvaluations',TOKEN), call('getCandidates',TOKEN,'전체','') ]);
-        return { evals: Array.isArray(ev)?ev:[], cands: Array.isArray(cd)?cd:[] };
+        const r=await Promise.all([ call('getEvaluations',TOKEN), getCandListCached() ]);
+        return { evals:Array.isArray(r[0])?r[0]:[], cands:Array.isArray(r[1])?r[1]:[] };
       }, renderEvals);
-    }catch(err){ authFail(err); tb.innerHTML='<tr><td colspan="8" class="empty-row">불러오지 못했습니다.</td></tr>'; }
+    }catch(err){ authFail(err); tb.innerHTML='<tr><td colspan="7" class="empty-row">불러오지 못했습니다.</td></tr>'; }
   }
-  function renderEvals(data){
+  /* EVMERGE:BEGIN ═══ 이력서 관리에 등록된 지원자는 평가 목록에 자동 노출 ═══
+     평가가 아직 없는 지원자는 '평가 전' 행으로 위에 표시되고,
+     [평가 작성]을 누르면 그 지원자가 선택된 상태로 작성 창이 열린다.
+     평가 저장/삭제 시 자동으로 두 상태를 오간다 — 수기 재등록 불필요. */
+  function renderEvals(v){
+    const evals = Array.isArray(v) ? v : ((v&&v.evals)||[]);
+    const cands = Array.isArray(v) ? [] : ((v&&v.cands)||[]);
     const tb=$('#eval-table');
-    evSelReset();
-    const list  = Array.isArray(data) ? data : (data.evals||[]);
-    const cands = Array.isArray(data) ? []   : (data.cands||[]);
-    const evaluated = new Set(list.map(e=>String(e.candidateId)));
-    // 이력서 관리 연동: 평가가 없는 서류·면접 상태 지원자 → 평가 대기 행
-    const pending = cands.filter(c=>!evaluated.has(String(c.id)) && (c.status==='서류'||c.status==='면접'));
-    if(!list.length && !pending.length){ tb.innerHTML='<tr><td colspan="8" class="empty-row">작성된 평가가 없습니다. 이력서 관리에 지원자가 등록되면 여기에 자동으로 표시됩니다.</td></tr>'; return; }
-    const pendRows = pending.map(c=>`<tr class="pend-row">
-      <td class="ck"></td>
+    const done=new Set(evals.map(e=>String(e.candidateId)));
+    const pending=cands.filter(c=>c && c.id!=null && !done.has(String(c.id)))
+                       .sort((a,b)=>String(b.created||'').localeCompare(String(a.created||'')));
+    if(!evals.length && !pending.length){ tb.innerHTML='<tr><td colspan="7" class="empty-row">지원자가 없습니다. 이력서 관리에 등록되면 여기에 자동으로 나타납니다.</td></tr>'; return; }
+    const pRows=pending.map(c=>`<tr>
       <td class="hname">${esc(c.name)}</td>
       <td>${c.hospital?esc(c.hospital):'<span class="muted">–</span>'}</td>
       <td>${c.job?esc(c.job):'<span class="muted">–</span>'}</td>
-      <td class="r"><span class="pend">평가 대기</span></td>
+      <td class="r"><span class="ev-wait">평가 전</span></td>
       <td><span class="muted">–</span></td>
-      <td class="r muted">–</td>
-      <td class="r"><span class="act"><button data-ewrite="${esc(c.id)}">평가 작성</button></span></td>
+      <td class="r muted">${esc(c.created||'')}</td>
+      <td class="r"><span class="act"><button data-enew="${esc(c.id)}">평가 작성</button></span></td>
     </tr>`).join('');
-    const evRows = list.map(e=>`<tr>
-      <td class="ck"><input type="checkbox" class="ev-ck" data-id="${esc(e.id)}" data-name="${esc(e.name)}"></td>
+    const eRows=evals.map(e=>`<tr>
       <td class="hname">${esc(e.name)}</td>
       <td>${e.hospital?esc(e.hospital):'<span class="muted">–</span>'}</td>
       <td>${e.job?esc(e.job):'<span class="muted">–</span>'}</td>
@@ -1209,8 +1233,9 @@
       <td class="r muted">${esc(e.date)}</td>
       <td class="r"><span class="act"><button data-eedit='${esc(JSON.stringify(e))}'>보기</button><button class="del" data-edel="${esc(e.id)}" data-name="${esc(e.name)}">삭제</button></span></td>
     </tr>`).join('');
-    tb.innerHTML = pendRows + evRows;
+    tb.innerHTML=pRows+eRows;
   }
+  /* EVMERGE:END */
   function renderRubric(scores){
     evalScores=Object.assign({},scores||{});
     $('#em-rubric').innerHTML=rubricCache.map(comp=>{
@@ -1228,7 +1253,6 @@
   function showAiBox(comment){ $('#em-ai-box').innerHTML='<span class="ai-lab">AI 총평</span>'+esc(comment); $('#em-ai-box').style.display=''; }
   async function openEModal(ev){
     $('#em-err').classList.remove('on'); $('#em-ai-box').style.display='none'; evalAi={comment:'',overall:null};
-    if(!ev) candListCache=null;   // 새 평가 작성 시 지원자 목록 최신화 (자동등록분 즉시 반영)
     await Promise.all([ensureRubric(), ensureCandidateOptions()]);
     if(ev){
       $('#em-title').textContent='면접 평가'; $('#em-id').value=ev.id;
@@ -1242,8 +1266,6 @@
       $('#em-notes').value=''; $('#em-evaluator').value='';
       renderRubric({});
     }
-    ['#em-d-name','#em-d-hospital','#em-d-job'].forEach(s=>{ if($(s)) $(s).value=''; });
-    emDirectToggle();
     $('#emodal').classList.add('on');
   }
   function closeEModal(){ $('#emodal').classList.remove('on'); }
@@ -1261,26 +1283,11 @@
     finally{ btn.disabled=false; btn.textContent=old; }
   }
   async function saveEval(){
-    let cid=$('#em-candidate').value;
+    const cid=$('#em-candidate').value;
     if(!cid){ $('#em-err').textContent='지원자를 선택하세요.'; $('#em-err').classList.add('on'); return; }
+    const data={ candidateId:cid, scores:evalScores, notes:$('#em-notes').value.trim(), evaluator:$('#em-evaluator').value.trim(), aiComment:evalAi.comment||'', aiScore:evalAi.overall };
     const id=$('#em-id').value;
     $('#em-save').disabled=true; $('#em-save').textContent='저장 중…';
-    /* 직접 입력 → 지원자를 '면접' 상태로 먼저 등록 후 ID 확보 */
-    if(cid==='__direct__'){
-      const nm=$('#em-d-name').value.trim();
-      if(!nm){ $('#em-err').textContent='이름을 입력하세요.'; $('#em-err').classList.add('on'); $('#em-d-name').focus(); $('#em-save').disabled=false; $('#em-save').textContent='평가 저장'; return; }
-      try{
-        await call('addCandidate',TOKEN,{ 이름:nm, 연락처:'', 병원ID:$('#em-d-hospital').value, 병원명:'', 직무:$('#em-d-job').value.trim(), 지원경로:'면접 평가 직접입력', 상태:'면접', 메모:'' });
-        candListCache=null; invalidate('cand','dash');
-        const list=await getCandListCached();
-        const found=list.filter(c=>String(c.name).replace(/\s/g,'')===nm.replace(/\s/g,''));
-        const pick=found.length?found[found.length-1]:null;   // 동명이인 시 방금 등록분(최신)
-        if(!pick){ throw new Error('지원자 등록 후 ID를 찾지 못했습니다. 새로고침 후 다시 시도하세요.'); }
-        cid=pick.id;
-        await ensureCandidateOptions();
-      }catch(e){ authFail(e); $('#em-save').disabled=false; $('#em-save').textContent='평가 저장'; return; }
-    }
-    const data={ candidateId:cid, scores:evalScores, notes:$('#em-notes').value.trim(), evaluator:$('#em-evaluator').value.trim(), aiComment:evalAi.comment||'', aiScore:evalAi.overall };
     try{
       if(id) await call('updateEvaluation',TOKEN,id,data); else await call('addEvaluation',TOKEN,data);
       invalidate('ev','dash');
@@ -1294,9 +1301,13 @@
     b.parentElement.querySelectorAll('button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
     updateOverall();
   });
+  async function openEModalFor(cid){
+    try{ await openEModal(null); $('#em-candidate').value=cid; }catch(e){ authFail(e); }
+  }
   $('#eval-table').addEventListener('click', async e=>{
-    const ed=e.target.closest('[data-eedit]'); const dl=e.target.closest('[data-edel]'); const wr=e.target.closest('[data-ewrite]');
-    if(wr){ await openEModal(null); $('#em-candidate').value=wr.getAttribute('data-ewrite'); emDirectToggle(); return; }
+    const nw=e.target.closest('[data-enew]');
+    if(nw){ openEModalFor(nw.getAttribute('data-enew')); return; }
+    const ed=e.target.closest('[data-eedit]'); const dl=e.target.closest('[data-edel]');
     if(ed){ openEModal(JSON.parse(ed.getAttribute('data-eedit'))); return; }
     if(dl){
       const ok=await confirmAction('평가를 삭제할까요?', `'${dl.dataset.name}'의 평가를 삭제합니다.`);
@@ -1320,26 +1331,24 @@
   async function loadContracts(){
     const tb=$('#contract-table');
     const key='ct:'+ctFilter.status+':'+ctFilter.hospitalId;
-    if(!hasCache(key)) tb.innerHTML='<tr><td colspan="8" class="loading">불러오는 중…</td></tr>';
+    if(!hasCache(key)) tb.innerHTML='<tr><td colspan="7" class="loading">불러오는 중…</td></tr>';
     try{
       await swr(key, async ()=>{
         const r=await Promise.all([ensureHospitals(), call('getContracts',TOKEN,ctFilter.status,ctFilter.hospitalId)]);
         return Array.isArray(r[1]) ? r[1] : [];
       }, list=>renderContracts(key, list));
-    }catch(err){ authFail(err); tb.innerHTML='<tr><td colspan="8" class="empty-row">불러오지 못했습니다.</td></tr>'; }
+    }catch(err){ authFail(err); tb.innerHTML='<tr><td colspan="7" class="empty-row">불러오지 못했습니다.</td></tr>'; }
   }
   function renderContracts(key, list){
     if(key!=='ct:'+ctFilter.status+':'+ctFilter.hospitalId) return;
     const tb=$('#contract-table');
-    ctSelReset();
-    if(!list.length){ tb.innerHTML='<tr><td colspan="8" class="empty-row">등록된 계약이 없습니다. <b>＋ 계약 등록</b>으로 파견 계약을 추가하세요.</td></tr>'; return; }
+    if(!list.length){ tb.innerHTML='<tr><td colspan="7" class="empty-row">등록된 계약이 없습니다. <b>＋ 계약 등록</b>으로 파견 계약을 추가하세요.</td></tr>'; return; }
     const rowOf = (c,i)=>{
       let dd;
       if(c.dday==null) dd='<span class="muted">–</span>';
       else if(c.dday<0) dd='<span class="dday over">만료</span>';
       else{ const cls=c.dday<=30?'soon':(c.dday<=60?'near':''); dd=`<span class="dday ${cls}">D-${c.dday}</span>`; }
       return `<tr>
-        <td class="ck"><input type="checkbox" class="ct-ck" data-id="${esc(c.id)}" data-name="${esc(c.name)}"></td>
         <td class="hname"><span class="rownum">${i+1}</span>${esc(c.name)}</td>
         <td>${c.hospital?esc(c.hospital):'<span class="muted">–</span>'}</td>
         <td class="r muted">${c.start?esc(c.start):'–'}</td>
@@ -1358,7 +1367,7 @@
       const g=groups[k];
       const run=g.rows.filter(c=>c.status==='진행').length;
       const soon=g.rows.filter(c=>c.dday!=null&&c.dday>=0&&c.dday<=60&&c.status==='진행').length;
-      return `<tr class="grp" data-ghid="${esc(g.hid)}"><td colspan="8">${esc(k)}<span class="grp-meta">전체 ${g.rows.length} · 진행 ${run}${soon?` · <b>만료임박 ${soon}</b>`:''}</span><span class="grp-go">해당 병원만 보기 ›</span></td></tr>`
+      return `<tr class="grp" data-ghid="${esc(g.hid)}"><td colspan="7">${esc(k)}<span class="grp-meta">전체 ${g.rows.length} · 진행 ${run}${soon?` · <b>만료임박 ${soon}</b>`:''}</span><span class="grp-go">해당 병원만 보기 ›</span></td></tr>`
         + g.rows.map(rowOf).join('');
     }).join('');
   }
@@ -1427,79 +1436,6 @@
   }
   $('#add-contract').addEventListener('click', ()=>openCnModal(null));
   $('#cn-save').addEventListener('click', saveContract);
-
-  /* ── 공용 일괄 선택 삭제 ── */
-  function makeBulkDelete(opt){
-    // opt: {tbl, ckClass, checkall, btn, cnt, unit, api, after}
-    function reset(){ const ca=$(opt.checkall); if(ca){ ca.checked=false; ca.indeterminate=false; } sync(); }
-    function sync(){
-      const cks=$$(opt.tbl+' .'+opt.ckClass);
-      const sel=[].filter.call(cks, c=>c.checked);
-      const btn=$(opt.btn);
-      if(btn){ btn.style.display=sel.length?'':'none'; $(opt.cnt).textContent=sel.length; }
-      const ca=$(opt.checkall);
-      if(ca){ ca.checked=cks.length>0 && sel.length===cks.length; ca.indeterminate=sel.length>0 && sel.length<cks.length; }
-    }
-    $(opt.checkall).addEventListener('change', e=>{ $$(opt.tbl+' .'+opt.ckClass).forEach(c=>c.checked=e.target.checked); sync(); });
-    $(opt.tbl).addEventListener('change', e=>{ if(e.target.closest('.'+opt.ckClass)) sync(); });
-    $(opt.btn).addEventListener('click', async ()=>{
-      const sel=[].filter.call($$(opt.tbl+' .'+opt.ckClass), c=>c.checked);
-      if(!sel.length) return;
-      const names=sel.slice(0,3).map(c=>c.dataset.name).join(', ')+(sel.length>3?` 외 ${sel.length-3}건`:'');
-      const ok=await confirmAction(`${opt.unit} ${sel.length}건을 삭제할까요?`, `${names}을(를) 삭제합니다. 되돌릴 수 없습니다.`);
-      if(!ok) return;
-      const btn=$(opt.btn); btn.disabled=true;
-      let done=0, fail=0;
-      for(const c of sel){
-        try{ await call(opt.api, TOKEN, c.dataset.id); done++; toast(`삭제 중… ${done}/${sel.length}`); }
-        catch(err){ fail++; }
-      }
-      btn.disabled=false;
-      toast(fail?`${done}건 삭제, ${fail}건 실패`:`${done}건이 삭제되었습니다.`);
-      opt.after();
-    });
-    return reset;
-  }
-  const cdSelReset = makeBulkDelete({ tbl:'#cand-table', ckClass:'cd-ck', checkall:'#cd-checkall', btn:'#cd-del-sel', cnt:'#cd-sel-cnt',
-    unit:'지원자', api:'deleteCandidate', after:()=>{ candListCache=null; invalidate('cand','ev','ct','dash'); loadCandidates(); } });
-  const evSelReset = makeBulkDelete({ tbl:'#eval-table', ckClass:'ev-ck', checkall:'#ev-checkall', btn:'#ev-del-sel', cnt:'#ev-sel-cnt',
-    unit:'면접 평가', api:'deleteEvaluation', after:()=>{ invalidate('ev','dash'); loadEvals(); } });
-
-  /* ── 계약 일괄 선택 삭제 ── */
-  function ctSelReset(){
-    const ca=$('#ct-checkall'); if(ca){ ca.checked=false; ca.indeterminate=false; }
-    ctSelSync();
-  }
-  function ctSelSync(){
-    const cks=$$('#contract-table .ct-ck');
-    const sel=[].filter.call(cks, c=>c.checked);
-    const btn=$('#ct-del-sel');
-    if(btn){ btn.style.display=sel.length?'':'none'; $('#ct-sel-cnt').textContent=sel.length; }
-    const ca=$('#ct-checkall');
-    if(ca){ ca.checked=cks.length>0 && sel.length===cks.length; ca.indeterminate=sel.length>0 && sel.length<cks.length; }
-  }
-  $('#ct-checkall').addEventListener('change', e=>{
-    $$('#contract-table .ct-ck').forEach(c=>c.checked=e.target.checked);
-    ctSelSync();
-  });
-  $('#contract-table').addEventListener('change', e=>{ if(e.target.closest('.ct-ck')) ctSelSync(); });
-  $('#ct-del-sel').addEventListener('click', async ()=>{
-    const sel=[].filter.call($$('#contract-table .ct-ck'), c=>c.checked);
-    if(!sel.length) return;
-    const names=sel.slice(0,3).map(c=>c.dataset.name).join(', ')+(sel.length>3?` 외 ${sel.length-3}명`:'');
-    const ok=await confirmAction(`계약 ${sel.length}건을 삭제할까요?`, `${names}의 계약을 삭제합니다. 되돌릴 수 없습니다.`);
-    if(!ok) return;
-    const btn=$('#ct-del-sel'); btn.disabled=true;
-    let done=0, fail=0;
-    for(const c of sel){
-      try{ await call('deleteContract',TOKEN,c.dataset.id); done++; toast(`삭제 중… ${done}/${sel.length}`); }
-      catch(err){ fail++; }
-    }
-    btn.disabled=false;
-    invalidate('ct','dash');
-    toast(fail?`${done}건 삭제, ${fail}건 실패`:`${done}건이 삭제되었습니다.`);
-    loadContracts();
-  });
   $$('[data-cnclose]').forEach(el=>el.addEventListener('click', closeCnModal));
 
   /* ───────── 파견·계약 엑셀 일괄등록 ───────── */
@@ -1814,7 +1750,6 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   $$('.nav-item').forEach(btn=>btn.addEventListener('click',()=>{
     $$('.nav-item').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
     const v=btn.dataset.view, t=btn.dataset.title;
-    try{ localStorage.setItem('hr2_view', v); }catch(_){}
     Object.values(views).forEach(s=>{ if(s) s.style.display='none'; }); if(views[v]) views[v].style.display='';
     if(v==='dash') loadDashboard();
     else if(v==='hospitals') loadHospitals();
@@ -1859,17 +1794,11 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   $('#menu').addEventListener('click', ()=>app.classList.toggle('menu'));
   $('#scrim').addEventListener('click', ()=>app.classList.remove('menu'));
   $('#logout').addEventListener('click', logout);
-  function logout(){ app.classList.remove('on','ready','menu'); $('#login').style.display=''; $('#pw').value=''; setLoginErr(''); TOKEN=null; try{ localStorage.removeItem('hr2_token'); localStorage.removeItem('hr2_view'); }catch(_){} invalidateAll(); }
+  function logout(){ app.classList.remove('on','ready','menu'); $('#login').style.display=''; $('#pw').value=''; setLoginErr(''); TOKEN=null; invalidateAll(); try{ localStorage.removeItem('hr2_token'); }catch(_){ } }
 
-  /* ═══ 새로고침 세션 복원: 저장된 토큰이 있으면 로그인 없이 바로 입장, 보던 화면 복원 ═══ */
-  (function restoreSession(){
-    let tk=null, v=null;
-    try{ tk=localStorage.getItem('hr2_token'); v=localStorage.getItem('hr2_view'); }catch(_){}
-    if(!tk) return;                                   // 저장된 세션 없음 → 평소처럼 로그인 화면
-    TOKEN=tk;
-    enterApp();                                       // 대시보드 로드 (토큰 만료 시 authFail → 자동 로그아웃)
-    if(v && v!=='dash') setTimeout(()=>gotoView(v), 0);   // 보던 메뉴로 복원
-  })();
+  /* 세션 유지: 새로고침(F5·브라우저 버튼)해도 로그인 화면으로 튕기지 않음.
+     토큰이 만료됐으면 첫 호출이 실패하면서 자동 로그아웃된다. */
+  try{ const t=localStorage.getItem('hr2_token'); if(t){ TOKEN=t; enterApp(); } }catch(_){ }
 </script>
 </body>
 </html>
