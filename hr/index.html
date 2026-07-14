@@ -449,6 +449,7 @@
           <tbody id="eval-table"><tr><td colspan="7" class="loading">불러오는 중…</td></tr></tbody>
         </table>
       </div>
+      <input type="file" id="resume-input" accept=".pdf,.doc,.docx,.hwp,.hwpx" style="display:none">
     </section>
 
     <!-- 파견·계약 -->
@@ -649,7 +650,10 @@
     <div id="em-ai-box" class="ai-box" style="display:none"></div>
     <div class="rubric" id="em-rubric"></div>
     <div class="overall-bar"><span>종합 점수</span><b id="em-overall">–</b></div>
-    <div class="field" style="margin-top:18px"><label for="em-evaluator">평가자</label><input id="em-evaluator" placeholder="이름 (선택)"></div>
+    <div style="display:flex;gap:12px;margin-top:18px">
+      <div class="field" style="flex:1;margin-top:0"><label for="em-evaluator">평가자</label><input id="em-evaluator" placeholder="이름 (선택)"></div>
+      <div class="field" style="flex:1;margin-top:0"><label for="em-date">평가일</label><input type="date" id="em-date"></div>
+    </div>
     <div class="err-msg" id="em-err"></div>
     <div class="m-foot"><button class="btn-sm ghost" data-eclose>취소</button><button class="btn-sm" id="em-save">평가 저장</button></div>
   </div>
@@ -1205,8 +1209,9 @@
     if(!hasCache('ev')) tb.innerHTML='<tr><td colspan="7" class="loading">불러오는 중…</td></tr>';
     try{
       await swr('ev', async ()=>{
-        const r=await Promise.all([ call('getEvaluations',TOKEN), getCandListCached() ]);
-        return { evals:Array.isArray(r[0])?r[0]:[], cands:Array.isArray(r[1])?r[1]:[] };
+        const r=await Promise.all([ call('getEvaluations',TOKEN), getCandListCached(),
+                                    call('getResumeLinks',TOKEN).catch(()=>({})) ]);   // 백엔드 패치 전에도 화면은 정상 동작
+        return { evals:Array.isArray(r[0])?r[0]:[], cands:Array.isArray(r[1])?r[1]:[], resumes:(r[2]&&typeof r[2]==='object')?r[2]:{} };
       }, renderEvals);
     }catch(err){ authFail(err); tb.innerHTML='<tr><td colspan="7" class="empty-row">불러오지 못했습니다.</td></tr>'; }
   }
@@ -1218,6 +1223,7 @@
   function renderEvals(v){
     const evalsAll = Array.isArray(v) ? v : ((v&&v.evals)||[]);
     const candsAll = Array.isArray(v) ? [] : ((v&&v.cands)||[]);
+    const resumes  = (v&&v.resumes)||{};
     const tb=$('#eval-table');
     const done=new Set(evalsAll.map(e=>String(e.candidateId)));           // 평가 여부는 필터와 무관하게 전체 기준
     const hf=String(evFilter.hospital||'').trim();
@@ -1225,6 +1231,11 @@
     const evals=evalsAll.filter(e=>hit(e.hospital));
     const pending=candsAll.filter(c=>c && c.id!=null && !done.has(String(c.id)) && hit(c.hospital))
                           .sort((a,b)=>String(b.created||'').localeCompare(String(a.created||'')));
+    const resBtns=cid=>{
+      const rs=resumes[String(cid)];
+      return rs ? `<button data-rview="${esc(rs.url)}" title="${esc(rs.name)}">이력서</button><button data-rup="${esc(cid)}" title="이력서 파일 교체">교체</button>`
+                : `<button data-rup="${esc(cid)}">＋ 이력서</button>`;
+    };
     if(!evals.length && !pending.length){
       tb.innerHTML='<tr><td colspan="7" class="empty-row">'+(hf?esc(hf)+'의 지원자·평가가 없습니다.':'지원자가 없습니다. 이력서 관리에 등록되면 여기에 자동으로 나타납니다.')+'</td></tr>';
       return;
@@ -1236,7 +1247,7 @@
       <td class="r"><span class="ev-wait">평가 전</span></td>
       <td><span class="muted">–</span></td>
       <td class="r muted">${esc(c.created||'')}</td>
-      <td class="r"><span class="act"><button data-enew="${esc(c.id)}">평가 작성</button></span></td>
+      <td class="r"><span class="act">${resBtns(c.id)}<button data-enew="${esc(c.id)}">평가 작성</button></span></td>
     </tr>`).join('');
     const eRows=evals.map(e=>`<tr>
       <td class="hname">${esc(e.name)}</td>
@@ -1245,7 +1256,7 @@
       <td class="r">${e.overall==null?'<span class="muted">–</span>':'<span class="sat">'+esc(e.overall)+'</span>'}</td>
       <td>${e.evaluator?esc(e.evaluator):'<span class="muted">–</span>'}</td>
       <td class="r muted">${esc(e.date)}</td>
-      <td class="r"><span class="act"><button data-eedit='${esc(JSON.stringify(e))}'>보기</button><button class="del" data-edel="${esc(e.id)}" data-name="${esc(e.name)}">삭제</button></span></td>
+      <td class="r"><span class="act">${resBtns(e.candidateId)}<button data-eedit='${esc(JSON.stringify(e))}'>보기</button><button class="del" data-edel="${esc(e.id)}" data-name="${esc(e.name)}">삭제</button></span></td>
     </tr>`).join('');
     tb.innerHTML=pRows+eRows;
   }
@@ -1265,6 +1276,12 @@
     $('#em-overall').innerHTML = o==null?'–':esc(o)+'<u>/5</u>';
   }
   function showAiBox(comment){ $('#em-ai-box').innerHTML='<span class="ai-lab">AI 총평</span>'+esc(comment); $('#em-ai-box').style.display=''; }
+  function dateToInput(v){
+    const m=String(v||'').match(/(\d{4})[.\-/](\d{1,2})[.\-/](\d{1,2})/);
+    if(m) return m[1]+'-'+String(m[2]).padStart(2,'0')+'-'+String(m[3]).padStart(2,'0');
+    const d=new Date();
+    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  }
   async function openEModal(ev){
     $('#em-err').classList.remove('on'); $('#em-ai-box').style.display='none'; evalAi={comment:'',overall:null};
     await Promise.all([ensureRubric(), ensureCandidateOptions()]);
@@ -1272,12 +1289,14 @@
       $('#em-title').textContent='면접 평가'; $('#em-id').value=ev.id;
       $('#em-candidate').value=ev.candidateId; $('#em-candidate').disabled=true;
       $('#em-notes').value=ev.notes||''; $('#em-evaluator').value=ev.evaluator||'';
+      $('#em-date').value=dateToInput(ev.date); $('#em-date').dataset.orig=$('#em-date').value;
       if(ev.aiComment){ showAiBox(ev.aiComment); evalAi.comment=ev.aiComment; }
       renderRubric(ev.scores||{});
     }else{
       $('#em-title').textContent='면접 평가 작성'; $('#em-id').value='';
       $('#em-candidate').value=''; $('#em-candidate').disabled=false;
       $('#em-notes').value=''; $('#em-evaluator').value='';
+      $('#em-date').value=dateToInput(''); $('#em-date').dataset.orig='';   // 오늘
       renderRubric({});
     }
     $('#emodal').classList.add('on');
@@ -1299,11 +1318,19 @@
   async function saveEval(){
     const cid=$('#em-candidate').value;
     if(!cid){ $('#em-err').textContent='지원자를 선택하세요.'; $('#em-err').classList.add('on'); return; }
-    const data={ candidateId:cid, scores:evalScores, notes:$('#em-notes').value.trim(), evaluator:$('#em-evaluator').value.trim(), aiComment:evalAi.comment||'', aiScore:evalAi.overall };
+    const data={ candidateId:cid, scores:evalScores, notes:$('#em-notes').value.trim(), evaluator:$('#em-evaluator').value.trim(), aiComment:evalAi.comment||'', aiScore:evalAi.overall, date:$('#em-date').value };
     const id=$('#em-id').value;
     $('#em-save').disabled=true; $('#em-save').textContent='저장 중…';
     try{
-      if(id) await call('updateEvaluation',TOKEN,id,data); else await call('addEvaluation',TOKEN,data);
+      let evalId=id;
+      if(id){ await call('updateEvaluation',TOKEN,id,data); }
+      else{ const r=await call('addEvaluation',TOKEN,data); evalId=(r&&r.id)||''; }
+      const dateChanged = id ? (data.date && data.date!==$('#em-date').dataset.orig)
+                             : (data.date && data.date!==dateToInput(''));       // 신규 평가는 오늘이면 백엔드 기본값 그대로
+      if(dateChanged){
+        try{ await call('setEvaluationDate',TOKEN,evalId||'',cid,data.date); }   // 신규 저장 직후엔 지원자ID로 역추적
+        catch(de){ if(/허용되지 않은|찾을 수 없습니다/.test(String(de&&de.message||de))) toast('평가일 지정은 확장 패치(통합HR_확장패치.gs) 설치 후 사용할 수 있습니다.'); }
+      }
       invalidate('ev','dash');
       closeEModal(); toast(id?'평가가 수정되었습니다.':'평가가 저장되었습니다.'); loadEvals();
     }catch(e){ authFail(e); }
@@ -1315,10 +1342,43 @@
     b.parentElement.querySelectorAll('button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
     updateOverall();
   });
+  /* RESUME:BEGIN ═══ 면접자별 이력서 첨부 (Google Drive 저장, Code.gs 패치 필요) ═══ */
+  let resumeTarget='';
+  function fileToB64(f){
+    return new Promise((res,rej)=>{
+      const r=new FileReader();
+      r.onload=()=>res(String(r.result).split(',')[1]||'');
+      r.onerror=()=>rej(new Error('파일을 읽지 못했습니다.'));
+      r.readAsDataURL(f);
+    });
+  }
+  $('#resume-input').addEventListener('change', async e=>{
+    const f=e.target.files[0]; e.target.value='';
+    const cid=resumeTarget; resumeTarget='';
+    if(!f||!cid) return;
+    if(f.size>15*1024*1024){ toast('15MB 이하 파일만 첨부할 수 있습니다.'); return; }
+    toast('이력서 업로드 중…');
+    try{
+      const b64=await fileToB64(f);
+      const r=await call('uploadResume', TOKEN, cid, f.name, f.type||'application/octet-stream', b64);
+      invalidate('ev');
+      toast('이력서가 첨부되었습니다: '+((r&&r.name)||f.name));
+      loadEvals();
+    }catch(err){
+      const m=String((err&&err.message)||err);
+      if(/허용되지 않은|찾을 수 없습니다/.test(m)) toast('백엔드 업데이트 필요 — Code.gs·Api.gs에 이력서 패치를 추가하고 재배포하세요.');
+      else authFail(err);
+    }
+  });
+  /* RESUME:END */
   async function openEModalFor(cid){
     try{ await openEModal(null); $('#em-candidate').value=cid; }catch(e){ authFail(e); }
   }
   $('#eval-table').addEventListener('click', async e=>{
+    const rv=e.target.closest('[data-rview]');
+    if(rv){ window.open(rv.getAttribute('data-rview'),'_blank'); return; }
+    const ru=e.target.closest('[data-rup]');
+    if(ru){ resumeTarget=ru.getAttribute('data-rup'); $('#resume-input').click(); return; }
     const nw=e.target.closest('[data-enew]');
     if(nw){ openEModalFor(nw.getAttribute('data-enew')); return; }
     const ed=e.target.closest('[data-eedit]'); const dl=e.target.closest('[data-edel]');
