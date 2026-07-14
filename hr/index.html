@@ -439,6 +439,10 @@
         <div><div class="eyebrow">Recruitment</div><h1>면접 평가</h1></div>
         <div class="actions"><button class="btn-sm" id="add-eval">＋ 평가 작성</button></div>
       </div>
+      <div class="filterbar">
+        <div></div>
+        <select id="filter-hospital-ev" class="filter-sel"><option value="">전체 병원</option></select>
+      </div>
       <div class="tbl-scroll">
         <table class="htbl">
           <thead><tr><th>지원자</th><th>병원</th><th>직무</th><th class="r">종합</th><th>평가자</th><th class="r">평가일</th><th class="r">관리</th></tr></thead>
@@ -727,6 +731,7 @@
   let evalScores = {};
   let evalAi = { comment:'', overall:null };
   let ctFilter = { status:'전체', hospitalId:'' };
+  let evFilter = { hospital:'' };   // 면접 평가 병원 필터 (병원명 기준, 평가+평가 전 모두 적용)
   let candHospMap = {};
   let svFilter = { hospital:'' };   // 병원명 기준 로컬 필터 (드릴다운)
 
@@ -957,6 +962,7 @@
     if($('#cn-hospital')) $('#cn-hospital').innerHTML = '<option value="">선택 안 함</option>'+opts;
     if($('#po-hospital')) $('#po-hospital').innerHTML = '<option value="">선택</option>'+opts;
     if($('#filter-hospital3')) $('#filter-hospital3').innerHTML = '<option value="">전체 병원</option>'+hospitalCache.map(h=>`<option value="${esc(h['병원명'])}">${esc(h['병원명'])}</option>`).join('');
+    if($('#filter-hospital-ev')) $('#filter-hospital-ev').innerHTML = '<option value="">전체 병원</option>'+hospitalCache.map(h=>`<option value="${esc(h['병원명'])}">${esc(h['병원명'])}</option>`).join('');
     if($('#sv-hospital')) $('#sv-hospital').innerHTML = '<option value="">선택</option>'+opts;
     return hospitalCache;
   }
@@ -1195,6 +1201,7 @@
   }
   async function loadEvals(){
     const tb=$('#eval-table');
+    ensureHospitals().then(()=>{ const s=$('#filter-hospital-ev'); if(s) s.value=evFilter.hospital; }).catch(()=>{});
     if(!hasCache('ev')) tb.innerHTML='<tr><td colspan="7" class="loading">불러오는 중…</td></tr>';
     try{
       await swr('ev', async ()=>{
@@ -1206,15 +1213,22 @@
   /* EVMERGE:BEGIN ═══ 이력서 관리에 등록된 지원자는 평가 목록에 자동 노출 ═══
      평가가 아직 없는 지원자는 '평가 전' 행으로 위에 표시되고,
      [평가 작성]을 누르면 그 지원자가 선택된 상태로 작성 창이 열린다.
-     평가 저장/삭제 시 자동으로 두 상태를 오간다 — 수기 재등록 불필요. */
+     평가 저장/삭제 시 자동으로 두 상태를 오간다 — 수기 재등록 불필요.
+     병원 필터는 '평가 전'과 작성된 평가 양쪽에 동일하게 적용된다. */
   function renderEvals(v){
-    const evals = Array.isArray(v) ? v : ((v&&v.evals)||[]);
-    const cands = Array.isArray(v) ? [] : ((v&&v.cands)||[]);
+    const evalsAll = Array.isArray(v) ? v : ((v&&v.evals)||[]);
+    const candsAll = Array.isArray(v) ? [] : ((v&&v.cands)||[]);
     const tb=$('#eval-table');
-    const done=new Set(evals.map(e=>String(e.candidateId)));
-    const pending=cands.filter(c=>c && c.id!=null && !done.has(String(c.id)))
-                       .sort((a,b)=>String(b.created||'').localeCompare(String(a.created||'')));
-    if(!evals.length && !pending.length){ tb.innerHTML='<tr><td colspan="7" class="empty-row">지원자가 없습니다. 이력서 관리에 등록되면 여기에 자동으로 나타납니다.</td></tr>'; return; }
+    const done=new Set(evalsAll.map(e=>String(e.candidateId)));           // 평가 여부는 필터와 무관하게 전체 기준
+    const hf=String(evFilter.hospital||'').trim();
+    const hit=s=>!hf || String(s||'').trim()===hf;
+    const evals=evalsAll.filter(e=>hit(e.hospital));
+    const pending=candsAll.filter(c=>c && c.id!=null && !done.has(String(c.id)) && hit(c.hospital))
+                          .sort((a,b)=>String(b.created||'').localeCompare(String(a.created||'')));
+    if(!evals.length && !pending.length){
+      tb.innerHTML='<tr><td colspan="7" class="empty-row">'+(hf?esc(hf)+'의 지원자·평가가 없습니다.':'지원자가 없습니다. 이력서 관리에 등록되면 여기에 자동으로 나타납니다.')+'</td></tr>';
+      return;
+    }
     const pRows=pending.map(c=>`<tr>
       <td class="hname">${esc(c.name)}</td>
       <td>${c.hospital?esc(c.hospital):'<span class="muted">–</span>'}</td>
@@ -1316,6 +1330,7 @@
     }
   });
   $('#add-eval').addEventListener('click', ()=>openEModal(null));
+  $('#filter-hospital-ev').addEventListener('change', e=>{ evFilter.hospital=e.target.value; loadEvals(); });
   $('#em-ai').addEventListener('click', runAiScore);
   $('#em-save').addEventListener('click', saveEval);
   $$('[data-eclose]').forEach(el=>el.addEventListener('click', closeEModal));
