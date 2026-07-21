@@ -1366,47 +1366,55 @@
     const n=(file.name||'').toLowerCase();
     return n.endsWith('.docx') || (file.type||'').indexOf('wordprocessingml')>=0;
   }
+  /* PizZip이 defer로 로드되므로, 아직이면 잠깐 기다린다(최대 ~3초). */
+  async function ensurePizZip_(){
+    for(let i=0;i<30;i++){
+      if(typeof PizZip!=='undefined') return true;
+      await new Promise(r=>setTimeout(r,100));
+    }
+    return typeof PizZip!=='undefined';
+  }
   async function fixDocxAnchorsToInline_(file){
-    // 반환: 변환이 일어나면 새 Blob, 아니면 원본 file
-    if(typeof PizZip==='undefined' || typeof DOMParser==='undefined') return file;
+    // 반환: {blob, changed, note}. 실패해도 원본 blob을 반환하되 note로 이유를 남긴다.
+    const ok=await ensurePizZip_();
+    if(!ok) return {blob:file, changed:0, note:'PizZip 미로드'};
+    if(typeof DOMParser==='undefined') return {blob:file, changed:0, note:'DOMParser 미지원'};
     let buf;
-    try{ buf=await file.arrayBuffer(); }catch(_){ return file; }
+    try{ buf=await file.arrayBuffer(); }catch(_){ return {blob:file, changed:0, note:'파일읽기 실패'}; }
     let zip, xmlFile;
     try{
       zip=new PizZip(buf);
       xmlFile=zip.file('word/document.xml');
-      if(!xmlFile) return file;                       // docx 구조 아님
-    }catch(_){ return file; }                          // docx 아님/손상 → 원본 그대로
+      if(!xmlFile) return {blob:file, changed:0, note:'docx구조 아님'};
+    }catch(_){ return {blob:file, changed:0, note:'zip파싱 실패'}; }
     try{
       const doc=new DOMParser().parseFromString(xmlFile.asText(),'application/xml');
-      if(doc.getElementsByTagName('parsererror').length) return file;
+      if(doc.getElementsByTagName('parsererror').length) return {blob:file, changed:0, note:'XML파싱 오류'};
       const anchors=doc.getElementsByTagNameNS(WP_NS_,'anchor');
       const arr=[]; for(let i=0;i<anchors.length;i++) arr.push(anchors[i]);
-      if(!arr.length) return file;                     // floating 사진 없음 → 그대로
+      if(!arr.length) return {blob:file, changed:0, note:'floating사진 없음(이미정상)'};
       let changed=0;
       arr.forEach(anchor=>{
-        const parent=anchor.parentNode;                // <w:drawing>
-        if(!parent) return;
+        const parent=anchor.parentNode; if(!parent) return;
         const inline=doc.createElementNS(WP_NS_,'wp:inline');
         ['distT','distB','distL','distR'].forEach(a=>inline.setAttribute(a,'0'));
-        // inline 스키마 순서: extent → effectExtent → docPr → cNvGraphicFramePr → graphic
         ['extent','effectExtent','docPr','cNvGraphicFramePr'].forEach(tag=>{
           const el=anchor.getElementsByTagNameNS(WP_NS_,tag)[0];
           if(el && el.parentNode===anchor) inline.appendChild(el);
         });
-        const g=anchor.getElementsByTagNameNS(A_NS_,'graphic')[0];  // graphic은 a: 네임스페이스
+        const g=anchor.getElementsByTagNameNS(A_NS_,'graphic')[0];
         if(g && g.parentNode===anchor) inline.appendChild(g);
         parent.appendChild(inline);
         parent.removeChild(anchor);
         changed++;
       });
-      if(!changed) return file;
+      if(!changed) return {blob:file, changed:0, note:'변환대상 없음'};
       const newXml=new XMLSerializer().serializeToString(doc);
       zip.file('word/document.xml', newXml);
       const outU8=zip.generate({type:'uint8array', compression:'DEFLATE'});
-      toast('이력서 사진 자동 보정 완료('+changed+')');
-      return new Blob([outU8], {type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
-    }catch(_){ return file; }                           // 어떤 오류든 원본 업로드로 안전 폴백
+      const outBlob=new Blob([outU8], {type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+      return {blob:outBlob, changed, note:''};
+    }catch(err){ return {blob:file, changed:0, note:'변환예외: '+String((err&&err.message)||err).slice(0,40)}; }
   }
   $('#resume-input').addEventListener('change', async e=>{
     const f=e.target.files[0]; e.target.value='';
@@ -1415,14 +1423,17 @@
     if(f.size>15*1024*1024){ toast('15MB 이하 파일만 첨부할 수 있습니다.'); return; }
     toast('이력서 업로드 중…');
     try{
-      // docx면 사진 anchor→inline 자동 보정 (그 외 형식/실패 시 원본 그대로)
-      const up = isDocx_(f) ? await fixDocxAnchorsToInline_(f) : f;
-      const upName = f.name;   // 파일명은 원본 유지
-      const upType = (up.type||f.type||'application/octet-stream');
+      let up=f, upType=(f.type||'application/octet-stream');
+      if(isDocx_(f)){
+        const res=await fixDocxAnchorsToInline_(f);
+        up=res.blob; upType=(up.type||upType);
+        if(res.changed>0) toast('사진 자동 보정 완료('+res.changed+') · 업로드 중…', 3000);
+        else if(res.note && res.note.indexOf('이미정상')<0) toast('보정 건너뜀('+res.note+') · 원본 업로드', 4000);
+      }
       const b64=await fileToB64(up);
-      const r=await call('uploadResume', TOKEN, cid, upName, upType, b64);
+      const r=await call('uploadResume', TOKEN, cid, f.name, upType, b64);
       invalidate('ev');
-      toast('이력서가 첨부되었습니다: '+((r&&r.name)||upName));
+      toast('이력서가 첨부되었습니다: '+((r&&r.name)||f.name));
       loadEvals();
     }catch(err){
       const m=String((err&&err.message)||err);
