@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <base target="_top">
 <title>엔젤스태프 통합 HR</title>
-
+ 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.1.4/pizzip.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
-
+ 
 <style>
   :root{
     --paper:#ffffff; --panel:#FAF9F5;
@@ -33,7 +33,7 @@
   ::selection{background:var(--trace-wash)}
   .eyebrow{font-family:var(--gr);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--ink-3)}
   .muted{color:var(--ink-3)}
-
+ 
   /* 로그인 */
   #login{position:fixed;inset:0;z-index:50;background:var(--paper);display:grid;grid-template-columns:1.05fr 1fr}
   #login .stage{position:relative;background:var(--ink);color:#fff;overflow:hidden;padding:48px;display:flex;flex-direction:column;justify-content:space-between}
@@ -60,7 +60,7 @@
   .btn:hover{background:#000}.btn:active{transform:translateY(1px)}
   .btn:focus-visible{outline:2px solid var(--trace);outline-offset:2px}
   #login .note{margin-top:18px;font-size:12px;color:var(--ink-3);border-top:1px solid var(--line-2);padding-top:14px}
-
+ 
   /* 셸 */
   #app{display:none;min-height:100vh;grid-template-columns:248px 1fr}
   #app.on{display:grid}
@@ -83,7 +83,7 @@
   .user .av{width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:600;font-size:12px;flex:none}
   .user .who{font-size:13px;font-weight:600;line-height:1.2}.user .who span{display:block;font-weight:400;font-size:11px;color:var(--ink-3)}
   .logout{margin-left:auto;border:none;background:none;color:var(--ink-3);font-size:12px;padding:4px}.logout:hover{color:var(--ink)}
-
+ 
   /* 콘텐츠 */
   .content{min-width:0;display:flex;flex-direction:column}
   .topbar{display:none;align-items:center;gap:12px;padding:12px var(--pad);border-bottom:1px solid var(--line)}
@@ -92,7 +92,7 @@
   .menu-btn span::before{position:absolute;top:-5px}.menu-btn span::after{position:absolute;top:5px}
   .topbar .logo{font-weight:700;letter-spacing:-0.03em}.topbar .logo b{color:var(--trace-ink)}
   .page{padding:var(--pad);max-width:1180px;width:100%}
-
+ 
   .head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:38px}
   .head h1{font-weight:700;font-size:clamp(26px,3.4vw,34px);letter-spacing:-0.035em;margin:6px 0 0}
   .head .when{text-align:right;color:var(--ink-3);font-size:12.5px;line-height:1.5}
@@ -103,7 +103,7 @@
   .btn-sm.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}.btn-sm.ghost:hover{background:var(--panel)}
   .btn-sm.danger{background:var(--danger);border-color:var(--danger)}.btn-sm.danger:hover{background:#9a1d12}
   .btn-sm:focus-visible{outline:2px solid var(--trace);outline-offset:2px}
-
+ 
   /* KPI */
   .kpis{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--ink);border-bottom:1px solid var(--line)}
   .kpi{padding:20px 22px 18px;border-left:1px solid var(--line-2);position:relative}
@@ -113,7 +113,7 @@
   .kpi .k-lab{font-size:12.5px;color:var(--ink-2);margin-top:10px;font-weight:500}
   .kpi.flag::after{content:"";position:absolute;top:20px;right:18px;width:7px;height:7px;border-radius:50%;background:var(--trace)}
   .kpi.flag .k-lab b{color:var(--trace-ink);font-weight:600}
-
+ 
   /* 파이프라인 */
   .pipe{margin-top:46px}
   .block .b-head{display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--ink);padding-bottom:10px;margin-bottom:4px}
@@ -129,7 +129,7 @@
   .arrow svg{width:34px;height:8px}
   .pipe .base{height:3px;background:var(--line-2);border-radius:2px;margin-top:18px;overflow:hidden}
   .pipe .base i{display:block;height:100%;width:0;background:var(--trace);transition:width .6s ease}
-
+ 
   .grid{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(24px,3.4vw,52px);margin-top:46px;align-items:start}
   .row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:13px 2px;border-bottom:1px solid var(--line-2)}
   .row:last-child{border-bottom:none}
@@ -138,7 +138,7 @@
   .dday{font-family:var(--gr);font-weight:700;font-size:14px;letter-spacing:-0.01em;padding:5px 9px;border-radius:2px;background:var(--line-2);color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
   .dday.soon{background:var(--trace);color:#3a2f00}
   .dday.near{background:var(--trace-wash);color:var(--trace-ink)}
-
+ 
   .tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
   .tbl th{font-family:var(--gr);font-weight:500;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);text-align:right;padding:10px 0 9px;border-bottom:1px solid var(--line)}
   .tbl th:first-child{text-align:left}
@@ -147,7 +147,7 @@
   .tbl tr:last-child td{border-bottom:none}
   .sat{font-family:var(--gr);font-weight:500}
   .sat::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--trace);margin-right:6px;vertical-align:middle}
-
+ 
   /* 병원 드릴다운(만족도) */
   .tbl tr.h-click td{cursor:pointer;padding-left:6px;padding-right:6px;transition:background .12s}
   .tbl tr.h-click:hover td{background:var(--panel)}
@@ -158,7 +158,7 @@
   .chip-reset{display:none;align-items:center;gap:7px;border:1px solid var(--trace);background:var(--trace-wash);color:var(--trace-ink);border-radius:100px;padding:6px 13px;font-size:12px;font-weight:600;cursor:pointer;margin-left:10px}
   .chip-reset.on{display:inline-flex}
   .chip-reset:hover{background:var(--trace);color:#3a2f00}
-
+ 
   /* 병원 마스터 테이블 */
   .tbl-scroll{overflow-x:auto;border-bottom:1px solid var(--line)}
   .htbl{width:100%;border-collapse:collapse;min-width:620px}
@@ -174,11 +174,11 @@
   .act button{border:none;background:none;color:var(--ink-3);font-size:12.5px;padding:5px 8px;border-radius:2px;font-weight:500}
   .act button:hover{color:var(--ink);background:var(--line-2)}
   .act .del:hover{color:var(--danger);background:var(--danger-bg)}
-
+ 
   .loading{padding:40px 2px;color:var(--ink-3);font-size:13px}
   .empty-row{padding:30px 14px;color:var(--ink-3);font-size:13px}
   .empty-row b{color:var(--ink-2);font-weight:600}
-
+ 
   /* 빈 모듈 */
   .empty{padding:var(--pad);max-width:560px}
   .empty .eyebrow{display:block;margin-bottom:10px}
@@ -186,7 +186,7 @@
   .empty p{color:var(--ink-2);font-size:14px;margin:0 0 22px;max-width:42ch}
   .empty .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:100px;padding:8px 14px;font-size:12.5px;color:var(--ink-2);font-weight:500}
   .empty .pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--trace)}
-
+ 
   /* 모달 / 확인 / 토스트 */
   .modal-wrap{display:none;position:fixed;inset:0;z-index:60;place-items:center;padding:20px}
   .modal-wrap.on{display:grid}
@@ -197,7 +197,7 @@
   .modal .m-foot{display:flex;gap:10px;justify-content:flex-end;margin-top:22px}
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(14px);z-index:70;background:var(--ink);color:#fff;font-size:13px;font-weight:500;padding:11px 18px;border-radius:100px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
   .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-
+ 
   /* 지원자 필터바 + 인라인 상태 셀렉트 */
   .filterbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px;flex-wrap:wrap}
   .segs{display:inline-flex;gap:2px;align-items:center}
@@ -214,7 +214,7 @@
   .ev-wait{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--ink-3);border:1px dashed var(--line);background:#fff;border-radius:100px;padding:4px 11px}
   .field textarea{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:var(--r);background:#fff;font-size:14px;font-family:inherit;color:var(--ink);outline:none;resize:vertical;min-height:64px}
   .field textarea:focus{border-color:var(--ink);box-shadow:0 0 0 3px var(--trace-wash)}
-
+ 
   /* 면접 평가 */
   .modal-lg{width:min(560px,94vw);max-height:88vh;overflow:auto}
   .ai-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:14px}
@@ -232,11 +232,11 @@
   .overall-bar b{font-family:var(--gr);font-weight:700;font-size:30px;line-height:1;position:relative;font-variant-numeric:tabular-nums}
   .overall-bar b::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:2.5px;background:var(--trace)}
   .overall-bar b u{text-decoration:none;font-size:.45em;font-weight:500;color:var(--ink-3);margin-left:2px}
-
+ 
   .st-sel[data-s="진행"]{border-color:var(--ink);color:var(--ink)}
   .st-sel[data-s="종료"]{color:var(--ink-3)}
   .dday.over{background:var(--danger-bg);color:var(--danger)}
-
+ 
   /* 파견·계약 병원별 그룹 헤더 */
   .htbl tr.grp td{background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-weight:700;font-size:13.5px;color:var(--ink);cursor:pointer;padding-top:11px;padding-bottom:11px}
   .htbl tr.grp:hover td{background:var(--trace-wash)}
@@ -245,7 +245,7 @@
   .htbl tr.grp .grp-go{float:right;font-family:var(--gr);font-weight:500;font-size:11px;letter-spacing:.04em;color:var(--ink-3)}
   .htbl tr.grp:hover .grp-go{color:var(--trace-ink)}
   .rownum{display:inline-block;min-width:22px;font-family:var(--gr);font-weight:500;font-size:11.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
-
+ 
   /* 대시보드 드릴다운 (클릭 가능한 KPI·행) */
   .kpi.click{cursor:pointer;transition:background .14s}
   .kpi.click:hover{background:var(--panel)}
@@ -254,7 +254,7 @@
   .stage.click:hover{background:var(--panel)}
   .row.click{cursor:pointer;transition:background .12s}
   .row.click:hover{background:var(--panel)}
-
+ 
   /* 직무공고 생성기 */
   .gen{display:grid;grid-template-columns:380px 1fr;border:1px solid var(--line);border-radius:6px;overflow:hidden}
   .gen-form{padding:22px;border-right:1px solid var(--line);background:var(--panel);max-height:calc(100vh - 220px);overflow:auto}
@@ -266,7 +266,7 @@
   .gen-prev{background:#F3F4F6}
   .gen-prev iframe{width:100%;height:calc(100vh - 220px);border:none;display:block;background:#F3F4F6}
   @media(max-width:880px){.gen{grid-template-columns:1fr}.gen-form{border-right:none;border-bottom:1px solid var(--line);max-height:none}.gen-prev iframe{height:78vh}}
-
+ 
   .scrim{display:none}
   @media (max-width:880px){
     #login{grid-template-columns:1fr}#login .stage{display:none}#login .form{max-width:none;min-height:100vh}
@@ -292,7 +292,7 @@
 </style>
 </head>
 <body>
-
+ 
 <!-- 로그인 -->
 <div id="login">
   <div class="stage">
@@ -317,11 +317,11 @@
     <div class="note">세션은 6시간 유지됩니다. 모든 데이터는 로그인 후에만 불러옵니다.</div>
   </div>
 </div>
-
+ 
 <!-- 앱 -->
 <div id="app">
   <div class="scrim" id="scrim"></div>
-
+ 
   <aside class="sidebar" id="sidebar">
     <div class="brand" id="brand-logo" style="cursor:pointer" title="대시보드로 이동"><span class="logo">엔젤스태프</span><span class="tag">HR</span></div>
     <div class="nav-sec"><div class="eyebrow">대시보드</div></div>
@@ -343,20 +343,20 @@
       </div>
     </div>
   </aside>
-
+ 
   <main class="content">
     <div class="topbar">
       <button class="menu-btn" id="menu" aria-label="메뉴"><span></span></button>
       <span class="logo">엔젤스태프<b>.</b></span>
     </div>
-
+ 
     <!-- 현황 -->
     <section class="page" id="view-dash">
       <div class="head reveal">
         <div><div class="eyebrow">Overview</div><h1>현황</h1></div>
         <div class="when"><b id="today">—</b>엔젤스태프 운영 전체</div>
       </div>
-
+ 
       <div class="kpis reveal" style="opacity:1;transform:none">
         <div class="kpi click" data-go="hospitals" title="병원 마스터 상세보기"><div class="k-val" id="kpi-hospitals">–</div><div class="k-lab">운영 병원</div></div>
         <div class="kpi click" data-go="cand:전체" title="이력서 관리 상세보기"><div class="k-val" id="kpi-hiring">–</div><div class="k-lab">진행 중 채용</div></div>
@@ -364,7 +364,7 @@
         <div class="kpi flag click" data-go="ct:진행" title="파견·계약 상세보기"><div class="k-val" id="kpi-expiring">–</div><div class="k-lab"><b>파견 만료 임박</b> · 60일 내</div></div>
         <div class="kpi click" data-go="surveys" title="만족도 조사 상세보기"><div class="k-val" id="kpi-sat">–</div><div class="k-lab">평균 만족도</div></div>
       </div>
-
+ 
       <div class="pipe reveal">
         <div class="block"><div class="b-head"><h3>채용 파이프라인</h3><span class="meta">현재 진행</span></div></div>
         <div class="flow">
@@ -376,7 +376,7 @@
         </div>
         <div class="base"><i id="pipe-base"></i></div>
       </div>
-
+ 
       <div class="grid reveal">
         <div class="block">
           <div class="b-head"><h3>파견법 만료 임박</h3><span class="meta">2년 한도 · 90일 내 · 클릭 → 계약 상세</span></div>
@@ -390,7 +390,7 @@
         </div>
       </div>
     </section>
-
+ 
     <!-- 병원 마스터 -->
     <section class="page" id="view-hospitals" style="display:none">
       <div class="head">
@@ -404,7 +404,7 @@
         </table>
       </div>
     </section>
-
+ 
     <!-- 이력서 관리 (지원자) -->
     <section class="page" id="view-candidates" style="display:none">
       <div class="head">
@@ -432,7 +432,7 @@
         </table>
       </div>
     </section>
-
+ 
     <!-- 면접 평가 -->
     <section class="page" id="view-evals" style="display:none">
       <div class="head">
@@ -451,7 +451,7 @@
       </div>
       <input type="file" id="resume-input" accept=".pdf,.doc,.docx,.hwp,.hwpx" style="display:none">
     </section>
-
+ 
     <!-- 파견·계약 -->
     <section class="page" id="view-contracts" style="display:none">
       <div class="head">
@@ -478,7 +478,7 @@
         </table>
       </div>
     </section>
-
+ 
     <!-- 직무공고 생성기 -->
     <section class="page" id="view-postings" style="display:none">
       <div class="head">
@@ -532,7 +532,7 @@
         <div class="gen-prev"><iframe id="post-preview" title="공고 미리보기"></iframe></div>
       </div>
     </section>
-
+ 
     <!-- 만족도 조사 -->
     <section class="page" id="view-surveys" style="display:none">
       <div class="head">
@@ -569,7 +569,7 @@
         <div id="sv-comments"><div class="loading">불러오는 중…</div></div>
       </div>
     </section>
-
+ 
     <!-- 빈 모듈 -->
     <section class="page" id="view-empty" style="display:none">
       <div class="empty">
@@ -581,7 +581,7 @@
     </section>
   </main>
 </div>
-
+ 
 <!-- 병원 추가/수정 모달 -->
 <div class="modal-wrap" id="hmodal">
   <div class="modal-bg" data-hclose></div>
@@ -603,7 +603,7 @@
     </div>
   </div>
 </div>
-
+ 
 <!-- 확인 모달 -->
 <div class="modal-wrap" id="confirm">
   <div class="modal-bg" data-cf-cancel></div>
@@ -616,7 +616,7 @@
     </div>
   </div>
 </div>
-
+ 
 <!-- 지원자 추가/수정 모달 -->
 <div class="modal-wrap" id="cmodal">
   <div class="modal-bg" data-cclose></div>
@@ -636,7 +636,7 @@
     <div class="m-foot"><button class="btn-sm ghost" data-cclose>취소</button><button class="btn-sm" id="cm-save">저장</button></div>
   </div>
 </div>
-
+ 
 <!-- 면접 평가 모달 -->
 <div class="modal-wrap" id="emodal">
   <div class="modal-bg" data-eclose></div>
@@ -658,7 +658,7 @@
     <div class="m-foot"><button class="btn-sm ghost" data-eclose>취소</button><button class="btn-sm" id="em-save">평가 저장</button></div>
   </div>
 </div>
-
+ 
 <!-- 파견 계약 모달 -->
 <div class="modal-wrap" id="cnmodal">
   <div class="modal-bg" data-cnclose></div>
@@ -676,7 +676,7 @@
     <div class="m-foot"><button class="btn-sm ghost" data-cnclose>취소</button><button class="btn-sm" id="cn-save">저장</button></div>
   </div>
 </div>
-
+ 
 <!-- 입사지원서 DOCX 모달 -->
 <div class="modal-wrap" id="appmodal">
   <div class="modal-bg" data-appclose></div>
@@ -701,7 +701,7 @@
     <div class="m-foot"><button class="btn-sm ghost" data-appclose>취소</button><button class="btn-sm" id="app-gen">DOCX 생성</button></div>
   </div>
 </div>
-
+ 
 <!-- 만족도 응답 모달 -->
 <div class="modal-wrap" id="svmodal">
   <div class="modal-bg" data-svclose></div>
@@ -720,9 +720,9 @@
     <div class="m-foot"><button class="btn-sm ghost" data-svclose>취소</button><button class="btn-sm" id="sv-save">저장</button></div>
   </div>
 </div>
-
+ 
 <div class="toast" id="toast"></div>
-
+ 
 <script>
   const $  = s => document.querySelector(s);
   const $$ = s => document.querySelectorAll(s);
@@ -738,7 +738,7 @@
   let evFilter = { hospital:'' };   // 면접 평가 병원 필터 (병원명 기준, 평가+평가 전 모두 적용)
   let candHospMap = {};
   let svFilter = { hospital:'' };   // 병원명 기준 로컬 필터 (드릴다운)
-
+ 
   /* ═══ SWR 캐시: 캐시가 있으면 즉시 렌더 → 백그라운드 갱신 (체감속도 대폭 개선) ═══ */
   const DATA = {};                    // key -> {t, v}
   const SWR_TTL = 25000;              // 25초 내 재방문은 서버 호출 자체를 생략
@@ -753,12 +753,12 @@
     render(v);
   }
   function hasCache(key){ return !!DATA[key]; }
-
+ 
   /* ═══ 백엔드 연결 (GitHub Pages → Apps Script API) ═══
      GAS_URL: 배포 관리의 활성 배포 '통합 HR v 2' 웹앱 주소(/exec). ※만족도 설문(gd.html 등)은 별도 배포 URL 사용.
      새 버전 재배포 시에도 URL은 유지됨. */
   const GAS_URL = 'https://script.google.com/macros/s/AKfycbxmQOAC8zXpZ9skWuhvLy8E_YB3ENpuFcOastzqH8NREk3_Cfub-jm1hLy_SAwOqCBloA/exec';
-
+ 
   async function call(method){
     const args = [].slice.call(arguments, 1);
     let res;
@@ -784,7 +784,7 @@
     if(/세션|권한/.test(m)){ logout(); toast('세션이 만료되었습니다. 다시 로그인하세요.'); }
     else toast('오류: '+m);
   }
-
+ 
   /* 로그인 */
   function setLoginErr(msg){ const i=$('#pw'), e=$('#login-err'); if(msg){ i.classList.add('err'); e.textContent=msg; e.classList.add('on'); } else { i.classList.remove('err'); e.classList.remove('on'); } }
   async function doLogin(){
@@ -804,7 +804,7 @@
     loadDashboard();
     ensureHospitals().catch(()=>{});   // 병원 목록 선-예열 (다른 탭 진입 즉시화)
   }
-
+ 
   /* ───────── 대시보드 ───────── */
   async function loadDashboard(){
     try{ await swr('dash', ()=>call('getDashboard', TOKEN), renderDashboard); }
@@ -820,13 +820,13 @@
     $('#kpi-interviews').textContent= d.kpi.interviews;
     $('#kpi-expiring').textContent  = d.kpi.expiring;
     $('#kpi-sat').innerHTML = (sat==null) ? '–' : esc(sat)+'<u>/5</u>';
-
+ 
     const p=d.pipeline;
     $('#pipe-doc').textContent=p.doc; $('#pipe-interview').textContent=p.interview; $('#pipe-placed').textContent=p.placed;
     $('#rate-1').textContent = p.doc ? Math.round(p.interview/p.doc*100)+'%' : '–';
     $('#rate-2').textContent = p.interview ? Math.round(p.placed/p.interview*100)+'%' : '–';
     $('#pipe-base').style.width = (p.doc ? Math.min(100, Math.round(p.placed/p.doc*100)) : 0)+'%';
-
+ 
     const el=$('#exp-list');
     if(!d.expiring.length){ el.innerHTML='<div class="empty-row">임박한 만료 계약이 없습니다.</div>'; }
     else{
@@ -835,14 +835,14 @@
         return `<div class="row click" data-hn="${esc(x.hospital)}" title="파견·계약에서 상세보기"><div><div class="who">${esc(x.name)}<span>${esc(x.hospital)}${x.job?' · '+esc(x.job):''}</span></div><div class="meta">파견 만료 ${esc(x.date)}</div></div><div class="dday ${cls}">D-${x.dday}</div></div>`;
       }).join('');
     }
-
+ 
     const hr=$('#hospital-rows');
     if(!d.hospitals.length){ hr.innerHTML='<tr><td colspan="4" class="empty-row">등록된 병원이 없습니다 — <b>병원 마스터</b>에서 추가하세요.</td></tr>'; }
     else{
       hr.innerHTML = d.hospitals.map(h=>`<tr class="h-click" data-hn="${esc(h.name)}" title="파견·계약에서 상세보기"><td>${esc(h.name)}</td><td>${h.active}</td><td>${h.hiring}</td><td>${h.sat==null?'<span class="muted">–</span>':'<span class="sat">'+esc(h.sat)+'</span>'}</td></tr>`).join('');
     }
   }
-
+ 
   /* ═══ 대시보드 드릴다운: 클릭 → 해당 메뉴로 이동하며 필터 자동 적용 ═══ */
   function gotoView(v){ const btn=document.querySelector(`.nav-item[data-view="${v}"]`); if(btn) btn.click(); }
   function hidByName(name){
@@ -878,7 +878,7 @@
     const hrow=e.target.closest('#hospital-rows tr.h-click');
     if(hrow){ gotoContracts('전체', hrow.getAttribute('data-hn')); return; }
   });
-
+ 
   /* ───────── 병원 마스터 ───────── */
   async function loadHospitals(){
     const tb=$('#hosp-table');
@@ -907,7 +907,7 @@
       </tr>`;
     }).join('');
   }
-
+ 
   /* 모달 */
   function openHModal(h){
     $('#hm-err').classList.remove('on');
@@ -933,7 +933,7 @@
     }catch(e){ authFail(e); }
     finally{ $('#hm-save').disabled=false; $('#hm-save').textContent='저장'; }
   }
-
+ 
   /* 확인 모달 */
   let cfResolve=null;
   function confirmAction(title, msg){
@@ -941,7 +941,7 @@
     return new Promise(res=>{ cfResolve=res; });
   }
   function cfClose(v){ $('#confirm').classList.remove('on'); if(cfResolve){ cfResolve(v); cfResolve=null; } }
-
+ 
   /* 이벤트 위임 (테이블 버튼) */
   $('#hosp-table').addEventListener('click', async e=>{
     const ed=e.target.closest('[data-edit]'); const dl=e.target.closest('[data-del]');
@@ -952,7 +952,7 @@
       try{ await call('deleteHospital', TOKEN, dl.dataset.del); hospitalCache=null; invalidateAll(); toast('삭제되었습니다.'); loadHospitals(); }catch(err){ authFail(err); }
     }
   });
-
+ 
   /* 지원자(이력서) */
   async function ensureHospitals(){
     if(hospitalCache) return hospitalCache;
@@ -1018,7 +1018,7 @@
     }catch(_){ HEALED.delete(c.id); }                                          // 실패 시 다음 로드에서 재시도
   }
   /* HEAL:END */
-
+ 
   async function loadCandidates(){
     const tb=$('#cand-table');
     const key='cand:'+candFilter.status+':'+candFilter.hospitalId;
@@ -1094,7 +1094,7 @@
   $('#add-candidate').addEventListener('click', ()=>openCModal(null));
   $('#cm-save').addEventListener('click', saveCandidate);
   $$('[data-cclose]').forEach(el=>el.addEventListener('click', closeCModal));
-
+ 
   /* 알바몬 PDF 가져오기 */
   function parseAlbamon(t){
     const T=(t||'').replace(/\u00A0/g,' ');
@@ -1192,7 +1192,7 @@
   }
   if($('#import-pdf')) $('#import-pdf').addEventListener('click', ()=>$('#pdf-input').click());
   if($('#pdf-input')) $('#pdf-input').addEventListener('change', e=>{ importResumeFile(e.target.files[0]); e.target.value=''; });
-
+ 
   /* 면접 평가 */
   async function ensureRubric(){ if(!rubricCache) rubricCache=await call('getRubric',TOKEN); return rubricCache; }
   async function getCandListCached(){
@@ -1366,30 +1366,19 @@
     const n=(file.name||'').toLowerCase();
     return n.endsWith('.docx') || (file.type||'').indexOf('wordprocessingml')>=0;
   }
-  /* PizZip이 아직 로드 전이면(=defer 미완료) 즉석에서 로드한다.
-     이미 있으면 즉시 통과. CDN 로드 실패 시에도 원본 업로드로 안전 폴백. */
-  let _pizzipLoading_=null;
+  /* PizZip은 페이지 상단 <script defer>로 로드가 예약돼 있다(입사지원서 생성도 이걸 씀).
+     방화벽/추적방지가 '재요청'을 막을 수 있으므로 CDN 재주입은 하지 않고,
+     예약된 로드가 끝날 때까지 넉넉히(최대 10초) 기다리기만 한다. */
   function loadPizZip_(){
-    if(typeof PizZip!=='undefined') return Promise.resolve(true);
-    if(_pizzipLoading_) return _pizzipLoading_;
-    _pizzipLoading_=new Promise(resolve=>{
-      // 1) 이미 defer로 끝나길 잠깐(1.5초) 대기
+    return new Promise(resolve=>{
+      if(typeof PizZip!=='undefined'){ resolve(true); return; }
       let waited=0;
       const iv=setInterval(()=>{
         if(typeof PizZip!=='undefined'){ clearInterval(iv); resolve(true); return; }
         waited+=100;
-        if(waited>=1500){
-          clearInterval(iv);
-          // 2) 그래도 없으면 script 태그로 직접 주입
-          const s=document.createElement('script');
-          s.src='https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.1.4/pizzip.min.js';
-          s.onload=()=>resolve(typeof PizZip!=='undefined');
-          s.onerror=()=>resolve(false);
-          document.head.appendChild(s);
-        }
+        if(waited>=10000){ clearInterval(iv); resolve(typeof PizZip!=='undefined'); }
       },100);
     });
-    return _pizzipLoading_;
   }
   async function fixDocxAnchorsToInline_(file){
     // 반환: {blob, changed, note}. 실패해도 원본 blob을 반환하되 note로 이유를 남긴다.
@@ -1498,7 +1487,7 @@
   $('#em-ai').addEventListener('click', runAiScore);
   $('#em-save').addEventListener('click', saveEval);
   $$('[data-eclose]').forEach(el=>el.addEventListener('click', closeEModal));
-
+ 
   /* 파견·계약 */
   let candByName = {};   // 이름(공백제거) → {id, hospitalId}
   async function ensureContractCandidates(){
@@ -1616,7 +1605,7 @@
   $('#add-contract').addEventListener('click', ()=>openCnModal(null));
   $('#cn-save').addEventListener('click', saveContract);
   $$('[data-cnclose]').forEach(el=>el.addEventListener('click', closeCnModal));
-
+ 
   /* ───────── 파견·계약 엑셀 일괄등록 ───────── */
   function ctTemplateDownload(){
     if(typeof XLSX==='undefined'){ toast('엑셀 모듈 로드 실패. 새로고침 후 다시 시도하세요.'); return; }
@@ -1677,7 +1666,7 @@
   if($('#ct-template')) $('#ct-template').addEventListener('click', ctTemplateDownload);
   if($('#ct-bulk')) $('#ct-bulk').addEventListener('click', ()=>$('#ct-xlsx-input').click());
   if($('#ct-xlsx-input')) $('#ct-xlsx-input').addEventListener('change', e=>{ importContractXlsx(e.target.files[0]); e.target.value=''; });
-
+ 
   /* 직무공고 생성기 */
   function poV(id){ return ($('#'+id).value||'').trim(); }
   function poLines(id){ return ($('#'+id).value||'').split('\n').map(s=>s.trim()).filter(Boolean); }
@@ -1728,14 +1717,14 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   if($('#post-gen')) $('#post-gen').addEventListener('click', generatePosting);
   if($('#post-copy')) $('#post-copy').addEventListener('click', ()=>{ if(!window.__posting) generatePosting(); navigator.clipboard.writeText(window.__posting).then(()=>toast('HTML이 복사되었습니다. 알바몬에 붙여넣으세요.')).catch(()=>toast('복사 실패 — .html 저장을 이용하세요.')); });
   if($('#post-download')) $('#post-download').addEventListener('click', ()=>{ if(!window.__posting) generatePosting(); const blob=new Blob([window.__posting],{type:'text/html;charset=utf-8'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=(poV('po-title')||'채용공고')+'.html'; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); });
-
+ 
   /* ═══════════ 만족도 조사 — 전체 1회 로드 + 병원 드릴다운(로컬 필터, 0ms) ═══════════ */
   const SV_QMAP = [
     ['q_pay','급여·수당'],['q_payAccuracy','급여 정확·적시'],['q_workload','근무 강도·교대'],
     ['q_rest','휴게·휴가'],['q_siteManager','현장 관리자 관계'],['q_companySupport','회사 지원·소통'],
     ['q_environment','업무환경·안전'],['q_grievance','불만 처리'],['q_overall','전반 만족도']
   ];
-
+ 
   async function loadSurveys(){
     if(!hasCache('sv')){
       $('#sv-bars').innerHTML='<div class="loading">불러오는 중…</div>';
@@ -1754,20 +1743,20 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
       $('#sv-comments').innerHTML='';
     }
   }
-
+ 
   function setSvHospital(name){
     svFilter.hospital = (svFilter.hospital===name) ? '' : (name||'');   // 같은 병원 재클릭 = 해제
     if($('#filter-hospital3')) $('#filter-hospital3').value = svFilter.hospital;
     if(DATA['sv']) renderSurveys(DATA['sv'].v);                          // 서버 호출 없이 즉시 재집계
     else loadSurveys();
   }
-
+ 
   function renderSurveys(all0){
     const all = Array.isArray(all0) ? all0 : [];
     const sel = svFilter.hospital;
     const list = sel ? all.filter(s=>s.hospital===sel) : all;
     const scope = sel || '전체';
-
+ 
     /* 필터 상태 UI */
     $('#sv-reset').classList.toggle('on', !!sel);
     if(sel) $('#sv-reset').textContent = sel+' 필터 해제 ×';
@@ -1775,7 +1764,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     $('#sv-meta-c').textContent = '최근순 · '+scope;
     $('#sv-count-lab').textContent = sel ? '응답 수 · '+sel : '응답 수';
     if($('#filter-hospital3')) $('#filter-hospital3').value = sel;
-
+ 
     /* ── 병원별 만족도 (항상 전체 기준 · 응답/평균 표시 · 클릭 드릴다운) ── */
     const byh=$('#sv-byhosp');
     const g={};
@@ -1788,7 +1777,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     byh.innerHTML = hrows.length
       ? hrows.map(r=>`<tr class="h-click ${sel===r.k?'h-on':''}" data-hn="${esc(r.k)}"><td>${esc(r.k)}</td><td class="r">${r.n}</td><td class="r"><span class="sat">${r.a?r.a.toFixed(2):'–'}</span></td></tr>`).join('')
       : '<tr><td colspan="3" class="empty-row">응답 없음</td></tr>';
-
+ 
     /* ── KPI (선택 병원 기준) ── */
     $('#sv-count').textContent=list.length;
     if(!list.length){
@@ -1804,7 +1793,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     if(nps.length){ const p=nps.filter(v=>v>=9).length, d=nps.filter(v=>v<=6).length; const e=Math.round((p-d)/nps.length*100); $('#sv-enps').textContent=(e>0?'+':'')+e; }
     else $('#sv-enps').textContent='–';
     $('#sv-recent').textContent=list[0].date||'–';
-
+ 
     /* ── 문항별 평균 (선택 병원 기준) ── */
     const rows2=SV_QMAP.map(([k,label])=>{
       const vs=list.map(s=>Number(s.raw&&s.raw[k])).filter(v=>!isNaN(v)&&v>0);
@@ -1815,12 +1804,12 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
       const pct=Math.max(0,Math.min(100,r.a/5*100));
       return `<div style="margin:0 0 13px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span>${esc(r.label)}</span><b style="font-family:'Space Grotesk'">${r.a.toFixed(2)} <span style="font-weight:400;color:var(--ink-3);font-size:11px">· ${r.n}건</span></b></div><div style="height:7px;background:var(--line);border-radius:4px;overflow:hidden"><i style="display:block;height:100%;width:${pct}%;background:var(--trace);border-radius:4px"></i></div></div>`;
     }).join('') : '<div class="empty-row" style="padding:16px 2px">세부 문항 점수가 없는 응답입니다. (종합점수만 입력됨)</div>';
-
+ 
     /* ── 응답 코멘트 (선택 병원 기준) ── */
     const withC=list.filter(s=>s.comment&&s.comment.trim());
     $('#sv-comments').innerHTML = withC.length ? withC.map(s=>`<div style="padding:11px 0;border-bottom:1px solid var(--line)"><div style="font-size:12px;color:var(--ink-3);margin-bottom:3px">${esc(s.hospital||'')}${s.name?' · '+esc(s.name):''}${s.type?' · '+esc(s.type):''} · ${esc(s.date||'')}</div><div style="font-size:13.5px;line-height:1.5">${esc(s.comment)}</div></div>`).join('') : '<div class="empty-row" style="padding:18px 2px">코멘트가 없습니다.</div>';
   }
-
+ 
   /* 병원명 클릭 → 드릴다운 */
   $('#sv-byhosp').addEventListener('click', e=>{
     const tr=e.target.closest('tr.h-click'); if(!tr) return;
@@ -1831,7 +1820,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     svFilter.hospital = e.target.value || '';
     if(DATA['sv']) renderSurveys(DATA['sv'].v); else loadSurveys();
   });
-
+ 
   function openSvModal(){
     $('#sv-err').classList.remove('on');
     ensureHospitals().then(()=>{
@@ -1854,7 +1843,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   if($('#add-survey')) $('#add-survey').addEventListener('click', openSvModal);
   if($('#sv-save')) $('#sv-save').addEventListener('click', saveSurvey);
   $$('[data-svclose]').forEach(el=>el.addEventListener('click', closeSvModal));
-
+ 
   /* ───────── 입사지원서 DOCX 생성 ───────── */
   function svToday(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
   function calcAge(birth){
@@ -1923,7 +1912,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   if($('#app-gen')) $('#app-gen').addEventListener('click', generateApplication);
   $$('[data-appclose]').forEach(el=>el.addEventListener('click', closeAppModal));
   if($('#app-birth')) $('#app-birth').addEventListener('input', ()=>{ $('#app-age').value=calcAge($('#app-birth').value); });
-
+ 
   /* 네비게이션 */
   const views={ dash:$('#view-dash'), hospitals:$('#view-hospitals'), candidates:$('#view-candidates'), evals:$('#view-evals'), contracts:$('#view-contracts'), postings:$('#view-postings'), surveys:$('#view-surveys'), empty:$('#view-empty') };
   $$('.nav-item').forEach(btn=>btn.addEventListener('click',()=>{
@@ -1940,14 +1929,14 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     else{ $('#empty-title').textContent=t; $('#empty-desc').textContent=t+' 화면은 다음 단계에서 백엔드에 연결됩니다. 연결되면 여기서 실제 데이터를 바로 다루게 됩니다.'; }
     app.classList.remove('menu'); window.scrollTo(0,0);
   }));
-
+ 
   $('#brand-logo').addEventListener('click', ()=>{
     $$('.nav-item').forEach(b=>b.classList.remove('active'));
     const dashBtn=$('[data-view="dash"]'); if(dashBtn) dashBtn.classList.add('active');
     Object.values(views).forEach(s=>{ if(s) s.style.display='none'; }); if(views.dash) views.dash.style.display='';
     loadDashboard(); app.classList.remove('menu'); window.scrollTo(0,0);
   });
-
+ 
   document.addEventListener('keydown', e=>{
     if(e.key==='F5'){ e.preventDefault();
       const active=[...$$('.nav-item')].find(b=>b.classList.contains('active'));
@@ -1962,7 +1951,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
       else if(v==='surveys'){ invalidate('sv'); loadSurveys(); }
     }
   });
-
+ 
   $('#enter').addEventListener('click', doLogin);
   $('#pw').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
   $('#add-hospital').addEventListener('click', ()=>openHModal(null));
@@ -1974,10 +1963,11 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   $('#scrim').addEventListener('click', ()=>app.classList.remove('menu'));
   $('#logout').addEventListener('click', logout);
   function logout(){ app.classList.remove('on','ready','menu'); $('#login').style.display=''; $('#pw').value=''; setLoginErr(''); TOKEN=null; invalidateAll(); try{ localStorage.removeItem('hr2_token'); }catch(_){ } }
-
+ 
   /* 세션 유지: 새로고침(F5·브라우저 버튼)해도 로그인 화면으로 튕기지 않음.
      토큰이 만료됐으면 첫 호출이 실패하면서 자동 로그아웃된다. */
   try{ const t=localStorage.getItem('hr2_token'); if(t){ TOKEN=t; enterApp(); } }catch(_){ }
 </script>
 </body>
 </html>
+ 
