@@ -1366,18 +1366,35 @@
     const n=(file.name||'').toLowerCase();
     return n.endsWith('.docx') || (file.type||'').indexOf('wordprocessingml')>=0;
   }
-  /* PizZip이 defer로 로드되므로, 아직이면 잠깐 기다린다(최대 ~3초). */
-  async function ensurePizZip_(){
-    for(let i=0;i<30;i++){
-      if(typeof PizZip!=='undefined') return true;
-      await new Promise(r=>setTimeout(r,100));
-    }
-    return typeof PizZip!=='undefined';
+  /* PizZip이 아직 로드 전이면(=defer 미완료) 즉석에서 로드한다.
+     이미 있으면 즉시 통과. CDN 로드 실패 시에도 원본 업로드로 안전 폴백. */
+  let _pizzipLoading_=null;
+  function loadPizZip_(){
+    if(typeof PizZip!=='undefined') return Promise.resolve(true);
+    if(_pizzipLoading_) return _pizzipLoading_;
+    _pizzipLoading_=new Promise(resolve=>{
+      // 1) 이미 defer로 끝나길 잠깐(1.5초) 대기
+      let waited=0;
+      const iv=setInterval(()=>{
+        if(typeof PizZip!=='undefined'){ clearInterval(iv); resolve(true); return; }
+        waited+=100;
+        if(waited>=1500){
+          clearInterval(iv);
+          // 2) 그래도 없으면 script 태그로 직접 주입
+          const s=document.createElement('script');
+          s.src='https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.1.4/pizzip.min.js';
+          s.onload=()=>resolve(typeof PizZip!=='undefined');
+          s.onerror=()=>resolve(false);
+          document.head.appendChild(s);
+        }
+      },100);
+    });
+    return _pizzipLoading_;
   }
   async function fixDocxAnchorsToInline_(file){
     // 반환: {blob, changed, note}. 실패해도 원본 blob을 반환하되 note로 이유를 남긴다.
-    const ok=await ensurePizZip_();
-    if(!ok) return {blob:file, changed:0, note:'PizZip 미로드'};
+    const ok=await loadPizZip_();
+    if(!ok) return {blob:file, changed:0, note:'PizZip 로드 실패(네트워크)'};
     if(typeof DOMParser==='undefined') return {blob:file, changed:0, note:'DOMParser 미지원'};
     let buf;
     try{ buf=await file.arrayBuffer(); }catch(_){ return {blob:file, changed:0, note:'파일읽기 실패'}; }
