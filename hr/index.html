@@ -242,6 +242,10 @@ try{ if(typeof window!=="undefined" && window.PizZip){ window.__PizZipEmbedded =
   .st-sel[data-s="배치"]{border-color:var(--trace);color:var(--trace-ink);background-color:var(--trace-wash)}
   .st-sel[data-s="보류"]{color:var(--ink-3)}
   .st-sel[data-s="탈락"]{border-color:#E8A29B;color:var(--danger);background-color:var(--danger-bg)}
+  .jd-btn{font-family:var(--gr);font-size:11.5px;font-weight:500;padding:4px 12px;border-radius:100px;border:1px solid var(--line);background:#fff;color:var(--ink-3);cursor:pointer;white-space:nowrap;transition:border-color .14s,color .14s,background .14s}
+  .jd-btn:hover{border-color:var(--ink-3);color:var(--ink-2)}
+  .jd-btn.set{border-color:var(--line);color:var(--ink);background:var(--panel);font-variant-numeric:tabular-nums}
+  .jd-input{font-family:var(--gr);font-size:11.5px;padding:3px 8px;border-radius:8px;border:1px solid var(--ink);background:#fff;color:var(--ink);outline:none}
   .ev-wait{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--ink-3);border:1px dashed var(--line);background:#fff;border-radius:100px;padding:4px 11px}
   .field textarea{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:var(--r);background:#fff;font-size:14px;font-family:inherit;color:var(--ink);outline:none;resize:vertical;min-height:64px}
   .field textarea:focus{border-color:var(--ink);box-shadow:0 0 0 3px var(--trace-wash)}
@@ -458,8 +462,8 @@ try{ if(typeof window!=="undefined" && window.PizZip){ window.__PizZipEmbedded =
       </div>
       <div class="tbl-scroll">
         <table class="htbl">
-          <thead><tr><th>이름</th><th>병원</th><th>직무</th><th>지원경로</th><th>상태</th><th class="r">등록일</th><th class="r">관리</th></tr></thead>
-          <tbody id="cand-table"><tr><td colspan="7" class="loading">불러오는 중…</td></tr></tbody>
+          <thead><tr><th>이름</th><th>병원</th><th>직무</th><th>지원경로</th><th>상태</th><th>입사일</th><th class="r">등록일</th><th class="r">관리</th></tr></thead>
+          <tbody id="cand-table"><tr><td colspan="8" class="loading">불러오는 중…</td></tr></tbody>
         </table>
       </div>
     </section>
@@ -1070,18 +1074,18 @@ try{ if(typeof window!=="undefined" && window.PizZip){ window.__PizZipEmbedded =
   async function loadCandidates(){
     const tb=$('#cand-table');
     const key='cand:'+candFilter.status+':'+candFilter.hospitalId;
-    if(!hasCache(key)) tb.innerHTML='<tr><td colspan="7" class="loading">불러오는 중…</td></tr>';
+    if(!hasCache(key)) tb.innerHTML='<tr><td colspan="8" class="loading">불러오는 중…</td></tr>';
     try{
       await swr(key, async ()=>{
         const r = await Promise.all([ensureHospitals(), call('getCandidates', TOKEN, candFilter.status, candFilter.hospitalId)]);
         return healCandidates(Array.isArray(r[1]) ? r[1] : []);
       }, list=>renderCandidates(key, list));
-    }catch(e){ authFail(e); tb.innerHTML='<tr><td colspan="7" class="empty-row">불러오지 못했습니다.</td></tr>'; }
+    }catch(e){ authFail(e); tb.innerHTML='<tr><td colspan="8" class="empty-row">불러오지 못했습니다.</td></tr>'; }
   }
   function renderCandidates(key, list){
     if(key!=='cand:'+candFilter.status+':'+candFilter.hospitalId) return;   // 필터 변경 후 늦게 온 응답 무시
     const tb=$('#cand-table');
-    if(!list.length){ tb.innerHTML='<tr><td colspan="7" class="empty-row">해당 조건의 지원자가 없습니다. <b>＋ 지원자 추가</b>로 등록하세요.</td></tr>'; return; }
+    if(!list.length){ tb.innerHTML='<tr><td colspan="8" class="empty-row">해당 조건의 지원자가 없습니다. <b>＋ 지원자 추가</b>로 등록하세요.</td></tr>'; return; }
     const STAT=['서류','면접','배치','보류','탈락'];
     tb.innerHTML = list.map(c=>`<tr>
       <td class="hname">${esc(c.name)}</td>
@@ -1089,9 +1093,23 @@ try{ if(typeof window!=="undefined" && window.PizZip){ window.__PizZipEmbedded =
       <td>${c.job?esc(c.job):'<span class="muted">–</span>'}</td>
       <td>${c.source?esc(c.source):'<span class="muted">–</span>'}</td>
       <td><select class="st-sel" data-s="${esc(c.status)}" data-id="${esc(c.id)}">${STAT.map(s=>`<option ${s===c.status?'selected':''}>${s}</option>`).join('')}</select></td>
+      <td>${joinDateCell_(c)}</td>
       <td class="r muted">${esc(c.created)}</td>
       <td class="r"><span class="act"><button data-capp='${esc(JSON.stringify(c))}'>지원서</button><button data-cedit='${esc(JSON.stringify(c))}'>수정</button><button class="del" data-cdel="${esc(c.id)}" data-name="${esc(c.name)}">삭제</button></span></td>
     </tr>`).join('');
+  }
+  /* 입사일 셀: 값이 있으면 날짜 버튼, 없으면 '지정' 버튼. 클릭 시 date input이 열린다.
+     저장은 백엔드(updateCandidate의 입사일 필드)와 localStorage 양쪽에 하여,
+     백엔드가 아직 필드를 저장하지 않아도 값이 유지되게 한다. */
+  function getJoinDate_(c){
+    if(c && c.입사일) return String(c.입사일);
+    if(c && c.joinDate) return String(c.joinDate);
+    try{ const m=JSON.parse(localStorage.getItem('hr2_joindates')||'{}'); if(m[String(c.id)]) return m[String(c.id)]; }catch(_){}
+    return '';
+  }
+  function joinDateCell_(c){
+    const v=getJoinDate_(c);
+    return `<button class="jd-btn${v?' set':''}" data-jd="${esc(c.id)}" data-v="${esc(v)}">${v?esc(v):'＋ 지정'}</button>`;
   }
   function openCModal(c){
     $('#cm-err').classList.remove('on');
@@ -1120,6 +1138,8 @@ try{ if(typeof window!=="undefined" && window.PizZip){ window.__PizZipEmbedded =
     finally{ $('#cm-save').disabled=false; $('#cm-save').textContent='저장'; }
   }
   $('#cand-table').addEventListener('click', async e=>{
+    const jd=e.target.closest('[data-jd]');
+    if(jd){ openJoinDatePicker_(jd); return; }
     const ap=e.target.closest('[data-capp]'); const ed=e.target.closest('[data-cedit]'); const dl=e.target.closest('[data-cdel]');
     if(ap){ openAppModal(JSON.parse(ap.getAttribute('data-capp'))); return; }
     if(ed){ openCModal(JSON.parse(ed.getAttribute('data-cedit'))); return; }
@@ -1134,6 +1154,39 @@ try{ if(typeof window!=="undefined" && window.PizZip){ window.__PizZipEmbedded =
     sel.dataset.s=sel.value;
     try{ await call('setCandidateStatus', TOKEN, sel.dataset.id, sel.value); invalidate('cand','dash'); toast('상태: '+sel.value); }catch(err){ authFail(err); }
   });
+  /* 입사일 지정: 버튼을 date input으로 바꿔 즉시 달력을 연다.
+     선택하면 백엔드(updateCandidate의 입사일 필드) + localStorage 양쪽에 저장.
+     비우면 삭제. 상태 버튼과 같은 인라인 UX. */
+  function saveJoinDateLocal_(id, val){
+    try{ const m=JSON.parse(localStorage.getItem('hr2_joindates')||'{}');
+      if(val) m[String(id)]=val; else delete m[String(id)];
+      localStorage.setItem('hr2_joindates', JSON.stringify(m)); }catch(_){}
+  }
+  async function persistJoinDate_(id, val){
+    saveJoinDateLocal_(id, val);                       // 즉시 로컬 저장(항상 유지)
+    // 백엔드에도 반영 시도 — 백엔드가 '입사일' 필드를 받으면 시트에 저장됨. 실패해도 로컬값 유지.
+    try{ await call('updateCandidate', TOKEN, id, { 입사일: val||'' }); invalidate('cand'); }
+    catch(err){ /* 백엔드 미지원/오류 시에도 로컬 저장은 이미 됨 */ }
+  }
+  function openJoinDatePicker_(btn){
+    const id=btn.getAttribute('data-jd'); const cur=btn.getAttribute('data-v')||'';
+    const inp=document.createElement('input');
+    inp.type='date'; inp.className='jd-input'; if(cur) inp.value=cur;
+    btn.replaceWith(inp);
+    inp.focus(); try{ inp.showPicker && inp.showPicker(); }catch(_){}
+    let done=false;
+    const finish=async ()=>{
+      if(done) return; done=true;
+      const val=inp.value||'';
+      const nb=document.createElement('button');
+      nb.className='jd-btn'+(val?' set':''); nb.setAttribute('data-jd',id); nb.setAttribute('data-v',val);
+      nb.textContent=val||'＋ 지정';
+      inp.replaceWith(nb);
+      if(val!==cur){ await persistJoinDate_(id, val); toast(val?('입사일: '+val):'입사일이 지워졌습니다.'); }
+    };
+    inp.addEventListener('change', finish);
+    inp.addEventListener('blur', finish);
+  }
   $$('#view-candidates .seg').forEach(b=>b.addEventListener('click',()=>{
     $$('#view-candidates .seg').forEach(x=>x.classList.remove('active')); b.classList.add('active');
     candFilter.status=b.dataset.f; loadCandidates();
