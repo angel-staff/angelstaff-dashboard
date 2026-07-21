@@ -1386,7 +1386,15 @@
   }
   $('#eval-table').addEventListener('click', async e=>{
     const rv=e.target.closest('[data-rview]');
-    if(rv){ window.open(rv.getAttribute('data-rview'),'_blank'); return; }
+    if(rv){
+      /* 백엔드가 준 url(?resume=ID 또는 /d/ID/view 등)에서 파일ID만 추출해
+         항상 구글 드라이브 정식 뷰어로 연다 → docx·hwp·pdf 모두 열람 가능,
+         웹앱 뷰어(샌드박스) 문제를 근본 회피. */
+      const raw=rv.getAttribute('data-rview')||'';
+      let m=raw.match(/[?&]resume=([A-Za-z0-9_-]+)/) || raw.match(/\/d\/([A-Za-z0-9_-]+)/) || raw.match(/[?&]id=([A-Za-z0-9_-]+)/);
+      const url = m ? ('https://drive.google.com/file/d/'+m[1]+'/view') : raw;
+      window.open(url,'_blank'); return;
+    }
     const ru=e.target.closest('[data-rup]');
     if(ru){ resumeTarget=ru.getAttribute('data-rup'); $('#resume-input').click(); return; }
     const nw=e.target.closest('[data-enew]');
