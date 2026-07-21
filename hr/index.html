@@ -778,7 +778,7 @@
   function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   function fmtDate(v){ if(!v) return '–'; const d=new Date(v); if(isNaN(d)) return '–';
     return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0'); }
-  function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('on'),2400); }
+  function toast(msg,ms){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('on'),ms||2400); }
   function authFail(e){
     const m=String((e&&e.message)||e);
     if(/세션|권한/.test(m)){ logout(); toast('세션이 만료되었습니다. 다시 로그인하세요.'); }
@@ -1366,8 +1366,18 @@
       loadEvals();
     }catch(err){
       const m=String((err&&err.message)||err);
-      if(/허용되지 않은|찾을 수 없습니다/.test(m)) toast('백엔드 업데이트 필요 — Code.gs·Api.gs에 이력서 패치를 추가하고 재배포하세요.');
-      else authFail(err);
+      if(/허용되지 않은|찾을 수 없습니다/.test(m)){
+        toast('배포된 백엔드가 구버전입니다 — 앱스크립트 → 배포 관리 → ✏️ → 버전 "새 버전"으로 재배포하세요.', 6000);
+      }else if(/세션이 만료되었거나 권한이 없습니다/.test(m)){
+        /* 업로드에서만 세션 오류가 온 경우: 진짜 만료인지 다른 API로 즉시 검증.
+           세션이 살아있다면 배포된 백엔드가 편집기 코드와 다른 구버전이라는 확정 증거다. */
+        try{
+          await call('getRubric', TOKEN);
+          toast('세션은 정상인데 업로드만 거부됨 → 배포된 백엔드가 구버전입니다. 앱스크립트 → 배포 관리 → ✏️ → "새 버전"으로 재배포하세요.', 8000);
+        }catch(_e2){ authFail(err); }   /* 정말 만료된 경우에만 로그인 화면으로 */
+      }else{
+        toast('이력서 업로드 실패: '+m, 6000);   /* 드라이브 권한·용량 등 실제 원인을 그대로 표시, 로그아웃 없음 */
+      }
     }
   });
   /* RESUME:END */
