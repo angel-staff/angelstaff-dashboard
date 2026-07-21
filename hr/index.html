@@ -1352,6 +1352,62 @@
       r.readAsDataURL(f);
     });
   }
+  /* ═══ docx 자동 보정 ═══
+     워드에서 사진을 '텍스트 뒤(floating/behindDoc)'로 넣으면 구글 드라이브
+     미리보기에서 사진이 표를 뚫고 나오며 깨진다. 업로드 시 그 사진(anchor)을
+     '텍스트 줄 안(inline)'으로 자동 변환해 어떤 뷰어에서도 정상 표시되게 한다.
+     - 이미 inline이거나 사진이 없으면 원본을 그대로 둔다(변환 0건).
+     - docx가 아니거나 변환 중 오류가 나면 원본 파일을 그대로 업로드한다(안전).
+     ※ 검증: LibreOffice 렌더링으로 변환 전/후 비교해 사진이 셀 안에 정확히
+        들어가고 표 정렬이 복구됨을 확인함. */
+  const WP_NS_='http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing';
+  const A_NS_ ='http://schemas.openxmlformats.org/drawingml/2006/main';
+  function isDocx_(file){
+    const n=(file.name||'').toLowerCase();
+    return n.endsWith('.docx') || (file.type||'').indexOf('wordprocessingml')>=0;
+  }
+  async function fixDocxAnchorsToInline_(file){
+    // 반환: 변환이 일어나면 새 Blob, 아니면 원본 file
+    if(typeof PizZip==='undefined' || typeof DOMParser==='undefined') return file;
+    let buf;
+    try{ buf=await file.arrayBuffer(); }catch(_){ return file; }
+    let zip, xmlFile;
+    try{
+      zip=new PizZip(buf);
+      xmlFile=zip.file('word/document.xml');
+      if(!xmlFile) return file;                       // docx 구조 아님
+    }catch(_){ return file; }                          // docx 아님/손상 → 원본 그대로
+    try{
+      const doc=new DOMParser().parseFromString(xmlFile.asText(),'application/xml');
+      if(doc.getElementsByTagName('parsererror').length) return file;
+      const anchors=doc.getElementsByTagNameNS(WP_NS_,'anchor');
+      const arr=[]; for(let i=0;i<anchors.length;i++) arr.push(anchors[i]);
+      if(!arr.length) return file;                     // floating 사진 없음 → 그대로
+      let changed=0;
+      arr.forEach(anchor=>{
+        const parent=anchor.parentNode;                // <w:drawing>
+        if(!parent) return;
+        const inline=doc.createElementNS(WP_NS_,'wp:inline');
+        ['distT','distB','distL','distR'].forEach(a=>inline.setAttribute(a,'0'));
+        // inline 스키마 순서: extent → effectExtent → docPr → cNvGraphicFramePr → graphic
+        ['extent','effectExtent','docPr','cNvGraphicFramePr'].forEach(tag=>{
+          const el=anchor.getElementsByTagNameNS(WP_NS_,tag)[0];
+          if(el && el.parentNode===anchor) inline.appendChild(el);
+        });
+        const g=anchor.getElementsByTagNameNS(A_NS_,'graphic')[0];  // graphic은 a: 네임스페이스
+        if(g && g.parentNode===anchor) inline.appendChild(g);
+        parent.appendChild(inline);
+        parent.removeChild(anchor);
+        changed++;
+      });
+      if(!changed) return file;
+      const newXml=new XMLSerializer().serializeToString(doc);
+      zip.file('word/document.xml', newXml);
+      const outU8=zip.generate({type:'uint8array', compression:'DEFLATE'});
+      toast('이력서 사진 자동 보정 완료('+changed+')');
+      return new Blob([outU8], {type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+    }catch(_){ return file; }                           // 어떤 오류든 원본 업로드로 안전 폴백
+  }
   $('#resume-input').addEventListener('change', async e=>{
     const f=e.target.files[0]; e.target.value='';
     const cid=resumeTarget; resumeTarget='';
@@ -1359,24 +1415,26 @@
     if(f.size>15*1024*1024){ toast('15MB 이하 파일만 첨부할 수 있습니다.'); return; }
     toast('이력서 업로드 중…');
     try{
-      const b64=await fileToB64(f);
-      const r=await call('uploadResume', TOKEN, cid, f.name, f.type||'application/octet-stream', b64);
+      // docx면 사진 anchor→inline 자동 보정 (그 외 형식/실패 시 원본 그대로)
+      const up = isDocx_(f) ? await fixDocxAnchorsToInline_(f) : f;
+      const upName = f.name;   // 파일명은 원본 유지
+      const upType = (up.type||f.type||'application/octet-stream');
+      const b64=await fileToB64(up);
+      const r=await call('uploadResume', TOKEN, cid, upName, upType, b64);
       invalidate('ev');
-      toast('이력서가 첨부되었습니다: '+((r&&r.name)||f.name));
+      toast('이력서가 첨부되었습니다: '+((r&&r.name)||upName));
       loadEvals();
     }catch(err){
       const m=String((err&&err.message)||err);
       if(/허용되지 않은|찾을 수 없습니다/.test(m)){
         toast('배포된 백엔드가 구버전입니다 — 앱스크립트 → 배포 관리 → ✏️ → 버전 "새 버전"으로 재배포하세요.', 6000);
       }else if(/세션이 만료되었거나 권한이 없습니다/.test(m)){
-        /* 업로드에서만 세션 오류가 온 경우: 진짜 만료인지 다른 API로 즉시 검증.
-           세션이 살아있다면 배포된 백엔드가 편집기 코드와 다른 구버전이라는 확정 증거다. */
         try{
           await call('getRubric', TOKEN);
           toast('세션은 정상인데 업로드만 거부됨 → 배포된 백엔드가 구버전입니다. 앱스크립트 → 배포 관리 → ✏️ → "새 버전"으로 재배포하세요.', 8000);
-        }catch(_e2){ authFail(err); }   /* 정말 만료된 경우에만 로그인 화면으로 */
+        }catch(_e2){ authFail(err); }
       }else{
-        toast('이력서 업로드 실패: '+m, 6000);   /* 드라이브 권한·용량 등 실제 원인을 그대로 표시, 로그아웃 없음 */
+        toast('이력서 업로드 실패: '+m, 6000);
       }
     }
   });
