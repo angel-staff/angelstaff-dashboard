@@ -54,6 +54,8 @@
   .field select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%238C887F' stroke-width='1.5'/></svg>");background-repeat:no-repeat;background-position:right 14px center}
   .field input:focus,.field select:focus{border-color:var(--ink);box-shadow:0 0 0 3px var(--trace-wash)}
   .field input.err{border-color:var(--danger)}
+  .dsel{display:flex;gap:6px}
+  .dsel select{padding:13px 8px 13px 12px;background-position:right 8px center;font-size:13.5px}
   .err-msg{color:var(--danger);font-size:12px;margin-top:7px;display:none}
   .err-msg.on{display:block}
   .btn{width:100%;padding:13px 16px;border:none;border-radius:var(--r);background:var(--ink);color:#fff;font-weight:600;font-size:14px;letter-spacing:-0.01em;transition:transform .08s ease,background .15s}
@@ -200,6 +202,7 @@
 
   /* 지원자 필터바 + 인라인 상태 셀렉트 */
   .filterbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+  .fgroup{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .segs{display:inline-flex;gap:2px;align-items:center}
   .seg{border:none;background:none;font-weight:500;font-size:13px;color:var(--ink-3);padding:8px 12px;position:relative;border-radius:2px;font-family:inherit}
   .seg:hover{color:var(--ink)}
@@ -423,7 +426,12 @@
           <button class="seg" data-f="배치">배치</button>
           <button class="seg" data-f="종료">종료</button>
         </div>
-        <select id="filter-hospital" class="filter-sel"><option value="">전체 병원</option></select>
+        <div class="fgroup">
+          <select id="filter-y" class="filter-sel"><option value="">전체 연도</option></select>
+          <select id="filter-m" class="filter-sel"><option value="">전체 월</option></select>
+          <select id="filter-d" class="filter-sel"><option value="">전체 일</option></select>
+          <select id="filter-hospital" class="filter-sel"><option value="">전체 병원</option></select>
+        </div>
       </div>
       <div class="tbl-scroll">
         <table class="htbl">
@@ -441,7 +449,12 @@
       </div>
       <div class="filterbar">
         <div></div>
-        <select id="filter-hospital-ev" class="filter-sel"><option value="">전체 병원</option></select>
+        <div class="fgroup">
+          <select id="filter-y-ev" class="filter-sel"><option value="">전체 연도</option></select>
+          <select id="filter-m-ev" class="filter-sel"><option value="">전체 월</option></select>
+          <select id="filter-d-ev" class="filter-sel"><option value="">전체 일</option></select>
+          <select id="filter-hospital-ev" class="filter-sel"><option value="">전체 병원</option></select>
+        </div>
       </div>
       <div class="tbl-scroll">
         <table class="htbl">
@@ -630,6 +643,14 @@
     <div class="field"><label for="cm-hospital">지원 병원</label><select id="cm-hospital"><option value="">선택 안 함</option></select></div>
     <div class="field"><label for="cm-job">직무</label><input id="cm-job" placeholder="예) 병동보조"></div>
     <div class="field"><label for="cm-source">지원경로</label><input id="cm-source" placeholder="예) 알바몬"></div>
+    <div style="display:flex;gap:10px">
+      <div class="field" style="flex:1"><label>입사일</label>
+        <div class="dsel"><select id="cm-join-y"></select><select id="cm-join-m"></select><select id="cm-join-d"></select></div>
+      </div>
+      <div class="field" style="flex:1"><label>면접일</label>
+        <div class="dsel"><select id="cm-int-y"></select><select id="cm-int-m"></select><select id="cm-int-d"></select></div>
+      </div>
+    </div>
     <div class="field"><label for="cm-status">상태</label><select id="cm-status"><option>서류</option><option>면접</option><option>배치</option><option>보류</option><option>탈락</option></select></div>
     <div class="field"><label for="cm-memo">메모</label><textarea id="cm-memo" placeholder="면접 메모, 특이사항 등"></textarea></div>
     <div class="err-msg" id="cm-err"></div>
@@ -728,14 +749,27 @@
   const $$ = s => document.querySelectorAll(s);
   const app = $('#app');
   let TOKEN = null;
-  let candFilter = { status:'전체', hospitalId:'' };
+  let candFilter = { status:'전체', hospitalId:'', y:'', m:'', d:'' };
   let hospitalCache = null;
   let rubricCache = null;
   let candListCache = null;
   let evalScores = {};
   let evalAi = { comment:'', overall:null };
   let ctFilter = { status:'전체', hospitalId:'' };
-  let evFilter = { hospital:'' };   // 면접 평가 병원 필터 (병원명 기준, 평가+평가 전 모두 적용)
+  let evFilter = { hospital:'', y:'', m:'', d:'' };   // 면접 평가 필터 (병원명 + 연/월/일, 평가+평가 전 모두 적용)
+  /* DATEFILTER:BEGIN ═══ 연/월/일 필터 공용 로직 ═══ */
+  function dParts(s){ const m=String(s||'').match(/(\d{4})[.\-\/]\s*(\d{1,2})[.\-\/]\s*(\d{1,2})/); return m?{y:m[1],mo:String(Number(m[2])),d:String(Number(m[3]))}:null; }
+  function dMatch(s,f){ if(!f.y&&!f.m&&!f.d) return true; const p=dParts(s); if(!p) return false; return (!f.y||p.y===f.y)&&(!f.m||p.mo===f.m)&&(!f.d||p.d===f.d); }
+  function yearsOf(list,get){ const st=new Set(); (list||[]).forEach(x=>{ const p=dParts(get(x)); if(p) st.add(p.y); }); st.add(String(new Date().getFullYear())); return Array.from(st).sort().reverse(); }
+  function fillDateSels(py,pm,pd,years,f){
+    const ySel=$(py), mSel=$(pm), dSel=$(pd); if(!ySel||!mSel||!dSel) return;
+    const sig=years.join(',');
+    if(ySel.dataset.opts!==sig){ ySel.innerHTML='<option value="">전체 연도</option>'+years.map(y=>`<option value="${y}">${y}년</option>`).join(''); ySel.dataset.opts=sig; }
+    if(mSel.options.length<13){ mSel.innerHTML='<option value="">전체 월</option>'+Array.from({length:12},(_,i)=>`<option value="${i+1}">${i+1}월</option>`).join(''); }
+    if(dSel.options.length<32){ dSel.innerHTML='<option value="">전체 일</option>'+Array.from({length:31},(_,i)=>`<option value="${i+1}">${i+1}일</option>`).join(''); }
+    ySel.value=f.y; mSel.value=f.m; dSel.value=f.d;
+  }
+  /* DATEFILTER:END */
   let candHospMap = {};
   let svFilter = { hospital:'' };   // 병원명 기준 로컬 필터 (드릴다운)
 
@@ -757,7 +791,7 @@
   /* ═══ 백엔드 연결 (GitHub Pages → Apps Script API) ═══
      GAS_URL: 웹앱 배포 주소(/exec). 만족도 설문(gd.html 등)에 넣은 것과 동일한 주소.
      새 버전 재배포 시에도 URL은 유지됨. */
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbyygbucSaRId3qJiPJcS-eurdgAvNOAXY41S5Hh7FQGtygOJeuZJxv-8GlgoFN39tR5nQ/exec';
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycby_mBhRA_sRls4LRomy9jqLBdgz7Dpfof5z2smq7TWtMS_WeOwep96PlUz8VGCRun0igA/exec';
 
   async function call(method){
     const args = [].slice.call(arguments, 1);
@@ -781,7 +815,7 @@
   function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('on'),2400); }
   function authFail(e){
     const m=String((e&&e.message)||e);
-    if(/세션|권한/.test(m)){ logout(); toast('세션이 만료되었습니다. 다시 로그인하세요.'); }
+    if(/세션/.test(m)){ logout(); toast('세션이 만료되었습니다. 다시 로그인하세요.'); }   // '권한'은 드라이브 승인 오류일 수 있어 로그아웃하지 않음
     else toast('오류: '+m);
   }
 
@@ -1033,7 +1067,10 @@
   function renderCandidates(key, list){
     if(key!=='cand:'+candFilter.status+':'+candFilter.hospitalId) return;   // 필터 변경 후 늦게 온 응답 무시
     const tb=$('#cand-table');
-    if(!list.length){ tb.innerHTML='<tr><td colspan="7" class="empty-row">해당 조건의 지원자가 없습니다. <b>＋ 지원자 추가</b>로 등록하세요.</td></tr>'; return; }
+    fillDateSels('#filter-y','#filter-m','#filter-d', yearsOf(list,c=>c.created), candFilter);
+    const dated=(candFilter.y||candFilter.m||candFilter.d);
+    list=(list||[]).filter(c=>dMatch(c.created,candFilter));
+    if(!list.length){ tb.innerHTML='<tr><td colspan="7" class="empty-row">'+(dated?'해당 날짜의 지원자가 없습니다.':'해당 조건의 지원자가 없습니다. <b>＋ 지원자 추가</b>로 등록하세요.')+'</td></tr>'; return; }
     const STAT=['서류','면접','배치','보류','탈락'];
     tb.innerHTML = list.map(c=>`<tr>
       <td class="hname">${esc(c.name)}</td>
@@ -1045,12 +1082,40 @@
       <td class="r"><span class="act"><button data-capp='${esc(JSON.stringify(c))}'>지원서</button><button data-cedit='${esc(JSON.stringify(c))}'>수정</button><button class="del" data-cdel="${esc(c.id)}" data-name="${esc(c.name)}">삭제</button></span></td>
     </tr>`).join('');
   }
+  /* CANDDATES:BEGIN ═══ 입사일·면접일 (백엔드 지원자메타 시트) ═══ */
+  let candDatesCache=null;
+  async function getCandDatesCached(){
+    if(candDatesCache) return candDatesCache;
+    try{ const r=await call('getCandidateDates',TOKEN); candDatesCache=(r&&typeof r==='object')?r:{}; }
+    catch(_){ candDatesCache={}; }                       // 백엔드 새 버전 배포 전에도 화면은 정상 동작
+    return candDatesCache;
+  }
+  function dselInit(){
+    const yNow=new Date().getFullYear();
+    const yo='<option value="">연도</option>'+Array.from({length:5},(_,i)=>{const y=yNow-2+i;return '<option value="'+y+'">'+y+'년</option>';}).join('');
+    const mo='<option value="">월</option>'+Array.from({length:12},(_,i)=>'<option value="'+(i+1)+'">'+(i+1)+'월</option>').join('');
+    const doo='<option value="">일</option>'+Array.from({length:31},(_,i)=>'<option value="'+(i+1)+'">'+(i+1)+'일</option>').join('');
+    [['#cm-join-y',yo],['#cm-int-y',yo],['#cm-join-m',mo],['#cm-int-m',mo],['#cm-join-d',doo],['#cm-int-d',doo]]
+      .forEach(p=>{ const el=$(p[0]); if(el && el.options.length<2) el.innerHTML=p[1]; });
+  }
+  function dselSet(prefix, iso){
+    const m=String(iso||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    $(prefix+'-y').value=m?m[1]:''; $(prefix+'-m').value=m?String(Number(m[2])):''; $(prefix+'-d').value=m?String(Number(m[3])):'';
+  }
+  function dselGet(prefix){
+    const y=$(prefix+'-y').value, m=$(prefix+'-m').value, d=$(prefix+'-d').value;
+    if(!y||!m||!d) return '';
+    return y+'-'+('0'+m).slice(-2)+'-'+('0'+d).slice(-2);
+  }
+  /* CANDDATES:END */
   function openCModal(c){
     $('#cm-err').classList.remove('on');
     ensureHospitals().then(()=>{
+      dselInit(); dselSet('#cm-join',''); dselSet('#cm-int','');
       if(c){ $('#cm-title').textContent='지원자 정보 수정'; $('#cm-id').value=c.id;
         $('#cm-name').value=c.name||''; $('#cm-tel').value=c.tel||''; $('#cm-hospital').value=c.hospitalId||''; $('#cm-hospname').value=(c.hospitalId?'':(c.hospital||''));
-        $('#cm-job').value=c.job||''; $('#cm-source').value=c.source||''; $('#cm-status').value=c.status||'서류'; $('#cm-memo').value=c.memo||''; }
+        $('#cm-job').value=c.job||''; $('#cm-source').value=c.source||''; $('#cm-status').value=c.status||'서류'; $('#cm-memo').value=c.memo||'';
+        getCandDatesCached().then(mp=>{ const dt=mp[String(c.id)]||{}; dselSet('#cm-join',dt.join||''); dselSet('#cm-int',dt.interview||''); }); }
       else{ $('#cm-title').textContent='지원자 추가'; $('#cm-id').value=''; $('#cm-hospname').value='';
         ['#cm-name','#cm-tel','#cm-hospital','#cm-job','#cm-source','#cm-memo'].forEach(s=>$(s).value=''); $('#cm-status').value='서류'; }
       $('#cmodal').classList.add('on'); setTimeout(()=>$('#cm-name').focus(),50);
@@ -1066,6 +1131,12 @@
     $('#cm-save').disabled=true; $('#cm-save').textContent='저장 중…';
     try{
       if(id) await call('updateCandidate', TOKEN, id, data); else await call('addCandidate', TOKEN, data);
+      const jd=dselGet('#cm-join'), itd=dselGet('#cm-int');
+      const prev=(id && candDatesCache && candDatesCache[String(id)]) || {};
+      if(jd || itd || prev.join || prev.interview){
+        try{ await call('setCandidateDates', TOKEN, id||'', name, itd, jd); candDatesCache=null; }
+        catch(de){ if(/허용되지 않은|찾을 수 없습니다/.test(String(de&&de.message||de))) toast('입사일·면접일은 백엔드 새 버전 배포 후 저장됩니다.'); }
+      }
       candListCache=null; invalidate('cand','ev','ct','dash');
       closeCModal(); toast(id?'수정되었습니다.':'지원자가 추가되었습니다.'); loadCandidates();
     }catch(e){ authFail(e); }
@@ -1091,6 +1162,8 @@
     candFilter.status=b.dataset.f; loadCandidates();
   }));
   $('#filter-hospital').addEventListener('change', e=>{ candFilter.hospitalId=e.target.value; loadCandidates(); });
+  [['#filter-y','y'],['#filter-m','m'],['#filter-d','d']].forEach(([sel,k])=>
+    $(sel).addEventListener('change', e=>{ candFilter[k]=e.target.value; loadCandidates(); }));
   $('#add-candidate').addEventListener('click', ()=>openCModal(null));
   $('#cm-save').addEventListener('click', saveCandidate);
   $$('[data-cclose]').forEach(el=>el.addEventListener('click', closeCModal));
@@ -1205,7 +1278,7 @@
   }
   async function loadEvals(){
     const tb=$('#eval-table');
-    ensureHospitals().then(()=>{ const s=$('#filter-hospital-ev'); if(s) s.value=evFilter.hospital; }).catch(()=>{});
+    ensureHospitals().then(()=>{ const s=$('#filter-hospital-ev'); if(s) s.value=evFilter.hospital; }).catch(()=>{});   // 연/월/일 셀렉트는 renderEvals에서 채움
     if(!hasCache('ev')) tb.innerHTML='<tr><td colspan="7" class="loading">불러오는 중…</td></tr>';
     try{
       await swr('ev', async ()=>{
@@ -1226,10 +1299,12 @@
     const resumes  = (v&&v.resumes)||{};
     const tb=$('#eval-table');
     const done=new Set(evalsAll.map(e=>String(e.candidateId)));           // 평가 여부는 필터와 무관하게 전체 기준
+    fillDateSels('#filter-y-ev','#filter-m-ev','#filter-d-ev',
+      yearsOf(evalsAll.map(e=>e.date).concat(candsAll.map(c=>c.created)), x=>x), evFilter);
     const hf=String(evFilter.hospital||'').trim();
     const hit=s=>!hf || String(s||'').trim()===hf;
-    const evals=evalsAll.filter(e=>hit(e.hospital));
-    const pending=candsAll.filter(c=>c && c.id!=null && !done.has(String(c.id)) && hit(c.hospital))
+    const evals=evalsAll.filter(e=>hit(e.hospital) && dMatch(e.date,evFilter));
+    const pending=candsAll.filter(c=>c && c.id!=null && !done.has(String(c.id)) && hit(c.hospital) && dMatch(c.created,evFilter))
                           .sort((a,b)=>String(b.created||'').localeCompare(String(a.created||'')));
     const resBtns=cid=>{
       const rs=resumes[String(cid)];
@@ -1237,7 +1312,8 @@
                 : `<button data-rup="${esc(cid)}">＋ 이력서</button>`;
     };
     if(!evals.length && !pending.length){
-      tb.innerHTML='<tr><td colspan="7" class="empty-row">'+(hf?esc(hf)+'의 지원자·평가가 없습니다.':'지원자가 없습니다. 이력서 관리에 등록되면 여기에 자동으로 나타납니다.')+'</td></tr>';
+      const filtered=(hf||evFilter.y||evFilter.m||evFilter.d);
+      tb.innerHTML='<tr><td colspan="7" class="empty-row">'+(filtered?'조건에 맞는 지원자·평가가 없습니다.':'지원자가 없습니다. 이력서 관리에 등록되면 여기에 자동으로 나타납니다.')+'</td></tr>';
       return;
     }
     const pRows=pending.map(c=>`<tr>
@@ -1353,30 +1429,23 @@
     });
   }
   $('#resume-input').addEventListener('change', async e=>{
-  const f=e.target.files[0]; e.target.value='';
-  const cid=resumeTarget; resumeTarget='';
-  if(!f||!cid) return;
-  if(f.size>15*1024*1024){ toast('15MB 이하 파일만 첨부할 수 있습니다.'); return; }
-  toast('이력서 업로드 중…');
-  try{
-    const b64=await fileToB64(f);
-    const r=await call('uploadResume', TOKEN, cid, f.name, f.type||'application/octet-stream', b64);
-    invalidate('ev');
-    toast('이력서가 첨부되었습니다: '+((r&&r.name)||f.name));
-    loadEvals();
-  }catch(err){
-    const m=String((err&&err.message)||err);
-    if(/허용되지 않은|찾을 수 없습니다/.test(m)){
-      toast('백엔드 업데이트 필요 — Code.gs·Api.gs에 이력서 패치를 추가하고 재배포하세요.');
-    }else if(/세션이 만료되었거나 권한이 없습니다\. 다시 로그인하세요\./.test(m)){
-      // 정확히 requireSession_의 메시지와 일치할 때만 로그아웃
-      authFail(err);
-    }else{
-      // 그 외 모든 오류(Drive 권한, 용량, 네트워크 등)는 로그아웃시키지 않고 그대로 표시
-      toast('이력서 업로드 실패: '+m);
+    const f=e.target.files[0]; e.target.value='';
+    const cid=resumeTarget; resumeTarget='';
+    if(!f||!cid) return;
+    if(f.size>15*1024*1024){ toast('15MB 이하 파일만 첨부할 수 있습니다.'); return; }
+    toast('이력서 업로드 중…');
+    try{
+      const b64=await fileToB64(f);
+      const r=await call('uploadResume', TOKEN, cid, f.name, f.type||'application/octet-stream', b64);
+      invalidate('ev');
+      toast('이력서가 첨부되었습니다: '+((r&&r.name)||f.name));
+      loadEvals();
+    }catch(err){
+      const m=String((err&&err.message)||err);
+      if(/허용되지 않은|찾을 수 없습니다/.test(m)) toast('백엔드 업데이트 필요 — Code.gs·Api.gs에 이력서 패치를 추가하고 재배포하세요.');
+      else authFail(err);
     }
-  }
-});
+  });
   /* RESUME:END */
   async function openEModalFor(cid){
     try{ await openEModal(null); $('#em-candidate').value=cid; }catch(e){ authFail(e); }
@@ -1398,6 +1467,8 @@
   });
   $('#add-eval').addEventListener('click', ()=>openEModal(null));
   $('#filter-hospital-ev').addEventListener('change', e=>{ evFilter.hospital=e.target.value; loadEvals(); });
+  [['#filter-y-ev','y'],['#filter-m-ev','m'],['#filter-d-ev','d']].forEach(([sel,k])=>
+    $(sel).addEventListener('change', e=>{ evFilter[k]=e.target.value; loadEvals(); }));
   $('#em-ai').addEventListener('click', runAiScore);
   $('#em-save').addEventListener('click', saveEval);
   $$('[data-eclose]').forEach(el=>el.addEventListener('click', closeEModal));
