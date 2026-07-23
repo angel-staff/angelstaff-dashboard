@@ -224,6 +224,9 @@
   .st-sel[data-s="면접"]{border-color:var(--ink);color:var(--ink)}
   .st-sel[data-s="배치"]{border-color:var(--trace);color:var(--trace-ink);background-color:var(--trace-wash)}
   .st-sel[data-s="보류"],.st-sel[data-s="탈락"]{color:var(--ink-3)}
+  .dcell{display:inline-flex;gap:4px;justify-content:flex-end}
+  .dt-sel{font-family:var(--gr);font-size:11px;font-weight:500;padding:4px 15px 4px 8px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink-2);appearance:none;cursor:pointer;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='6' viewBox='0 0 8 6'><path d='M1 1l3 3 3-3' fill='none' stroke='%238C887F' stroke-width='1.2'/></svg>");background-repeat:no-repeat;background-position:right 5px center}
+  .dt-sel:focus{border-color:var(--ink);outline:none}
   .ev-wait{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--ink-3);border:1px dashed var(--line);background:#fff;border-radius:100px;padding:4px 11px}
   .field textarea{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:var(--r);background:#fff;font-size:14px;font-family:inherit;color:var(--ink);outline:none;resize:vertical;min-height:64px}
   .field textarea:focus{border-color:var(--ink);box-shadow:0 0 0 3px var(--trace-wash)}
@@ -445,8 +448,8 @@
       </div>
       <div class="tbl-scroll">
         <table class="htbl">
-          <thead><tr><th>이름</th><th>병원</th><th>직무</th><th>지원경로</th><th>상태</th><th class="r">등록일</th><th class="r">관리</th></tr></thead>
-          <tbody id="cand-table"><tr><td colspan="7" class="loading">불러오는 중…</td></tr></tbody>
+          <thead><tr><th>이름</th><th>병원</th><th>직무</th><th>지원경로</th><th>상태</th><th class="r">면접일</th><th class="r">입사일</th><th class="r">등록일</th><th class="r">관리</th></tr></thead>
+          <tbody id="cand-table"><tr><td colspan="9" class="loading">불러오는 중…</td></tr></tbody>
         </table>
       </div>
     </section>
@@ -663,14 +666,6 @@
     <div class="field"><label for="cm-hospital">지원 병원</label><select id="cm-hospital"><option value="">선택 안 함</option></select></div>
     <div class="field"><label for="cm-job">직무</label><input id="cm-job" placeholder="예) 병동보조"></div>
     <div class="field"><label for="cm-source">지원경로</label><input id="cm-source" placeholder="예) 알바몬"></div>
-    <div style="display:flex;gap:10px">
-      <div class="field" style="flex:1"><label>입사일</label>
-        <div class="dsel"><select id="cm-join-y"></select><select id="cm-join-m"></select><select id="cm-join-d"></select></div>
-      </div>
-      <div class="field" style="flex:1"><label>면접일</label>
-        <div class="dsel"><select id="cm-int-y"></select><select id="cm-int-m"></select><select id="cm-int-d"></select></div>
-      </div>
-    </div>
     <div class="field"><label for="cm-status">상태</label><select id="cm-status"><option>서류</option><option>면접</option><option>배치</option><option>보류</option><option>탈락</option></select></div>
     <div class="field"><label for="cm-memo">메모</label><textarea id="cm-memo" placeholder="면접 메모, 특이사항 등"></textarea></div>
     <div class="err-msg" id="cm-err"></div>
@@ -1185,31 +1180,47 @@
   async function loadCandidates(){
     const tb=$('#cand-table');
     const key='cand:'+candFilter.status+':'+candFilter.hospitalId;
-    if(!hasCache(key)) tb.innerHTML='<tr><td colspan="7" class="loading">불러오는 중…</td></tr>';
+    if(!hasCache(key)) tb.innerHTML='<tr><td colspan="9" class="loading">불러오는 중…</td></tr>';
     try{
       await swr(key, async ()=>{
         const r = await Promise.all([ensureHospitals(), call('getCandidates', TOKEN, candFilter.status, candFilter.hospitalId)]);
         return healCandidates(Array.isArray(r[1]) ? r[1] : []);
       }, list=>renderCandidates(key, list));
-    }catch(e){ authFail(e); tb.innerHTML='<tr><td colspan="7" class="empty-row">불러오지 못했습니다.</td></tr>'; }
+    }catch(e){ authFail(e); tb.innerHTML='<tr><td colspan="9" class="empty-row">불러오지 못했습니다.</td></tr>'; }
   }
   function renderCandidates(key, list){
     if(key!=='cand:'+candFilter.status+':'+candFilter.hospitalId) return;   // 필터 변경 후 늦게 온 응답 무시
     const tb=$('#cand-table');
+    const list0=list;
+    const dmap=candDatesCache||{};
+    if(!candDatesCache) getCandDatesCached().then(()=>renderCandidates(key,list0)).catch(()=>{});   // 날짜 도착 시 1회 갱신
+    const yNow=new Date().getFullYear();
+    const dEdit=(id,kind,iso)=>{
+      const m=String(iso||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      const [vy,vm,vd]=m?[m[1],String(Number(m[2])),String(Number(m[3]))]:['','',''];
+      const opt=(arr,cur,ph)=>'<option value="">'+ph+'</option>'+arr.map(x=>'<option value="'+x+'"'+(String(x)===cur?' selected':'')+'>'+x+'</option>').join('');
+      const ys=Array.from({length:5},(_,i)=>yNow-2+i), ms=Array.from({length:12},(_,i)=>i+1), ds=Array.from({length:31},(_,i)=>i+1);
+      return '<span class="dcell" data-did="'+esc(id)+'" data-dk="'+kind+'">'
+        +'<select class="dt-sel" data-p="y">'+opt(ys,vy,'년')+'</select>'
+        +'<select class="dt-sel" data-p="m">'+opt(ms,vm,'월')+'</select>'
+        +'<select class="dt-sel" data-p="d">'+opt(ds,vd,'일')+'</select></span>';
+    };
     fillDateSels('#filter-y','#filter-m','#filter-d', yearsOf(list,c=>c.created), candFilter);
     const dated=(candFilter.y||candFilter.m||candFilter.d);
     list=(list||[]).filter(c=>dMatch(c.created,candFilter));
-    if(!list.length){ tb.innerHTML='<tr><td colspan="7" class="empty-row">'+(dated?'해당 날짜의 지원자가 없습니다.':'해당 조건의 지원자가 없습니다. <b>＋ 지원자 추가</b>로 등록하세요.')+'</td></tr>'; return; }
+    if(!list.length){ tb.innerHTML='<tr><td colspan="9" class="empty-row">'+(dated?'해당 날짜의 지원자가 없습니다.':'해당 조건의 지원자가 없습니다. <b>＋ 지원자 추가</b>로 등록하세요.')+'</td></tr>'; return; }
     const STAT=['서류','면접','배치','보류','탈락'];
-    tb.innerHTML = list.map(c=>`<tr>
+    tb.innerHTML = list.map(c=>{ const dd=dmap[String(c.id)]||{}; return `<tr>
       <td class="hname">${esc(c.name)}</td>
       <td>${c.hospital?esc(c.hospital):'<span class="muted">–</span>'}</td>
       <td>${c.job?esc(c.job):'<span class="muted">–</span>'}</td>
       <td>${c.source?esc(c.source):'<span class="muted">–</span>'}</td>
       <td><select class="st-sel" data-s="${esc(c.status)}" data-id="${esc(c.id)}">${STAT.map(s=>`<option ${s===c.status?'selected':''}>${s}</option>`).join('')}</select></td>
+      <td class="r">${dEdit(c.id,'interview',dd.interview)}</td>
+      <td class="r">${dEdit(c.id,'join',dd.join)}</td>
       <td class="r muted">${esc(c.created)}</td>
       <td class="r"><span class="act"><button data-capp='${esc(JSON.stringify(c))}'>지원서</button><button data-cedit='${esc(JSON.stringify(c))}'>수정</button><button class="del" data-cdel="${esc(c.id)}" data-name="${esc(c.name)}">삭제</button></span></td>
-    </tr>`).join('');
+    </tr>`;}).join('');
   }
   /* CANDDATES:BEGIN ═══ 입사일·면접일 (백엔드 지원자메타 시트) ═══ */
   let candDatesCache=null;
@@ -1219,32 +1230,13 @@
     catch(_){ candDatesCache={}; }                       // 백엔드 새 버전 배포 전에도 화면은 정상 동작
     return candDatesCache;
   }
-  function dselInit(){
-    const yNow=new Date().getFullYear();
-    const yo='<option value="">연도</option>'+Array.from({length:5},(_,i)=>{const y=yNow-2+i;return '<option value="'+y+'">'+y+'년</option>';}).join('');
-    const mo='<option value="">월</option>'+Array.from({length:12},(_,i)=>'<option value="'+(i+1)+'">'+(i+1)+'월</option>').join('');
-    const doo='<option value="">일</option>'+Array.from({length:31},(_,i)=>'<option value="'+(i+1)+'">'+(i+1)+'일</option>').join('');
-    [['#cm-join-y',yo],['#cm-int-y',yo],['#cm-join-m',mo],['#cm-int-m',mo],['#cm-join-d',doo],['#cm-int-d',doo]]
-      .forEach(p=>{ const el=$(p[0]); if(el && el.options.length<2) el.innerHTML=p[1]; });
-  }
-  function dselSet(prefix, iso){
-    const m=String(iso||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
-    $(prefix+'-y').value=m?m[1]:''; $(prefix+'-m').value=m?String(Number(m[2])):''; $(prefix+'-d').value=m?String(Number(m[3])):'';
-  }
-  function dselGet(prefix){
-    const y=$(prefix+'-y').value, m=$(prefix+'-m').value, d=$(prefix+'-d').value;
-    if(!y||!m||!d) return '';
-    return y+'-'+('0'+m).slice(-2)+'-'+('0'+d).slice(-2);
-  }
   /* CANDDATES:END */
   function openCModal(c){
     $('#cm-err').classList.remove('on');
     ensureHospitals().then(()=>{
-      dselInit(); dselSet('#cm-join',''); dselSet('#cm-int','');
       if(c){ $('#cm-title').textContent='지원자 정보 수정'; $('#cm-id').value=c.id;
         $('#cm-name').value=c.name||''; $('#cm-tel').value=c.tel||''; $('#cm-hospital').value=c.hospitalId||''; $('#cm-hospname').value=(c.hospitalId?'':(c.hospital||''));
-        $('#cm-job').value=c.job||''; $('#cm-source').value=c.source||''; $('#cm-status').value=c.status||'서류'; $('#cm-memo').value=c.memo||'';
-        getCandDatesCached().then(mp=>{ const dt=mp[String(c.id)]||{}; dselSet('#cm-join',dt.join||''); dselSet('#cm-int',dt.interview||''); }); }
+        $('#cm-job').value=c.job||''; $('#cm-source').value=c.source||''; $('#cm-status').value=c.status||'서류'; $('#cm-memo').value=c.memo||''; }
       else{ $('#cm-title').textContent='지원자 추가'; $('#cm-id').value=''; $('#cm-hospname').value='';
         ['#cm-name','#cm-tel','#cm-hospital','#cm-job','#cm-source','#cm-memo'].forEach(s=>$(s).value=''); $('#cm-status').value='서류'; }
       $('#cmodal').classList.add('on'); setTimeout(()=>$('#cm-name').focus(),50);
@@ -1260,12 +1252,6 @@
     $('#cm-save').disabled=true; $('#cm-save').textContent='저장 중…';
     try{
       if(id) await call('updateCandidate', TOKEN, id, data); else await call('addCandidate', TOKEN, data);
-      const jd=dselGet('#cm-join'), itd=dselGet('#cm-int');
-      const prev=(id && candDatesCache && candDatesCache[String(id)]) || {};
-      if(jd || itd || prev.join || prev.interview){
-        try{ await call('setCandidateDates', TOKEN, id||'', name, itd, jd); candDatesCache=null; }
-        catch(de){ if(/허용되지 않은|찾을 수 없습니다/.test(String(de&&de.message||de))) toast('입사일·면접일은 백엔드 새 버전 배포 후 저장됩니다.'); }
-      }
       candListCache=null; invalidate('cand','ev','ct','dash');
       closeCModal(); toast(id?'수정되었습니다.':'지원자가 추가되었습니다.'); loadCandidates();
     }catch(e){ authFail(e); }
@@ -1282,9 +1268,35 @@
     }
   });
   $('#cand-table').addEventListener('change', async e=>{
-    const sel=e.target.closest('.st-sel'); if(!sel) return;
-    sel.dataset.s=sel.value;
-    try{ await call('setCandidateStatus', TOKEN, sel.dataset.id, sel.value); invalidate('cand','dash'); toast('상태: '+sel.value); }catch(err){ authFail(err); }
+    const sel=e.target.closest('.st-sel');
+    if(sel){
+      sel.dataset.s=sel.value;
+      try{ await call('setCandidateStatus', TOKEN, sel.dataset.id, sel.value); invalidate('cand','dash'); toast('상태: '+sel.value); }catch(err){ authFail(err); }
+      return;
+    }
+    const dt=e.target.closest('.dt-sel'); if(!dt) return;
+    const cell=dt.closest('.dcell'); const id=cell.getAttribute('data-did');
+    const row=cell.closest('tr');
+    const read=k=>{                                        // 셀렉트 3개 → 'YYYY-MM-DD' | '' (전부 비움) | null (입력 중)
+      const c2=row.querySelector('.dcell[data-dk="'+k+'"]'); if(!c2) return null;
+      const y=c2.querySelector('[data-p="y"]').value, m=c2.querySelector('[data-p="m"]').value, d=c2.querySelector('[data-p="d"]').value;
+      if(y&&m&&d) return y+'-'+('0'+m).slice(-2)+'-'+('0'+d).slice(-2);
+      if(!y&&!m&&!d) return '';
+      return null;
+    };
+    const kind=cell.getAttribute('data-dk');
+    if(read(kind)===null) return;                          // 년/월/일이 다 채워지면 그때 저장
+    const prev=(candDatesCache&&candDatesCache[String(id)])||{};
+    const iv=(v=>v===null?(prev.interview||''):v)(read('interview'));
+    const jn=(v=>v===null?(prev.join||''):v)(read('join'));
+    try{
+      await call('setCandidateDates', TOKEN, id, '', iv, jn);
+      candDatesCache=candDatesCache||{}; candDatesCache[String(id)]={interview:iv, join:jn};
+      toast((kind==='interview'?'면접일':'입사일')+(read(kind)?' 저장: '+read(kind).replace(/-/g,'.'):' 삭제'));
+    }catch(err){
+      if(/허용되지 않은|찾을 수 없습니다/.test(String(err&&err.message||err))) toast('날짜 저장은 백엔드 새 버전 배포 후 가능합니다.');
+      else authFail(err);
+    }
   });
   $$('#view-candidates .seg').forEach(b=>b.addEventListener('click',()=>{
     $$('#view-candidates .seg').forEach(x=>x.classList.remove('active')); b.classList.add('active');
