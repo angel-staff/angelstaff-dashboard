@@ -44,12 +44,30 @@ img{display:block;max-width:100%;height:auto}
 .chip::before{content:"";width:6px;height:6px;border-radius:50%;background:#3B2F00}
 h1{margin:20px 0 12px;font-size:clamp(30px,6.4vw,44px);font-weight:800;line-height:1.25;letter-spacing:-.03em}
 .lead{margin:0;color:var(--ink-2);font-size:clamp(15px,3.6vw,17px)}
+.lead b{color:var(--ink);font-weight:800}
 .metas{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
 .meta{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);
   border-radius:12px;padding:9px 14px;font-size:14px;color:var(--ink-2);box-shadow:var(--shadow)}
 .meta b{color:var(--ink);font-weight:700}
 
 /* ── course summary ─────────────────── */
+.meta.go{text-decoration:none;gap:10px;transition:.18s}
+.meta.go span{color:var(--muted);font-weight:600}
+.meta.go b{color:var(--ink)}
+.meta.go svg{width:15px;height:15px;color:var(--brand-deep);flex:none}
+.meta.go:hover{border-color:var(--brand);background:var(--brand-soft);transform:translateY(-1px)}
+.login{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.login-row{display:flex;align-items:center;gap:8px;background:var(--ink);border-radius:12px;padding:8px 14px}
+.login-row .k{font-size:11.5px;font-weight:800;color:#3B2F00;background:var(--brand);padding:3px 8px;border-radius:6px}
+.login-row .v{font-size:14px;font-weight:700;color:#fff}
+.notice{list-style:none;margin:18px 0 0;padding:16px 18px;display:grid;gap:8px;
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.notice li{position:relative;padding-left:20px;font-size:14.5px;color:var(--ink-2)}
+.notice li::before{content:"";position:absolute;left:4px;top:.6em;width:7px;height:7px;border-radius:2px;background:var(--brand)}
+.notice li b{color:var(--ink);font-weight:800}
+.notice li.must{color:var(--warn);font-weight:700}
+.notice li.must::before{background:var(--warn)}
+.notice li.must b{color:var(--warn)}
 .courses{display:grid;gap:12px;margin-top:16px}
 @media(min-width:640px){.courses{grid-template-columns:1fr 1fr}}
 .course{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
@@ -105,6 +123,8 @@ ul.todo li.alert{color:var(--warn);font-weight:600}
 ul.todo li.alert::before{background:var(--warn)}
 ul.todo li.ok{color:var(--ok);font-weight:600}
 ul.todo li.ok::before{background:var(--ok)}
+.ilink{color:var(--brand-deep);font-weight:800;text-decoration:none;border-bottom:2px solid var(--brand)}
+.ilink:hover{background:var(--brand-soft)}
 kbd{font-family:inherit;font-size:.94em;font-weight:700;background:var(--surface-2);
   border:1px solid var(--line);border-bottom-width:2px;border-radius:7px;padding:2px 7px;color:var(--ink)}
 
@@ -188,14 +208,30 @@ footer{margin:36px 0 60px}
     </div>
     <span class="chip">필수 이수 교육</span>
     <h1>온라인 교육 수강 안내</h1>
-    <p class="lead">2026년 산업안전보건교육 · 신규입사자교육 수강 방법입니다.<br>
+    <p class="lead">신규 입사자 채용 시 <b>안전보건 온라인 필수교육</b> 안내드립니다.<br>
        아래 순서대로 진행하시면 됩니다.</p>
 
     <div class="metas">
-      <div class="meta">교육 사이트 <b>ACASTAR 연수원</b></div>
-      <div class="meta">모바일 접속 <b>mobile.acastar.co.kr</b></div>
+      <a class="meta go" href="http://kdh.acastar.co.kr" target="_blank" rel="noopener">
+        <span>PC 접속</span><b>kdh.acastar.co.kr</b>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+      <a class="meta go" href="http://kdh.acastar.co.kr" target="_blank" rel="noopener">
+        <span>모바일 접속</span><b>kdh.acastar.co.kr</b>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       <div class="meta">연수원 고객센터 <b>051-896-4525</b></div>
     </div>
+
+    <div class="login">
+      <div class="login-row"><span class="k">ID</span><span class="v">사번</span></div>
+      <div class="login-row"><span class="k">PW</span><span class="v">생년월일 6자리</span></div>
+    </div>
+
+    <ul class="notice">
+      <li>수강 <b>100%</b> + <b>시험</b> 완료 시 수료됩니다.</li>
+      <li>PC, 모바일로 모두 수강 가능합니다.</li>
+      <li>평가는 차시별로 진행되며, <b>70점 이상</b> 시 수료됩니다.</li>
+      <li class="must">본 교육은 <b>법정 필수교육</b>으로 반드시 이수하여 주시기 바랍니다.</li>
+    </ul>
 
     <div class="courses">
       <div class="course">
@@ -224,7 +260,7 @@ footer{margin:36px 0 60px}
     <div>
       <h4>영상 시청만으로는 수료되지 않습니다</h4>
       <p>산업안전보건교육은 <b>진도율 100%</b> 와 <b>시험 응시</b> 를 <b>모두</b> 완료해야 수료 처리됩니다.
-         영상만 끝까지 보고 시험을 치지 않으면 <b>미수료</b> 로 남습니다.</p>
+         평가는 차시별로 진행되며 <b>70점 이상</b> 이어야 수료됩니다.</p>
     </div>
   </div>
 
@@ -232,6 +268,7 @@ footer{margin:36px 0 60px}
     <div class="step-head"><div class="badge">1</div>
       <h2>나의강의실에서 과정 확인<span class="sub">수강해야 할 과정 2개를 확인합니다</span></h2></div>
     <ul class="todo">
+      <li><a class="ilink" href="http://kdh.acastar.co.kr" target="_blank" rel="noopener">kdh.acastar.co.kr</a> 접속 후 로그인합니다. (ID 사번 / PW 생년월일 6자리)</li>
       <li>로그인 후 <b>나의강의실</b> → <kbd>수강과정</kbd> 클릭</li>
       <li><b>산업안전</b>, <b>법정 및 인증교육</b> 두 영역에 과정이 각각 있습니다.</li>
       <li>과정 오른쪽 <kbd>강의실입장</kbd> 버튼을 눌러 시작합니다.</li>
@@ -250,7 +287,7 @@ footer{margin:36px 0 60px}
       <h2>산업안전보건교육 수강<span class="sub">온라인 8과목</span></h2></div>
     <ul class="todo">
       <li>과목별 <kbd>입장하기</kbd> 클릭 후 영상을 시청합니다.</li>
-      <li class="alert">영상 시청 후 반드시 <b>시험(과목당 6문항)</b> 까지 응시해야 합니다. 시험을 안 보면 미수료입니다.</li>
+      <li class="alert">영상 시청 후 반드시 <b>시험(차시별 6문항)</b> 까지 응시해야 하며, <b>70점 이상</b> 이어야 수료됩니다.</li>
       <li>과목 목록의 <b>시험</b> 칸이 <kbd>미응시 (0/6)</kbd> 로 남아 있으면 아직 완료되지 않은 것입니다.</li>
       <li>마지막으로 <kbd>만족도조사</kbd> 까지 완료해 주세요.</li>
       <li class="alert">수료여부의 <b>‘미수료’</b> 가 <b>‘수료’</b> 로 바뀌면 완료입니다.</li>
@@ -291,15 +328,15 @@ footer{margin:36px 0 60px}
     <div>
       <h4>영상 시청만으로는 수료되지 않습니다</h4>
       <p>산업안전보건교육은 <b>진도율 100%</b> 와 <b>시험 응시</b> 를 <b>모두</b> 완료해야 수료 처리됩니다.
-         영상만 끝까지 보고 시험을 치지 않으면 <b>미수료</b> 로 남습니다.</p>
+         평가는 차시별로 진행되며 <b>70점 이상</b> 이어야 수료됩니다.</p>
     </div>
   </div>
 
   <article class="step">
     <div class="step-head"><div class="badge">1</div>
-      <h2>접속 후 하단 진행과정 터치<span class="sub">mobile.acastar.co.kr</span></h2></div>
+      <h2>접속 후 하단 진행과정 터치<span class="sub">kdh.acastar.co.kr</span></h2></div>
     <ul class="todo">
-      <li>휴대폰 브라우저에서 <b>mobile.acastar.co.kr</b> 접속 후 로그인합니다.</li>
+      <li>휴대폰 브라우저에서 <a class="ilink" href="http://kdh.acastar.co.kr" target="_blank" rel="noopener">kdh.acastar.co.kr</a> 접속 후 로그인합니다. (ID 사번 / PW 생년월일 6자리)</li>
       <li>마이페이지의 <b>나의 2026년 수강 현황</b> 에서 <b>수강과정 2</b> 를 확인합니다.</li>
       <li>화면 맨 아래 메뉴에서 <kbd>진행과정</kbd> 을 터치합니다.</li>
     </ul>
@@ -334,7 +371,7 @@ footer{margin:36px 0 60px}
       <h2>산업안전보건교육 수강<span class="sub">온라인 8과목</span></h2></div>
     <ul class="todo">
       <li>과목마다 <kbd>입장</kbd> 을 터치해 영상을 시청합니다.</li>
-      <li class="alert">영상 시청 후 반드시 <b>시험</b> 까지 응시해야 합니다. 시험을 안 보면 미수료입니다.</li>
+      <li class="alert">영상 시청 후 반드시 <b>시험</b> 까지 응시해야 하며, <b>70점 이상</b> 이어야 수료됩니다.</li>
       <li><b>시험</b>과 <b>진도율</b> 표시가 <b>둘 다</b> 빨간색(미달성)에서 파란색(달성)으로 바뀌어야 합니다.</li>
       <li>과정 상단의 <b>수료 콘텐츠 0/8</b> 이 <b>8/8</b> 이 되면 완료입니다.</li>
       <li class="alert">‘미수료’ 표시가 남아 있으면 아직 완료되지 않은 것입니다.</li>
@@ -377,8 +414,8 @@ footer{margin:36px 0 60px}
         <a href="mailto:gjy@angelstaff.co.kr">gjy@angelstaff.co.kr</a></div>
       <div class="fitem"><span>사이트 오류 · 연수원 고객센터</span>
         <a href="tel:0518964525">051-896-4525</a></div>
-      <div class="fitem"><span>모바일 접속</span>
-        <a href="https://mobile.acastar.co.kr" target="_blank" rel="noopener">mobile.acastar.co.kr</a></div>
+      <div class="fitem"><span>교육 사이트 (PC · 모바일 공통)</span>
+        <a href="http://kdh.acastar.co.kr" target="_blank" rel="noopener">kdh.acastar.co.kr</a></div>
     </div>
   </div>
 </footer>
