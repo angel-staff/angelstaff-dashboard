@@ -1,19 +1,189 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>엔젤스태프 입사지원서 받기</title>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
-  html,body{margin:0;height:100%;background:#f4f6f9}
-  iframe{position:fixed;inset:0;width:100%;height:100%;border:0}
+  :root{--bg:#f4f6f9;--card:#fff;--ink:#14171c;--sub:#5b6472;--line:#e3e7ee;--accent:#0056B3;--accent-ink:#fff;--err:#d93025;--ok:#0f9d58}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:Pretendard,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:480px;margin:0 auto;padding:28px 16px 40px}
+  .brand{font-size:13px;font-weight:600;color:var(--accent);letter-spacing:-.2px}
+  h1{font-size:23px;font-weight:700;letter-spacing:-.6px;margin:6px 0 6px}
+  .lead{font-size:14.5px;color:var(--sub);line-height:1.6;margin:0 0 22px}
+  .card{background:var(--card);border-radius:18px;padding:22px 20px;border:1px solid var(--line)}
+  label{display:block;font-size:13.5px;font-weight:600;margin:0 0 7px}
+  .f{margin:0 0 18px}
+  input:not([type=checkbox]),select{width:100%;height:50px;border:1px solid var(--line);border-radius:12px;padding:0 14px;font:inherit;font-size:16px;color:var(--ink);background:#fff;outline:none;transition:border-color .15s,box-shadow .15s;appearance:none}
+  select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235b6472' stroke-width='1.6' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+  input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,86,179,.15)}
+  .fixed{height:50px;border-radius:12px;background:#f1f4f9;display:flex;align-items:center;padding:0 14px;font-size:16px;font-weight:600}
+  .hint{font-size:12.5px;color:var(--sub);margin:6px 0 0}
+  .consent{border:1px solid var(--line);border-radius:12px;padding:14px;margin:4px 0 20px}
+  .consent summary{cursor:pointer;font-size:13px;color:var(--sub);margin-top:8px}
+  .consent table{width:100%;font-size:12.5px;color:var(--sub);border-collapse:collapse;margin-top:8px}
+  .consent td{padding:5px 0;vertical-align:top;border-top:1px solid var(--line)}
+  .consent td:first-child{width:72px;color:var(--ink);font-weight:600}
+  .chk{display:flex;gap:10px;align-items:center;font-size:14.5px;font-weight:600;margin:0}
+  .chk input{width:22px;height:22px;margin:0;accent-color:var(--accent);flex:none}
+  button{width:100%;height:54px;border:0;border-radius:14px;background:var(--accent);color:var(--accent-ink);font:inherit;font-size:16.5px;font-weight:700;cursor:pointer;transition:opacity .15s}
+  button:disabled{opacity:.55;cursor:default}
+  .err{color:var(--err);font-size:13.5px;margin:0 0 12px;min-height:1px}
+  .done{text-align:center;padding:36px 10px}
+  .done .ic{width:64px;height:64px;border-radius:50%;background:#e7f6ee;display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+  .done h2{font-size:21px;margin:0 0 10px;letter-spacing:-.4px}
+  .done p{color:var(--sub);font-size:14.5px;line-height:1.65;margin:0}
+  .foot{text-align:center;font-size:12px;color:#98a1af;margin-top:22px}
+  .hp{position:absolute;left:-9999px}
 </style>
 </head>
 <body>
-<iframe id="app" title="엔젤스태프 입사지원 신청" allow="clipboard-write"></iframe>
+<div class="wrap">
+  <div class="brand">㈜엔젤스태프 의료사업본부</div>
+  <h1>입사지원서 받기</h1>
+  <p class="lead">이메일 주소를 남겨 주시면 병원 입사지원서 양식을 바로 보내드립니다. 작성 후 받은 메일에 답장으로 보내 주세요.</p>
+
+  <div class="card" id="formCard">
+    <form id="frm" novalidate>
+      <div class="f">
+        <label for="hospital">지원 병원</label>
+        <div id="hFixed" class="fixed" style="display:none"></div>
+        <select id="hospital" name="hospital"><option value="">병원을 선택해 주세요</option></select>
+      </div>
+      <div class="f" id="deptWrap">
+        <label for="dept">지원 부서</label>
+        <div id="dFixed" class="fixed" style="display:none"></div>
+        <select id="dept" name="dept"></select>
+        <input id="deptText" placeholder="외래 보조" style="display:none">
+      </div>
+      <div class="f">
+        <label for="name">이름</label>
+        <input id="name" autocomplete="name" placeholder="홍길동" maxlength="30">
+      </div>
+      <div class="f">
+        <label for="phone">휴대폰 번호</label>
+        <input id="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-1234-5678" maxlength="13">
+      </div>
+      <div class="f">
+        <label for="email">이메일 <span style="color:var(--err)">*</span></label>
+        <input id="email" type="email" inputmode="email" autocomplete="email" placeholder="name@naver.com">
+        <p class="hint">이 주소로 입사지원서 양식이 발송됩니다.</p>
+      </div>
+      <input class="hp" id="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+      <div class="consent">
+        <label class="chk"><input type="checkbox" id="consent">개인정보 수집·이용 동의 (필수)</label>
+        <details>
+          <summary>내용 보기</summary>
+          <table>
+            <tr><td>수집 항목</td><td>이름, 휴대폰 번호, 이메일, 지원 병원·부서</td></tr>
+            <tr><td>이용 목적</td><td>입사지원서 양식 발송 및 채용 전형 안내</td></tr>
+            <tr><td>보유 기간</td><td>채용 절차 종료 후 30일 이내 파기</td></tr>
+            <tr><td>거부 권리</td><td>동의를 거부할 수 있으며, 이 경우 양식을 받을 수 없습니다.</td></tr>
+          </table>
+        </details>
+      </div>
+
+      <p class="err" id="err" role="alert"></p>
+      <button type="submit" id="btn" disabled>양식 받기</button>
+      <p class="hint" id="btnHint" style="text-align:center;margin:10px 0 0">이메일 주소를 입력하면 버튼이 활성화됩니다.</p>
+    </form>
+  </div>
+
+  <div class="card done" id="doneCard" style="display:none">
+    <div class="ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#0f9d58" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <h2>양식을 보내드렸어요</h2>
+    <p id="doneMsg"></p>
+  </div>
+
+  <div class="foot">문의 gjy@angelstaff.co.kr</div>
+</div>
+
 <script>
-  var APP = 'https://script.google.com/macros/s/AKfycbw7eo0dXiP11Zi9QEmaIxN7MEXG0ZzRw-pZjnFEH3ef-kE6uPOzNDaUGJo-4OcKE0H7/exec';
-  document.getElementById('app').src = APP + (location.search || '');
+  const API = 'https://script.google.com/macros/s/AKfycbw7eo0dXiP11Zi9QEmaIxN7MEXG0ZzRw-pZjnFEH3ef-kE6uPOzNDaUGJo-4OcKE0H7/exec';
+  const H = [{"key": "kd", "name": "강동성심병원", "depts": ["응급실", "수술실", "통합 중환자실", "중환자실·응급실", "중환자실·수술실", "이송", "병동보조", "린넨·위생 관리", "외래 보조", "외래 헬퍼", "영상의학과", "중앙공급실"]}, {"key": "ui", "name": "의정부성모병원", "depts": ["중앙공급실", "약제팀", "내시경실 세척", "병동 이송"]}, {"key": "hs", "name": "강남하트스캔의원", "depts": ["내시경실 보조", "사무·남자 탈의실 보조", "검진 안내 보조"]}];
+  const Q = new URLSearchParams(location.search);
+  const PRE_H = H.some(x => x.key === Q.get('h')) ? Q.get('h') : '';
+  const PRE_D = (Q.get('d') || '').slice(0, 40), SRC = (Q.get('src') || '직접').slice(0, 20);
+  const $ = id => document.getElementById(id);
+
+  H.forEach(h => $('hospital').add(new Option(h.name, h.key)));
+
+  function renderDept(){
+    const h = H.find(x => x.key === $('hospital').value);
+    const sel = $('dept'), txt = $('deptText');
+    sel.innerHTML = '';
+    if (h && h.depts.length){
+      sel.add(new Option('부서를 선택해 주세요', ''));
+      h.depts.forEach(d => sel.add(new Option(d, d)));
+      sel.add(new Option('기타 (직접 입력)', '__etc'));
+      sel.style.display = ''; txt.style.display = 'none';
+    } else { sel.style.display = 'none'; txt.style.display = ''; }
+  }
+  $('hospital').addEventListener('change', renderDept);
+  $('dept').addEventListener('change', () => { $('deptText').style.display = $('dept').value === '__etc' ? '' : 'none'; });
+
+  if (PRE_H){
+    $('hospital').value = PRE_H; $('hospital').style.display = 'none';
+    $('hFixed').textContent = H.find(x => x.key === PRE_H).name; $('hFixed').style.display = '';
+  }
+  renderDept();
+  if (PRE_D){
+    $('dept').style.display = 'none'; $('deptText').style.display = 'none';
+    $('dFixed').textContent = PRE_D; $('dFixed').style.display = '';
+  }
+
+  $('phone').addEventListener('input', e => {
+    const d = e.target.value.replace(/\D/g, '').slice(0, 11);
+    e.target.value = d.length > 7 ? d.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3') : d.length > 3 ? d.replace(/(\d{3})(\d+)/, '$1-$2') : d;
+  });
+  ['hospital','dept','deptText','name','phone','email','consent'].forEach(id => $(id).addEventListener('input', () => $('err').textContent = ''));
+
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  let sending = false;
+  function syncBtn(){
+    const ok = EMAIL_RE.test($('email').value.trim());
+    $('btn').disabled = sending || !ok;
+    $('btnHint').style.display = ok ? 'none' : '';
+  }
+  ['input','change','blur'].forEach(ev => $('email').addEventListener(ev, syncBtn));
+  syncBtn();
+  setInterval(syncBtn, 600);   // 휴대폰 자동완성으로 입력된 이메일도 감지
+
+  function deptValue(){
+    if (PRE_D) return PRE_D;
+    if ($('dept').style.display !== 'none' && $('dept').value && $('dept').value !== '__etc') return $('dept').value;
+    return $('deptText').value.trim();
+  }
+
+  $('frm').addEventListener('submit', e => {
+    e.preventDefault();
+    const data = {
+      hospital: $('hospital').value, dept: deptValue(), name: $('name').value.trim(),
+      phone: $('phone').value, email: $('email').value.trim(), consent: $('consent').checked,
+      website: $('website').value, src: SRC
+    };
+    const fail = (m, id) => { $('err').textContent = m; if (id) $(id).focus(); };
+    if (!data.hospital) return fail('지원 병원을 선택해 주세요.', 'hospital');
+    if (!data.dept) return fail('지원 부서를 선택하거나 입력해 주세요.', $('dept').style.display !== 'none' ? 'dept' : 'deptText');
+    if (data.name.length < 2) return fail('이름을 입력해 주세요.', 'name');
+    if (!/^01[016789]\d{7,8}$/.test(data.phone.replace(/\D/g, ''))) return fail('휴대폰 번호를 정확히 입력해 주세요.', 'phone');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(data.email)) return fail('이메일 주소를 정확히 입력해 주세요.', 'email');
+    if (!data.consent) return fail('개인정보 수집·이용에 동의해 주세요.', 'consent');
+
+    sending = true; syncBtn(); $('btn').textContent = '보내는 중…';
+    fetch(API, { method: 'POST', credentials: 'omit', body: JSON.stringify(data) })
+      .then(res => res.json())
+      .then(r => {
+        if (!r.ok){ sending = false; $('btn').textContent = '양식 받기'; syncBtn(); return fail(r.error); }
+        $('formCard').style.display = 'none'; $('doneCard').style.display = '';
+        $('doneMsg').innerHTML = (r.dup ? '이미 신청하신 내역이 있어 이전에 보낸 메일을 확인해 주세요.<br>' : '')
+          + '<b>' + r.email + '</b>(으)로 입사지원서 양식을 보냈습니다.<br>작성 후 받은 메일에 <b>답장으로 첨부</b>해 주세요.<br><br>메일이 보이지 않으면 스팸함도 확인해 주세요.';
+      })
+      .catch(() => { sending = false; $('btn').textContent = '양식 받기'; syncBtn(); fail('일시적인 오류입니다. 잠시 후 다시 시도해 주세요.'); });
+  });
 </script>
 </body>
 </html>
