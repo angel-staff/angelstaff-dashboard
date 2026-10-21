@@ -124,7 +124,8 @@
   .kpi .k-lab{font-size:12.5px;color:var(--ink-2);margin-top:10px;font-weight:500}
   .kpi.flag::after{content:"";position:absolute;top:20px;right:18px;width:7px;height:7px;border-radius:50%;background:var(--trace)}
   .kpi.flag .k-lab b{color:var(--trace-ink);font-weight:600}
-  .kpi .k-sub{display:block;margin-top:4px;font-size:11.5px;color:var(--ink-3);font-weight:500}
+  .kpi .k-sub{margin-top:5px;font-size:11.5px;color:var(--ink-3);font-weight:500;line-height:1.4}
+  .kpi .k-sub:empty{display:none}
   .kpi .k-sub.warn{color:var(--danger)}
   .sv-alert{display:none;margin:18px 0 0;border:1px solid var(--trace);background:var(--trace-wash);border-radius:var(--r);padding:14px 16px;font-size:13px;color:#4a3b00;line-height:1.6}
   .sv-alert.on{display:block}
@@ -393,7 +394,7 @@
         <div class="kpi click" data-go="cand:전체" title="채용 현황 요약 보기"><div class="k-val" id="kpi-hiring">–</div><div class="k-lab">진행 중 채용</div></div>
         <div class="kpi click" data-go="evals" title="이번 달 면접 요약 보기"><div class="k-val" id="kpi-interviews">–</div><div class="k-lab">이번 달 면접평가</div></div>
         <div class="kpi flag click" data-go="ct:진행" title="만료 임박 요약 보기"><div class="k-val" id="kpi-expiring">–</div><div class="k-lab" id="kpi-exp-lab"><b>파견 만료 임박</b> · 90일 내</div></div>
-        <div class="kpi click" data-go="surveys" title="만족도 요약 보기"><div class="k-val" id="kpi-sat">–</div><div class="k-lab">평균 만족도<span class="k-sub" id="kpi-sat-sub"></span></div></div>
+        <div class="kpi click" data-go="surveys" title="만족도 요약 보기"><div class="k-val" id="kpi-sat">–</div><div class="k-lab">평균 만족도</div><div class="k-sub" id="kpi-sat-sub"></div></div>
       </div>
 
       <div class="pipe reveal">
@@ -825,7 +826,9 @@
     });
     return _libP[k];
   }
-  function preloadLibs(){ const a=[].slice.call(arguments); const go=()=>a.forEach(k=>loadLib(k).catch(()=>{})); (window.requestIdleCallback||setTimeout)(go, 600); }
+  /* 한가할 때 실행 (requestIdleCallback 은 두 번째 인자로 {timeout} 객체만 받는다) */
+  function idle(fn, ms){ try{ if(window.requestIdleCallback) return requestIdleCallback(fn, { timeout: ms||1500 }); }catch(_){ } return setTimeout(fn, ms||300); }
+  function preloadLibs(){ const a=[].slice.call(arguments); idle(()=>a.forEach(k=>loadLib(k).catch(()=>{})), 1500); }
 
   /* ═══ SWR 캐시: 캐시가 있으면 즉시 렌더 → 백그라운드 갱신 (체감속도 대폭 개선) ═══ */
   const DATA = {};                    // key -> {t, v}
@@ -913,13 +916,13 @@
   let __prefetched=false;
   function prefetchAfterDash(){
     if(__prefetched || !TOKEN) return; __prefetched=true;
-    (window.requestIdleCallback||setTimeout)(()=>{
+    idle(()=>{
       swr('cand:전체:', async ()=>{
         const r=await Promise.all([ensureHospitals(), call('getCandidates', TOKEN, '전체', '')]);
         const list=healCandidates(Array.isArray(r[1])?r[1]:[]); candListCache=list; return list;
       }, ()=>{}).catch(()=>{});
       getCandDatesCached().catch(()=>{});
-    }, 800);
+    }, 1200);
   }
 
   /* ───────── 대시보드 ───────── */
