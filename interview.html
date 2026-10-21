@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>엔젤스태프 · 채용 상담</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+<style>
+  :root{
+    --ink:#0B1430; --ink-2:#2A3556; --brand:#1B3FA0; --brand-2:#3B6BF0; --mint:#10B981;
+    --bg:#FBFCFE; --surface:#FFFFFF; --line:#E4E8F2; --line-2:#EEF1F8; --muted:#5E6A86; --muted-2:#9AA3BC; --danger:#C2412D;
+    --sans:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;letter-spacing:-0.012em;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:break-word}
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 42% at 78% -8%,rgba(91,140,255,.14),transparent 70%),radial-gradient(46% 38% at -6% 12%,rgba(27,63,160,.07),transparent 70%)}
+  button{font-family:inherit;cursor:pointer}
+  :focus-visible{outline:2px solid var(--brand-2);outline-offset:2px}
+  .wrap{position:relative;z-index:1;max-width:560px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 18px) max(18px,env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 18px) max(18px,env(safe-area-inset-left))}
+  .brand{font-size:11px;font-weight:700;letter-spacing:.26em;color:var(--brand)}
+  /* 안내 */
+  .intro{margin:auto 0;padding:28px 0}
+  .intro h1{font-size:clamp(28px,7vw,36px);line-height:1.25;letter-spacing:-0.035em;margin:14px 0 10px}
+  .intro .lead{color:var(--muted);font-size:15.5px;margin:0 0 22px}
+  .facts{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}
+  .facts span{font-size:12.5px;font-weight:600;color:var(--ink-2);background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:6px 12px}
+  .assure{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;font-size:13.5px;color:var(--ink-2);line-height:1.7}
+  .assure b{color:var(--ink)}
+  .agree{display:flex;gap:10px;align-items:flex-start;margin:16px 2px 0;font-size:14px;cursor:pointer}
+  .agree input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--brand);flex:none}
+  .start{margin-top:22px;width:100%;border:0;border-radius:16px;background:var(--brand);color:#fff;font-size:16px;font-weight:700;padding:17px 18px;display:flex;justify-content:center;align-items:center;gap:8px;box-shadow:0 10px 24px -12px rgba(27,63,160,.6);transition:transform .08s,opacity .15s}
+  .start:active{transform:translateY(1px)}
+  .start[disabled]{opacity:.4;box-shadow:none;cursor:default}
+  /* 대화 */
+  .chat{display:none;flex-direction:column;flex:1;min-height:0}
+  .chat.on{display:flex}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:2px 2px 12px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:2}
+  .top .t{font-size:14px;font-weight:700}
+  .top .t small{display:block;font-size:12px;color:var(--muted);font-weight:500}
+  .bar{width:96px;height:6px;border-radius:99px;background:var(--line-2);overflow:hidden;flex:none}
+  .bar i{display:block;height:100%;background:var(--brand);border-radius:99px;transition:width .3s}
+  .msgs{flex:1;display:flex;flex-direction:column;gap:10px;padding:18px 2px 14px}
+  .bub{max-width:86%;padding:11px 14px;font-size:15px;line-height:1.55;border-radius:6px 18px 18px 18px;background:var(--surface);border:1px solid var(--line);white-space:pre-line;animation:in .22s ease both}
+  .bub.me{align-self:flex-end;background:var(--brand);color:#fff;border-color:var(--brand);border-radius:18px 6px 18px 18px}
+  .typing{align-self:flex-start;display:flex;gap:4px;padding:12px 14px;border-radius:6px 18px 18px 18px;background:var(--surface);border:1px solid var(--line)}
+  .typing i{width:6px;height:6px;border-radius:50%;background:var(--muted-2);animation:blink 1s infinite}
+  .typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+  @keyframes blink{0%,80%,100%{opacity:.3}40%{opacity:1}}
+  @keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .compose{position:sticky;bottom:0;background:var(--bg);padding:10px 0 2px;border-top:1px solid var(--line)}
+  .opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+  .opt{border:1.5px solid var(--brand);background:var(--surface);color:var(--brand);font-size:15px;font-weight:700;padding:11px 16px;border-radius:14px;min-height:46px}
+  .opt:active{background:var(--brand);color:#fff}
+  .opt.ghost{border-color:var(--line);color:var(--muted);font-weight:600}
+  .row{display:flex;gap:8px}
+  .row input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);font:inherit;font-size:16px;padding:12px 14px;color:var(--ink);outline:none}
+  .row input:focus{border-color:var(--brand)}
+  .send{border:0;border-radius:14px;background:var(--brand);color:#fff;font-weight:700;font-size:15px;padding:0 18px;min-height:48px}
+  .send[disabled]{opacity:.4}
+  .err{color:var(--danger);font-size:13px;margin:8px 2px 0}
+  .done{display:none;margin:18px 0 6px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center}
+  .done.on{display:block}
+  .done b{display:block;font-size:17px;margin-bottom:4px}
+  .done span{color:var(--muted);font-size:14px}
+  .msg-card{margin:auto 0;text-align:center;padding:30px 6px}
+  .msg-card h1{font-size:24px;letter-spacing:-0.03em;margin:12px 0 8px}
+  .msg-card p{color:var(--muted);margin:0}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="intro" id="intro">
+    <div class="brand">ANGEL STAFF</div>
+    <h1 id="in-title">채용 상담</h1>
+    <p class="lead" id="in-lead">링크를 확인하고 있습니다…</p>
+    <div class="facts" id="in-facts"></div>
+    <div class="assure" id="in-assure" hidden></div>
+    <label class="agree" id="in-agree" hidden><input type="checkbox" id="agree"><span>위 내용을 확인했고, 상담 답변을 채용 검토에 쓰는 데 동의합니다.</span></label>
+    <button class="start" id="start" disabled hidden>상담 시작하기</button>
+    <div class="err" id="in-err"></div>
+  </div>
+
+  <div class="chat" id="chat">
+    <div class="top"><div class="t" id="c-title">채용 상담<small id="c-sub"></small></div><div class="bar" aria-hidden="true"><i id="c-bar" style="width:0"></i></div></div>
+    <div class="msgs" id="msgs" aria-live="polite"></div>
+    <div class="done" id="done"><b>답변을 전달했습니다</b><span>담당자가 검토한 뒤 연락드릴게요. 창을 닫으셔도 됩니다.</span></div>
+    <div class="compose" id="compose">
+      <div class="opts" id="opts"></div>
+      <form class="row" id="form" autocomplete="off"><input id="inp" maxlength="500" placeholder="직접 입력해도 됩니다" aria-label="답변 입력"><button class="send" id="send" type="submit">보내기</button></form>
+      <div class="err" id="c-err"></div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var GAS_URL = "https://script.google.com/macros/s/AKfycbzC3oJLVi648DTIzrayJmkKse-SK1rpnX71LN04NCF-FHJc6S_3XGXZgJYZjPy6peiMVQ/exec";
+  var T = (new URLSearchParams(location.search).get("t")||"").trim().toLowerCase();
+  var S = null, busy = false;
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(m){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]; }); }
+  function api(name, args){
+    return fetch(GAS_URL,{ method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify({ api:name, args:args }) })
+      .then(function(r){ return r.json(); })
+      .then(function(j){ if(!j || j.ok===false) throw new Error((j&&j.error)||"요청이 실패했습니다."); return j.result; });
+  }
+  function fail(msg){
+    $("intro").innerHTML='<div class="msg-card"><div class="brand">ANGEL STAFF</div><h1>상담을 열 수 없습니다</h1><p>'+esc(msg)+'<br>담당자에게 새 링크를 요청해 주세요.</p></div>';
+  }
+  if(!/^[a-f0-9]{32}$/.test(T)){ fail("링크 주소가 올바르지 않습니다."); return; }
+
+  api("ivInfo",[T]).then(function(s){
+    S = s;
+    if(s.expired){ fail("링크가 만료되었습니다."); return; }
+    if(s.status==="진행"||s.status==="완료"){ openChat(); return; }
+    var what = [s.hospital, s.job].filter(Boolean).join(" ");
+    $("in-title").textContent = what ? what+"\n지원 상담" : "채용 상담";
+    $("in-title").style.whiteSpace="pre-line";
+    $("in-lead").textContent = (what? what+" 지원 건으로 ":"")+"몇 가지만 여쭤볼게요. 버튼을 눌러 답하면 2~3분이면 끝나요.";
+    $("in-facts").innerHTML = "<span>⏱ 2~3분</span><span>"+esc(s.progress.n)+"개 질문</span><span>🔒 담당자만 열람</span>";
+    $("in-assure").innerHTML = "<b>자동 상담입니다.</b> 면접 여부는 엔젤스태프 담당자가 답변을 보고 직접 결정합니다."+
+      (s.ai ? " 답변 정리에 AI를 사용하며, 이름과 연락처는 AI에 전달하지 않습니다." : "")+
+      "<br>답변은 이번 채용 검토에만 사용되고 병원이나 다른 지원자에게 공개되지 않습니다.";
+    $("in-assure").hidden=false; $("in-agree").hidden=false; $("start").hidden=false;
+  }).catch(function(e){ fail(e.message); });
+
+  $("agree").addEventListener("change", function(){ $("start").disabled = !this.checked; });
+  $("start").addEventListener("click", function(){
+    var b=this; b.disabled=true; b.textContent="여는 중…";
+    api("ivStart",[T]).then(function(s){ S=s; openChat(); }).catch(function(e){ $("in-err").textContent=e.message; b.disabled=false; b.textContent="상담 시작하기"; });
+  });
+
+  function openChat(){
+    $("intro").style.display="none"; $("chat").classList.add("on");
+    if(!S.messages || !S.messages.length){ api("ivStart",[T]).then(function(s){ S=s; render(); }).catch(function(e){ $("c-err").textContent=e.message; }); }
+    render();
+  }
+  function render(typing){
+    $("c-title").firstChild.textContent = "채용 상담";
+    $("c-sub").textContent = [S.hospital, S.job].filter(Boolean).join(" · ");
+    var p=S.progress||{i:0,n:1}; $("c-bar").style.width = (p.n? Math.round(p.i/p.n*100):0)+"%";
+    $("msgs").innerHTML = (S.messages||[]).map(function(m){ return '<div class="bub '+(m.r==="me"?"me":"")+'">'+esc(m.t)+'</div>'; }).join("") + (typing? '<div class="typing" aria-label="입력 중"><i></i><i></i><i></i></div>':'');
+    var q=S.question, done=S.done||S.expired;
+    $("done").classList.toggle("on", !!S.done);
+    $("compose").style.display = done ? "none" : "";
+    $("opts").innerHTML = (q && q.opts) ? q.opts.map(function(o){ return '<button type="button" class="opt" data-o="'+esc(o)+'">'+esc(o)+'</button>'; }).join("") : "";
+    $("inp").placeholder = (q && q.opts) ? "직접 입력해도 됩니다" : "답변을 입력해 주세요";
+    $("send").disabled = busy;
+    if(!typing) window.scrollTo(0, document.body.scrollHeight);
+    if(q && q.text && !busy) setTimeout(function(){ $("inp").focus(); }, 60);
+  }
+  function answer(text){
+    text=String(text||"").trim(); if(!text || busy) return;
+    busy=true; $("c-err").textContent="";
+    S.messages = (S.messages||[]).concat([{ r:"me", t:text }]); S.question=null;
+    render(true); window.scrollTo(0, document.body.scrollHeight);
+    api("ivAnswer",[T, text]).then(function(s){ busy=false; S=s; $("inp").value=""; render(); })
+      .catch(function(e){ busy=false; S.messages.pop(); $("c-err").textContent=e.message+" 다시 눌러 주세요."; api("ivInfo",[T]).then(function(s){ S=s; render(); }).catch(function(){ render(); }); });
+  }
+  $("opts").addEventListener("click", function(e){ var b=e.target.closest("[data-o]"); if(b) answer(b.getAttribute("data-o")); });
+  $("form").addEventListener("submit", function(e){ e.preventDefault(); answer($("inp").value); });
+})();
+</script>
+</body>
+</html>

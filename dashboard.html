@@ -321,6 +321,221 @@
   #app.on.ready .reveal>*:nth-child(3){transition-delay:.14s}
   #app.on.ready .reveal>*:nth-child(4){transition-delay:.20s}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.reveal>*{opacity:1!important;transform:none!important}}
+
+  /* ═══ HR 2.0 — 새 화면 공용 스타일 (x- 접두사로 기존 스타일과 분리) ═══ */
+  .sidebar{overflow-y:auto}
+  .grid>*{min-width:0}
+  .nav-item .x-new{margin-left:auto;font-family:var(--gr);font-size:9px;font-weight:700;letter-spacing:.08em;color:var(--trace-ink);background:var(--trace-wash);padding:1px 6px;border-radius:99px}
+  .x-lead{margin:-22px 0 26px;color:var(--ink-2);font-size:13.5px;max-width:72ch;line-height:1.65}
+  .x-note{border:1px solid var(--trace);background:var(--trace-wash);border-radius:var(--r);padding:12px 15px;font-size:13px;color:#4a3b00;line-height:1.65;margin:0 0 22px}
+  .x-note b{color:var(--ink)}
+  .x-note code{font-family:var(--gr);font-size:12px;background:#fff;border:1px solid var(--line);border-radius:2px;padding:0 5px}
+  .x-ai{display:inline-flex;align-items:center;gap:6px;font-family:var(--gr);font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:99px;border:1px solid var(--line);color:var(--ink-2);background:#fff}
+  .x-ai i{width:7px;height:7px;border-radius:50%;background:var(--ink-3)}
+  .x-ai.on i{background:#1F7A3E}
+  .x-pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:99px;white-space:nowrap;line-height:1.6}
+  .x-pill.ok{background:#E8F4EC;color:#1F7A3E}
+  .x-pill.warn{background:var(--trace-wash);color:var(--trace-ink)}
+  .x-pill.bad{background:var(--danger-bg);color:var(--danger)}
+  .x-pill.info{background:#EAF0F8;color:#2F5B9A}
+  .x-pill.ghost{border:1px solid var(--line);color:var(--ink-2);font-weight:500}
+  .x-num{font-family:var(--gr);font-variant-numeric:tabular-nums}
+  .x-mut{color:var(--ink-3)}
+  .x-small{font-size:12px}
+  .x-chips{display:flex;gap:6px;flex-wrap:wrap}
+  .x-chip{border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 13px;font-size:12.5px;font-weight:500;color:var(--ink-2);cursor:pointer;font-family:inherit}
+  .x-chip:hover{border-color:var(--ink);color:var(--ink)}
+  .x-chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .x-link{border:0;background:none;padding:0;color:var(--ink);font-weight:600;font-size:12.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-family:inherit}
+  .x-link.mut{color:var(--ink-3);font-weight:500}
+  .x-btn{border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:600;font-size:12px;padding:6px 11px;border-radius:var(--r);white-space:nowrap;font-family:inherit;cursor:pointer}
+  .x-btn:hover{border-color:var(--ink)}
+  .x-btn.dark{background:var(--ink);border-color:var(--ink);color:#fff}
+  .x-btn.dark:hover{background:#000}
+  .x-btn[disabled]{opacity:.45;cursor:default}
+  .x-btn:focus-visible,.x-chip:focus-visible,.x-link:focus-visible{outline:2px solid var(--trace);outline-offset:2px}
+  .x-acts{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .x-search{border:1px solid var(--line);border-radius:var(--r);background:#fff;font:inherit;font-size:13px;color:var(--ink);padding:9px 12px;min-width:0;width:200px;outline:none}
+  .x-search:focus{border-color:var(--ink)}
+  .x-input,.x-select,.x-text{width:100%;border:1px solid var(--line);border-radius:var(--r);background:#fff;font:inherit;font-size:13.5px;color:var(--ink);padding:10px 12px;outline:none}
+  .x-text{resize:vertical;min-height:84px;line-height:1.6}
+  .x-input:focus,.x-select:focus,.x-text:focus{border-color:var(--ink);box-shadow:0 0 0 3px var(--trace-wash)}
+  .x-lab{display:block;font-size:11.5px;font-weight:500;color:var(--ink-2);margin:0 0 6px}
+  .x-form{display:grid;gap:12px}
+  .x-form2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .x-sub{font-size:12px;color:var(--ink-3);margin-top:3px;line-height:1.5}
+  .x-empty{padding:26px 2px;color:var(--ink-3);font-size:13px;line-height:1.7}
+  .x-empty b{color:var(--ink-2)}
+  .x-tbl td{vertical-align:middle}
+  .x-tbl tr.x-click{cursor:pointer}
+  .x-tbl tr.x-click:hover td{background:var(--panel)}
+  .x-tbl tr.x-sel td{background:var(--trace-wash)}
+  .x-who b{font-weight:600;color:var(--ink)}
+  .x-who small{display:block;color:var(--ink-3);font-size:11.5px;margin-top:1px}
+  .x-kpis{grid-template-columns:repeat(var(--n,4),1fr)}
+
+  /* 학습 흐름 */
+  .x-cycle{display:grid;grid-template-columns:minmax(0,1fr) 34px minmax(0,1fr) 34px minmax(0,1fr);align-items:stretch;margin-bottom:8px}
+  .x-node{border:1px solid var(--line);border-radius:var(--r);padding:18px 18px 16px;background:var(--panel)}
+  .x-node.mid{border-color:var(--trace);background:var(--trace-wash)}
+  .x-node h3{margin:6px 0 4px;font-size:16px;letter-spacing:-0.02em}
+  .x-node p{margin:0;font-size:12.5px;color:var(--ink-2);line-height:1.55}
+  .x-node .m{display:flex;gap:24px;margin-top:14px;flex-wrap:wrap}
+  .x-node .m b{display:block;font-family:var(--gr);font-size:26px;letter-spacing:-0.02em;line-height:1.1;font-variant-numeric:tabular-nums}
+  .x-node .m span{font-size:11.5px;color:var(--ink-3)}
+  .x-arr{display:grid;place-items:center;color:var(--ink-3)}
+  .x-arr svg{width:20px;height:20px}
+  .x-loop{grid-column:1/-1;margin-top:10px;border:1px dashed var(--line);border-radius:var(--r);padding:9px 14px;font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:center}
+  .x-loop svg{width:15px;height:15px;color:var(--trace-ink);flex:none}
+  .x-spark .a{fill:var(--trace-wash)} .x-spark .l{fill:none;stroke:var(--ink);stroke-width:1.5} .x-spark .p{fill:var(--trace);stroke:var(--ink);stroke-width:1}
+  .x-props{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+  .x-prop{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;background:#fff}
+  .x-prop b{font-size:13.5px}
+  .x-prop p{margin:3px 0 0;font-size:12.5px;color:var(--ink-2);line-height:1.5}
+
+  /* 산출물 카드 */
+  .x-outs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:22px 0 30px}
+  .x-out{border:1px solid var(--line);border-radius:var(--r);padding:14px 15px;background:var(--panel);display:flex;flex-direction:column;gap:10px;justify-content:space-between}
+  .x-out b{display:block;font-size:13.5px}
+  .x-out .v{font-family:var(--gr);font-size:24px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums}
+  .x-out .v small{font-size:12px;color:var(--ink-3);font-weight:500;margin-left:2px;font-family:var(--kr)}
+  .x-filter{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+  /* 막대 */
+  .x-bars{display:flex;flex-direction:column;gap:11px;margin-top:14px}
+  .x-bar{display:grid;grid-template-columns:minmax(90px,170px) minmax(0,1fr) 96px;gap:12px;align-items:center;font-size:13px}
+  .x-bar .lb{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .x-bar .t{height:9px;background:var(--line-2);border-radius:99px;overflow:hidden}
+  .x-bar .t i{display:block;height:100%;background:var(--ink);border-radius:99px}
+  .x-bar .t i.hi{background:#1F7A3E}.x-bar .t i.mid{background:var(--trace)}.x-bar .t i.lo{background:var(--danger)}
+  .x-bar .v{font-family:var(--gr);font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+  .x-bar .v small{font-weight:400;color:var(--ink-3);font-size:11px;margin-left:4px}
+  .x-bar.thin{opacity:.6}
+  .x-axis{display:grid;grid-template-columns:minmax(90px,170px) minmax(0,1fr) 96px;gap:12px;font-size:10.5px;color:var(--ink-3);margin-top:6px}
+  .x-axis .s{display:flex;justify-content:space-between;font-family:var(--gr)}
+
+  /* 퇴사 위험 */
+  .x-pulse{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:28px;align-items:center;border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;background:var(--panel);margin-bottom:8px}
+  .x-pulse h3{margin:6px 0 6px;font-size:17px;letter-spacing:-0.02em}
+  .x-stack{display:flex;height:13px;border-radius:99px;overflow:hidden;margin:12px 0 9px;background:var(--line-2)}
+  .x-stack i{display:block;height:100%}
+  .x-stack .d{background:var(--danger)}.x-stack .p{background:#D9D5CC}.x-stack .o{background:#1F7A3E}
+  .x-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink-2)}
+  .x-legend span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px;background:var(--c)}
+  .x-wts{display:flex;flex-direction:column;gap:9px;margin-top:12px}
+  .x-wt{display:grid;grid-template-columns:96px minmax(0,1fr) 78px;gap:10px;align-items:center;font-size:12.5px}
+  .x-wt .bs{display:flex;flex-direction:column;gap:3px}
+  .x-wt .bs i{display:block;height:6px;border-radius:99px}
+  .x-wt .b0{background:#D9D5CC}.x-wt .b1{background:var(--ink)}
+  .x-wt .v{font-family:var(--gr);text-align:right}
+
+  /* 인터뷰 */
+  .x-iv{display:grid;grid-template-columns:250px minmax(0,340px) minmax(0,1fr);gap:22px;align-items:start}
+  .x-ivlist{display:flex;flex-direction:column;border-top:1px solid var(--ink);max-height:640px;overflow:auto}
+  .x-ivrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;text-align:left;border:0;border-bottom:1px solid var(--line-2);background:none;padding:12px 8px;font-size:13px;font-family:inherit;cursor:pointer;color:var(--ink)}
+  .x-ivrow:hover{background:var(--panel)}
+  .x-ivrow.on{background:var(--panel);box-shadow:inset 3px 0 0 var(--trace)}
+  .x-ivrow small{display:block;color:var(--ink-3);font-size:11.5px;margin-top:1px}
+  .x-ivrow .r{text-align:right}
+  .x-phone{border:1px solid var(--line);border-radius:24px;padding:12px;background:var(--panel)}
+  .x-phone-top{display:flex;align-items:center;gap:8px;padding:6px 6px 12px;border-bottom:1px solid var(--line);font-size:13px;font-weight:600}
+  .x-phone-top em{font-style:normal;font-family:var(--gr);font-size:10px;font-weight:700;background:var(--ink);color:#fff;border-radius:99px;padding:1px 7px}
+  .x-msgs{display:flex;flex-direction:column;gap:8px;padding:12px 4px 4px;max-height:560px;overflow:auto}
+  .x-bub{max-width:86%;padding:9px 12px;font-size:13px;line-height:1.55;border-radius:4px 14px 14px 14px;background:#fff;border:1px solid var(--line);white-space:pre-line}
+  .x-bub.me{align-self:flex-end;background:var(--ink);color:#fff;border-color:var(--ink);border-radius:14px 4px 14px 14px}
+  .x-card{border:1px solid var(--line);border-radius:var(--r);padding:20px;background:#fff}
+  .x-card h3{margin:4px 0 0;font-size:17px;letter-spacing:-0.02em}
+  .x-score{display:flex;align-items:baseline;gap:6px}
+  .x-score b{font-family:var(--gr);font-size:36px;letter-spacing:-0.03em;line-height:1}
+  .x-fields{display:flex;flex-direction:column;margin:14px 0}
+  .x-fld{display:grid;grid-template-columns:20px 86px minmax(0,1fr);gap:8px;padding:9px 0;border-bottom:1px solid var(--line-2);font-size:13px;align-items:start}
+  .x-fld .mk{font-family:var(--gr);font-weight:700}
+  .x-fld .mk.y{color:#1F7A3E}.x-fld .mk.w{color:var(--trace-ink)}.x-fld .mk.n{color:var(--danger)}.x-fld .mk.i{color:var(--ink-3)}
+  .x-fld .k{color:var(--ink-3)}
+  .x-aibox{border-left:2px solid var(--trace);padding:2px 0 2px 12px;font-size:13px;color:var(--ink-2);line-height:1.7;margin-top:4px}
+  .x-aibox b{color:var(--ink)}
+
+  /* 수정 학습 */
+  .x-chart{width:100%;height:auto;display:block}
+  .x-chart .g{stroke:var(--line);stroke-width:1}
+  .x-chart .ax{fill:var(--ink-3);font-size:11px;font-family:var(--gr)}
+  .x-chart .ln{fill:none;stroke:var(--ink);stroke-width:2}
+  .x-chart .ar{fill:var(--trace-wash)}
+  .x-chart .pt{fill:#fff;stroke:var(--ink);stroke-width:1.5}
+  .x-chart .end{fill:var(--trace);stroke:var(--ink);stroke-width:1.5}
+  .x-chart .vt{fill:var(--ink);font-size:12px;font-weight:700;font-family:var(--gr)}
+  .x-chart .cnt{fill:var(--ink-3);font-size:10px;font-family:var(--gr)}
+  .x-edits{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+  .x-edit{border:1px solid var(--line);border-radius:var(--r);padding:13px 15px}
+  .x-edit .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--ink-3);margin-bottom:8px}
+  .x-edit .txt{font-size:13px;line-height:1.75;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere}
+  .x-edit del{background:var(--danger-bg);color:var(--danger);text-decoration:line-through;padding:0 1px}
+  .x-edit ins{background:#E8F4EC;color:#1F7A3E;text-decoration:none;padding:0 1px}
+  .x-rules{display:flex;flex-direction:column}
+  .x-rule{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line-2);font-size:13px}
+  .x-rule.cand{background:var(--trace-wash);margin:0 -10px;padding:12px 10px;border-radius:var(--r);border-bottom:0}
+  .x-rule small{display:block;color:var(--ink-3);font-size:11.5px;margin-top:2px}
+  .x-sw{position:relative;width:36px;height:20px;border-radius:99px;border:1px solid var(--line);background:var(--line-2);padding:0;cursor:pointer;flex:none}
+  .x-sw::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--ink-3);transition:left .15s,background .15s}
+  .x-sw[aria-checked="true"]{background:var(--ink);border-color:var(--ink)}
+  .x-sw[aria-checked="true"]::after{left:18px;background:var(--trace)}
+  .x-draft{display:grid;gap:12px}
+  .x-draft .used{display:flex;gap:6px;flex-wrap:wrap;font-size:11.5px}
+
+  /* 결원 예측 */
+  .x-fc{display:flex;flex-direction:column;gap:14px;margin-top:14px}
+  .x-fr{display:grid;grid-template-columns:minmax(120px,190px) minmax(0,1fr) 70px;gap:12px;align-items:center;font-size:13px}
+  .x-fr small{display:block;font-size:11.5px;color:var(--ink-3);margin-top:2px}
+  .x-ft{display:block;position:relative;height:18px;background:var(--line-2);border-radius:var(--r)}
+  .x-ft .b{position:absolute;left:0;top:4px;height:10px;background:var(--ink);border-radius:2px}
+  .x-ft .rg{position:absolute;top:8px;height:2px;background:var(--trace-ink)}
+  .x-ft .rg::before,.x-ft .rg::after{content:"";position:absolute;top:-4px;width:2px;height:10px;background:var(--trace-ink)}
+  .x-ft .rg::before{left:0}.x-ft .rg::after{right:0}
+  .x-fr .v{font-family:var(--gr);font-weight:700;text-align:right}
+  .x-fr .v small{font-weight:400}
+
+  /* 원칙 */
+  .x-princ{list-style:none;margin:10px 0 0;padding:0;counter-reset:p}
+  .x-princ li{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;padding:12px 0;border-bottom:1px solid var(--line-2);font-size:13px;counter-increment:p;line-height:1.6}
+  .x-princ li::before{content:counter(p);font-family:var(--gr);font-weight:700;color:var(--trace-ink)}
+  .x-princ b{display:block;margin-bottom:2px}
+  .x-princ span{color:var(--ink-2)}
+
+  /* 만족도 응답 상세 */
+  .x-svd-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:10px 0 6px}
+  .x-ans{display:flex;flex-direction:column}
+  .x-ans .row2{display:grid;grid-template-columns:minmax(0,1fr) 150px;gap:14px;padding:10px 0;border-bottom:1px solid var(--line-2);font-size:13px;align-items:center}
+  .x-ans .row2.txt{grid-template-columns:minmax(0,1fr)}
+  .x-ans .q{color:var(--ink-2)}
+  .x-ans .sec{font-family:var(--gr);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);padding:16px 0 4px}
+  .x-ans .a{font-weight:600;text-align:right}
+  .x-ans .txt .a{text-align:left;font-weight:500;color:var(--ink);background:var(--panel);border-radius:var(--r);padding:10px 12px;margin-top:6px;white-space:pre-wrap}
+  .x-dots{display:inline-flex;gap:3px;vertical-align:middle;margin-right:8px}
+  .x-dots i{width:10px;height:10px;border-radius:2px;background:var(--line)}
+  .x-dots i.on{background:var(--ink)}
+  .x-more{display:block;margin:12px auto 0}
+  .modal.x-wide{width:min(720px,94vw);max-height:88vh;overflow:auto}
+  .modal.x-mid{width:min(560px,94vw);max-height:88vh;overflow:auto}
+
+  @media (max-width:1180px){
+    .x-iv{grid-template-columns:minmax(0,320px) minmax(0,1fr)}
+    .x-ivlist{grid-column:1/-1;flex-direction:row;overflow-x:auto;border-top:0;gap:6px;max-height:none}
+    .x-ivrow{min-width:200px;border:1px solid var(--line);border-radius:var(--r)}
+    .x-outs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media (max-width:880px){
+    .x-lead{margin-top:-6px}
+    .x-cycle{grid-template-columns:minmax(0,1fr)}
+    .x-arr{height:28px}.x-arr svg{transform:rotate(90deg)}
+    .x-pulse{grid-template-columns:minmax(0,1fr)}
+    .x-iv{grid-template-columns:minmax(0,1fr)}
+    .x-kpis{grid-template-columns:repeat(2,1fr)}
+    .x-form2{grid-template-columns:minmax(0,1fr)}
+    .x-bar,.x-axis{grid-template-columns:96px minmax(0,1fr) 82px}
+    .x-fr{grid-template-columns:110px minmax(0,1fr) 52px}
+    .x-search{width:100%}
+    .x-ans .row2{grid-template-columns:minmax(0,1fr) 110px}
+  }
 </style>
 </head>
 <body>
@@ -358,13 +573,23 @@
     <div class="brand" id="brand-logo" style="cursor:pointer" title="대시보드로 이동"><span class="logo">엔젤스태프</span><span class="tag">HR</span></div>
     <div class="nav-sec"><div class="eyebrow">대시보드</div></div>
     <button class="nav-item active" data-view="dash" data-title="현황"><i class="dot"></i>현황</button>
+    <button class="nav-item" data-view="flow" data-title="학습 흐름"><i class="dot"></i>학습 흐름<span class="x-new">NEW</span></button>
     <div class="nav-sec"><div class="eyebrow">채용</div></div>
     <button class="nav-item" data-view="postings" data-title="직무공고"><i class="dot"></i>직무공고</button>
     <button class="nav-item" data-view="candidates" data-title="이력서 관리"><i class="dot"></i>이력서 관리</button>
+    <button class="nav-item" data-view="interview" data-title="AI 1차 인터뷰"><i class="dot"></i>AI 1차 인터뷰<span class="x-new">NEW</span></button>
     <button class="nav-item" data-view="evals" data-title="면접 평가"><i class="dot"></i>면접 평가</button>
+    <button class="nav-item" data-view="quality" data-title="채용 결과 학습"><i class="dot"></i>채용 결과 학습<span class="x-new">NEW</span></button>
     <div class="nav-sec"><div class="eyebrow">운영</div></div>
     <button class="nav-item" data-view="contracts" data-title="파견·계약"><i class="dot"></i>파견·계약</button>
+    <button class="nav-item" data-view="workers" data-title="근무자 마스터"><i class="dot"></i>근무자 마스터<span class="x-new">NEW</span></button>
     <button class="nav-item" data-view="surveys" data-title="만족도 조사"><i class="dot"></i>만족도 조사</button>
+    <button class="nav-item" data-view="risk" data-title="퇴사 위험"><i class="dot"></i>퇴사 위험<span class="x-new">NEW</span></button>
+    <button class="nav-item" data-view="forecast" data-title="결원 예측·인재풀"><i class="dot"></i>결원 예측·인재풀<span class="x-new">NEW</span></button>
+    <div class="nav-sec"><div class="eyebrow">학습</div></div>
+    <button class="nav-item" data-view="learn" data-title="담당자 수정 학습"><i class="dot"></i>담당자 수정 학습<span class="x-new">NEW</span></button>
+    <button class="nav-item" data-view="knowledge" data-title="병원별 운영 지식"><i class="dot"></i>병원별 운영 지식<span class="x-new">NEW</span></button>
+    <button class="nav-item" data-view="audit" data-title="AI 결정 기록"><i class="dot"></i>AI 결정 기록<span class="x-new">NEW</span></button>
     <div class="nav-sec"><div class="eyebrow">설정</div></div>
     <button class="nav-item" data-view="hospitals" data-title="병원 마스터"><i class="dot"></i>병원 마스터</button>
     <div class="side-foot">
@@ -612,6 +837,226 @@
         <div class="b-head"><h3>응답 코멘트</h3><span class="meta" id="sv-meta-c">최근순 · 전체</span></div>
         <div id="sv-comments"><div class="loading">불러오는 중…</div></div>
       </div>
+      <div class="block" style="margin-top:34px">
+        <div class="b-head"><h3>응답 상세</h3><span class="meta" id="svd-meta">근무자별 전체 답변 · 행을 누르면 열람</span></div>
+        <div class="x-svd-bar">
+          <div class="segs" id="svd-type"><button class="seg active" data-t="전체">전체</button><button class="seg" data-t="재직">재직</button><button class="seg" data-t="퇴직">퇴직</button><button class="seg" data-t="월간">월 1문항</button></div>
+          <input id="svd-q" class="x-search" placeholder="이름·부서 검색" aria-label="이름·부서 검색">
+        </div>
+        <div class="tbl-scroll"><table class="htbl x-tbl" style="min-width:760px"><thead><tr><th>응답일</th><th>이름</th><th>병원 · 부서</th><th>유형</th><th class="r">종합</th><th class="r">추천</th><th>이직 고려 · 퇴직 사유</th></tr></thead><tbody id="svd-rows"><tr><td colspan="7" class="loading">불러오는 중…</td></tr></tbody></table></div>
+        <button class="x-btn x-more" id="svd-more" hidden>더 보기</button>
+      </div>
+    </section>
+
+    <!-- ═══ HR 2.0 ═══ 학습 흐름 -->
+    <section class="page" id="view-flow" style="display:none">
+      <div class="head">
+        <div><div class="eyebrow">Learning operations</div><h1>학습 흐름</h1></div>
+        <div class="when" id="flow-ai"></div>
+      </div>
+      <p class="x-lead">일하면서 생기는 기록이 자동으로 쌓이고, 쌓인 기록으로 기준과 문구가 고쳐집니다. 고친 내용은 담당자가 승인해야 반영됩니다.</p>
+      <div class="x-note" id="flow-note" hidden></div>
+      <div class="x-cycle" id="flow-cycle"><div class="loading">불러오는 중…</div></div>
+      <div class="grid">
+        <div class="block">
+          <div class="b-head"><h3>쌓이는 데이터</h3><span class="meta">최근 6개월 누적 · 행을 누르면 해당 화면</span></div>
+          <div class="tbl-scroll" style="border-bottom:0"><table class="htbl x-tbl" style="min-width:560px"><thead><tr><th>데이터</th><th>추이</th><th class="r">누적</th><th class="r">이번 달</th><th>쓰이는 곳</th></tr></thead><tbody id="flow-rows"></tbody></table></div>
+        </div>
+        <div class="block">
+          <div class="b-head"><h3>승인 대기</h3><span class="meta">담당자가 승인해야 반영</span></div>
+          <div id="flow-pending"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ HR 2.0 ═══ 근무자 마스터 -->
+    <section class="page" id="view-workers" style="display:none">
+      <div class="head">
+        <div><div class="eyebrow">Workforce master</div><h1>근무자 마스터</h1></div>
+        <div class="actions"><button class="btn-sm ghost" id="wk-export">전체 명단 받기 (xlsx)</button><button class="btn-sm" id="wk-add">＋ 근무자 추가</button></div>
+      </div>
+      <p class="x-lead">계약을 등록하면 근무자가 자동으로 생깁니다. 이름·병원·부서·입사·만료는 <b>파견·계약</b>에서, 생년월일·연락처·검진월·고용형태·근태 이상은 여기서 한 번만 입력하면 아래 명단 파일에 모두 반영됩니다.</p>
+      <div class="kpis x-kpis" style="--n:5" id="wk-kpis"></div>
+      <div class="x-outs" id="wk-outs"></div>
+      <div class="filterbar">
+        <div class="segs" id="wk-seg"><button class="seg active" data-f="재직">재직</button><button class="seg" data-f="퇴사">퇴사</button><button class="seg" data-f="전체">전체</button><button class="seg" data-f="미입력">정보 미입력</button></div>
+        <div class="x-filter"><select id="wk-hosp" class="filter-sel"><option value="">전체 병원</option></select><input id="wk-q" class="x-search" placeholder="이름·부서 검색" aria-label="이름·부서 검색"></div>
+      </div>
+      <div class="tbl-scroll">
+        <table class="htbl x-tbl" style="min-width:980px">
+          <thead><tr><th>근무자</th><th>고용형태</th><th>입사</th><th class="r">파견 만료</th><th>생년월일</th><th class="r">검진월</th><th class="r">근태 이상</th><th>만족도</th><th>명단 반영</th><th class="r">관리</th></tr></thead>
+          <tbody id="wk-rows"><tr><td colspan="10" class="loading">불러오는 중…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══ HR 2.0 ═══ 퇴사 위험 -->
+    <section class="page" id="view-risk" style="display:none">
+      <div class="head">
+        <div><div class="eyebrow">Retention</div><h1>퇴사 위험</h1></div>
+        <div class="when" id="rk-when"></div>
+      </div>
+      <p class="x-lead">월 1문항 응답, 만족도 변화, 파견 만료, 근태 이상을 점수로 합쳐 면담이 필요한 근무자를 먼저 보여줍니다. 점수는 매달 기록되고, 3개월 뒤 실제 퇴사와 비교해 계산 방식을 고칩니다.</p>
+      <div class="x-pulse" id="rk-pulse"><div class="loading">불러오는 중…</div></div>
+      <div class="grid">
+        <div class="block">
+          <div class="b-head"><h3>면담이 필요한 근무자</h3><span class="meta">점수 높은 순 · 70점 이상 고위험</span></div>
+          <div class="tbl-scroll" style="border-bottom:0"><table class="htbl x-tbl" style="min-width:560px"><thead><tr><th>근무자</th><th>요인</th><th class="r">점수</th><th class="r"></th></tr></thead><tbody id="rk-rows"></tbody></table></div>
+          <div class="x-sub" id="rk-nodata" style="margin-top:10px"></div>
+        </div>
+        <div class="block">
+          <div class="b-head"><h3>점수 계산 방식</h3><span class="meta" id="rk-wver"></span></div>
+          <div id="rk-weights"></div>
+          <div class="b-head" style="margin-top:30px"><h3>실제 퇴사와 비교</h3><span class="meta">점수를 매긴 뒤 90일 안 퇴사</span></div>
+          <div id="rk-cal"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ HR 2.0 ═══ AI 1차 인터뷰 -->
+    <section class="page" id="view-interview" style="display:none">
+      <div class="head">
+        <div><div class="eyebrow">Recruitment · AI interview</div><h1>AI 1차 인터뷰</h1></div>
+        <div class="actions"><button class="btn-sm" id="iv-new">＋ 인터뷰 링크 만들기</button></div>
+      </div>
+      <p class="x-lead" id="iv-lead">지원자에게 링크를 보내면 근무 조건과 경력을 대화로 확인하고, 답변을 정리해 점수를 붙입니다. 면접 여부는 담당자가 결정합니다.</p>
+      <div class="x-iv">
+        <div class="x-ivlist" id="iv-list"><div class="loading">불러오는 중…</div></div>
+        <div class="x-phone"><div class="x-phone-top"><em>상담</em><span id="iv-phone-meta">엔젤스태프 채용 상담</span></div><div class="x-msgs" id="iv-msgs"></div></div>
+        <div class="x-card" id="iv-card"></div>
+      </div>
+    </section>
+
+    <!-- ═══ HR 2.0 ═══ 채용 결과 학습 -->
+    <section class="page" id="view-quality" style="display:none">
+      <div class="head">
+        <div><div class="eyebrow">Quality of hire</div><h1>채용 결과 학습</h1></div>
+        <div class="when" id="q-when"></div>
+      </div>
+      <p class="x-lead">배치 후 6개월이 지난 계약의 근속 결과를 지원 정보와 연결합니다. 어떤 지원경로·답변·점수가 근속과 이어졌는지 보고, 스크리닝 기준을 고치는 수정안을 만듭니다.</p>
+      <div class="kpis x-kpis" style="--n:4" id="q-kpis"></div>
+      <div class="grid">
+        <div class="block">
+          <div class="b-head"><h3>병원 · 부서별 6개월 근속률</h3><span class="meta">n = 결과가 확인된 배치</span></div>
+          <div id="q-dept"></div>
+        </div>
+        <div class="block">
+          <div class="b-head"><h3>지원 정보별 6개월 근속률</h3><span class="meta">지원자 기록과 연결된 배치</span></div>
+          <div class="x-chips" id="q-dim" style="margin-top:12px"></div>
+          <div id="q-dimbars"></div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="block">
+          <div class="b-head"><h3>스크리닝 기준</h3><span class="meta" id="q-cver"></span></div>
+          <div id="q-crit"></div>
+        </div>
+        <div class="block">
+          <div class="b-head"><h3>기준 변경 이력</h3><span class="meta">버전마다 근거 보관</span></div>
+          <div id="q-vers"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ HR 2.0 ═══ 결원 예측 · 인재풀 -->
+    <section class="page" id="view-forecast" style="display:none">
+      <div class="head">
+        <div><div class="eyebrow">Demand forecast</div><h1>결원 예측 · 인재풀</h1></div>
+        <div class="when" id="fc-when"></div>
+      </div>
+      <p class="x-lead">파견 만료 예정, 퇴사 위험 점수, 작년 같은 기간 결원을 합쳐 병원·부서별 앞으로 90일 결원을 예상합니다. 결원이 예상되는 자리는 인재풀에서 먼저 재연락합니다.</p>
+      <div class="block">
+        <div class="b-head"><h3>병원 · 부서별 예상 결원</h3><span class="meta">막대 = 예상치 · 선 = 범위</span></div>
+        <div id="fc-rows"></div>
+        <div class="x-sub" id="fc-formula" style="margin-top:14px"></div>
+      </div>
+      <div class="block" style="margin-top:46px">
+        <div class="b-head"><h3>인재풀 재연락</h3><span class="meta" id="fc-poolmeta"></span></div>
+        <div class="tbl-scroll" style="border-bottom:0"><table class="htbl x-tbl" style="min-width:820px"><thead><tr><th>후보</th><th>맞는 자리</th><th>이전 기록</th><th>최근 재연락</th><th class="r">관리</th></tr></thead><tbody id="fc-pool"></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ═══ HR 2.0 ═══ 담당자 수정 학습 -->
+    <section class="page" id="view-learn" style="display:none">
+      <div class="head">
+        <div><div class="eyebrow">Feedback memory</div><h1>담당자 수정 학습</h1></div>
+        <div class="actions"><button class="btn-sm" id="ln-new">＋ 문서 초안 만들기</button></div>
+      </div>
+      <p class="x-lead">면접 안내·탈락 안내·인터뷰 요청·재연락 문구를 만들고, 복사할 때 원본과 최종본을 함께 기록합니다. 반복되는 수정은 규칙이 되어 다음 초안부터 반영됩니다.</p>
+      <div class="grid">
+        <div class="block">
+          <div class="b-head"><h3>초안 수정 비율</h3><span class="meta">고쳐서 쓴 초안 ÷ 전체 초안</span></div>
+          <div id="ln-chart"></div>
+          <div class="b-head" style="margin-top:30px"><h3>최근 수정</h3><span class="meta">원본 → 최종본</span></div>
+          <div id="ln-edits"></div>
+        </div>
+        <div class="block">
+          <div class="b-head"><h3>학습된 규칙</h3><span class="meta">켜진 규칙만 초안에 반영</span></div>
+          <div class="x-acts" style="margin:12px 0 4px"><button class="x-btn" id="ln-addrule">＋ 규칙 추가</button><button class="x-btn" id="ln-learn">Claude로 반복 수정 찾기</button></div>
+          <div class="x-rules" id="ln-rules"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ HR 2.0 ═══ 병원별 운영 지식 -->
+    <section class="page" id="view-knowledge" style="display:none">
+      <div class="head">
+        <div><div class="eyebrow">Hospital playbook</div><h1>병원별 운영 지식</h1></div>
+        <div class="when" id="kn-when"></div>
+      </div>
+      <p class="x-lead">병원마다 다른 규칙(필요 서류, 근무 조건, 면접 장소, 청구 방식)을 모아 둡니다. 확정된 규칙은 인터뷰 질문과 안내문 초안에 자동으로 들어갑니다.</p>
+      <div class="x-chips" id="kn-hosp" style="margin-bottom:22px"></div>
+      <div id="kn-pending"></div>
+      <div class="grid" style="margin-top:22px">
+        <div class="block">
+          <div class="b-head"><h3 id="kn-title">확정된 지식</h3><span class="meta">반영 = 인터뷰·초안에 쓰인 횟수</span></div>
+          <div class="tbl-scroll" style="border-bottom:0"><table class="htbl x-tbl" style="min-width:560px"><thead><tr><th>분류</th><th>내용</th><th>출처</th><th class="r">반영</th><th class="r"></th></tr></thead><tbody id="kn-rows"></tbody></table></div>
+        </div>
+        <div class="block">
+          <div class="b-head"><h3>직접 추가</h3><span class="meta">바로 확정</span></div>
+          <div class="x-form" style="margin-top:14px">
+            <div class="x-form2">
+              <div><label class="x-lab" for="kn-h">병원</label><select id="kn-h" class="x-select"></select></div>
+              <div><label class="x-lab" for="kn-cat">분류</label><select id="kn-cat" class="x-select"><option>근무</option><option>면접</option><option>서류</option><option>청구</option><option>연락</option><option>기타</option></select></div>
+            </div>
+            <div><label class="x-lab" for="kn-text">내용</label><input id="kn-text" class="x-input" maxlength="300" placeholder="예: 검사실은 오전 7시 30분 출근"></div>
+            <div><label class="x-lab" for="kn-src">출처</label><input id="kn-src" class="x-input" placeholder="예: 통화 메모 · 인사팀 · 10.21"></div>
+            <div><button class="btn-sm" id="kn-add">추가</button></div>
+          </div>
+          <div class="b-head" style="margin-top:32px"><h3>메모에서 뽑기</h3><span class="meta">Claude가 규칙만 추려 확인 대기로 올림</span></div>
+          <div class="x-form" style="margin-top:14px">
+            <div><label class="x-lab" for="kn-memo">메일 · 통화 메모 · 회의록</label><textarea id="kn-memo" class="x-text" rows="5" placeholder="원문을 붙여넣으세요. 이름·연락처 같은 개인정보는 저장하지 않습니다."></textarea></div>
+            <div><label class="x-lab" for="kn-memosrc">출처 이름</label><input id="kn-memosrc" class="x-input" placeholder="예: 인사팀 메일"></div>
+            <div class="x-acts"><button class="btn-sm" id="kn-extract">Claude로 뽑기</button><span class="x-sub" id="kn-exnote"></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ HR 2.0 ═══ AI 결정 기록 -->
+    <section class="page" id="view-audit" style="display:none">
+      <div class="head">
+        <div><div class="eyebrow">Decision log</div><h1>AI 결정 기록</h1></div>
+        <div class="actions"><select id="au-month" class="filter-sel" aria-label="월 선택"></select></div>
+      </div>
+      <p class="x-lead">AI가 추천한 것과 담당자가 결정한 것을 모두 남깁니다. 추천과 결정이 달랐던 기록은 기준과 규칙을 고치는 학습 재료로 다시 쓰입니다.</p>
+      <div class="kpis x-kpis" style="--n:4" id="au-kpis"></div>
+      <div class="grid">
+        <div class="block">
+          <div class="b-head"><h3>기록</h3><span class="meta">최근순</span></div>
+          <div class="tbl-scroll" style="border-bottom:0"><table class="htbl x-tbl" style="min-width:640px"><thead><tr><th>시각</th><th>기능</th><th>대상</th><th>AI 추천</th><th>담당자 결정</th><th>결과</th></tr></thead><tbody id="au-rows"></tbody></table></div>
+        </div>
+        <div class="block">
+          <div class="b-head"><h3>운영 원칙</h3><span class="meta">모든 기능에 공통</span></div>
+          <ol class="x-princ">
+            <li><div><b>최종 결정은 담당자</b><span>AI는 추천과 초안까지만 합니다. 정부는 채용 추천 AI가 사람의 최종 판단을 거치면 AI 기본법(2026.01.22 시행)의 고영향 AI 규제 대상이 아니라고 설명했습니다.</span></div></li>
+            <li><div><b>근거 보관</b><span>추천마다 근거와 결정을 남겨 설명 요청에 답할 수 있게 합니다. 개인정보보호법의 자동화된 결정 조항은 2024.03.15부터 시행 중입니다.</span></div></li>
+            <li><div><b>AI 사용 안내</b><span>지원자 상담 첫 메시지와 시작 화면에서 자동 상담이며 최종 결정은 담당자가 한다고 알립니다.</span></div></li>
+            <li><div><b>최소 전송</b><span>Claude에는 이름·연락처를 보내지 않습니다. 문구 속 이름은 화면에서 채웁니다.</span></div></li>
+            <li><div><b>블랙·불참 이력 제외</b><span>인재풀 재연락 후보에서 블랙·면접 불참 이력이 있는 지원자는 자동으로 뺍니다.</span></div></li>
+          </ol>
+        </div>
+      </div>
     </section>
 
     <!-- 빈 모듈 -->
@@ -772,6 +1217,17 @@
     <div class="field"><label for="sv-comment">코멘트</label><textarea id="sv-comment" rows="3" placeholder="선택"></textarea></div>
     <div class="err-msg" id="sv-err"></div>
     <div class="m-foot"><button class="btn-sm ghost" data-svclose>취소</button><button class="btn-sm" id="sv-save">저장</button></div>
+  </div>
+</div>
+
+<!-- HR 2.0 공용 모달 -->
+<div class="modal-wrap" id="xmodal">
+  <div class="modal-bg" data-xclose></div>
+  <div class="modal x-mid" role="dialog" aria-modal="true" aria-labelledby="xm-title">
+    <h3 id="xm-title"></h3>
+    <p class="m-sub" id="xm-sub"></p>
+    <div id="xm-body"></div>
+    <div class="m-foot" id="xm-foot"></div>
   </div>
 </div>
 
@@ -2050,6 +2506,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
       $('#sv-avg').textContent='–'; $('#sv-enps').textContent='–'; $('#sv-recent').textContent='–';
       $('#sv-bars').innerHTML='<div class="empty-row" style="padding:20px 2px">'+(sel?esc(sel)+'의 응답이 아직 없습니다.':'아직 응답이 없습니다. 외부 설문 링크가 통합앱으로 연동되면 여기에 실시간으로 집계됩니다. 또는 <b>＋ 응답 추가</b>로 직접 입력하세요.')+'</div>';
       $('#sv-comments').innerHTML='<div class="empty-row" style="padding:18px 2px">코멘트가 없습니다.</div>';
+      if(window.svDetailRender) svDetailRender(list);
       return;
     }
     const ov=list.map(s=>Number(s.overall)).filter(v=>!isNaN(v)&&v>0);
@@ -2075,6 +2532,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     /* ── 응답 코멘트 (선택 병원 기준) ── */
     const withC=list.filter(s=>s.comment&&s.comment.trim());
     $('#sv-comments').innerHTML = withC.length ? withC.map(s=>`<div style="padding:11px 0;border-bottom:1px solid var(--line)"><div style="font-size:12px;color:var(--ink-3);margin-bottom:3px">${esc(s.hospital||'')}${s.name?' · '+esc(s.name):''}${s.type?' · '+esc(s.type):''} · ${esc(s.date||'')}</div><div style="font-size:13.5px;line-height:1.5">${esc(s.comment)}</div></div>`).join('') : '<div class="empty-row" style="padding:18px 2px">코멘트가 없습니다.</div>';
+    if(window.svDetailRender) svDetailRender(list);
   }
 
   /* 병원명 클릭 → 드릴다운 */
@@ -2197,6 +2655,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     else if(v==='contracts') loadContracts();
     else if(v==='postings') loadPostings();
     else if(v==='surveys') loadSurveys();
+    else if(window.V2_LOAD && V2_LOAD[v]) V2_LOAD[v]();
     else{ $('#empty-title').textContent=t; $('#empty-desc').textContent=t+' 화면은 다음 단계에서 백엔드에 연결됩니다. 연결되면 여기서 실제 데이터를 바로 다루게 됩니다.'; }
     app.classList.remove('menu'); window.scrollTo(0,0);
   }));
@@ -2231,6 +2690,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
       else if(v==='contracts'){ invalidate('ct'); loadContracts(); }
       else if(v==='postings') loadPostings();
       else if(v==='surveys'){ invalidate('sv'); loadSurveys(); }
+      else if(window.V2_LOAD && V2_LOAD[v]) V2_LOAD[v](true);
     }
   });
 
@@ -2245,6 +2705,676 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   $('#scrim').addEventListener('click', ()=>app.classList.remove('menu'));
   $('#logout').addEventListener('click', logout);
   function logout(){ app.classList.remove('on','ready','menu'); $('#login').style.display=''; $('#pw').value=''; setLoginErr(''); TOKEN=null; invalidateAll(); hospitalCache=null; persistClear(); __prefetched=false; try{ localStorage.removeItem('hr2_token'); }catch(_){ } }
+
+
+  /* HR2:BEGIN ═══ 통합 HR 2.0 — 학습형 기능 (HR2.gs 와 짝) ═══ */
+  const V2_VIEWS=['flow','workers','risk','interview','knowledge','learn','quality','forecast','audit'];
+  V2_VIEWS.forEach(v=>{ views[v]=$('#view-'+v); });
+  const V2_LOAD = window.V2_LOAD = {};
+  let v2AiState=null;
+  async function v2Ai(force){
+    if(v2AiState && !force) return v2AiState;
+    try{ v2AiState=await call('aiStatus',TOKEN); }catch(_){ v2AiState={hasKey:false, model:''}; }
+    return v2AiState;
+  }
+  const X_NOKEY='AI 키가 없어 이 기능은 꺼져 있습니다. Apps Script <b>프로젝트 설정 → 스크립트 속성</b>에 <code>ANTHROPIC_API_KEY</code>를 추가하면 켜집니다.';
+  function xAiBadge(ai){ return (ai&&ai.hasKey) ? `<span class="x-ai on"><i></i>AI 켜짐${ai.model?' · '+esc(ai.model):''}</span>` : `<span class="x-ai"><i></i>AI 꺼짐 · 기본 모드</span>`; }
+  function xPct(v){ return v==null ? '–' : v+'%'; }
+  function xMonthLabel(m){ const p=String(m||'').split('-'); return p.length===2 ? Number(p[1])+'월' : m; }
+  function xYm(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
+  async function xRun(btn, label, fn){
+    const t=btn?btn.textContent:''; if(btn){ btn.disabled=true; btn.textContent=label||'처리 중…'; }
+    try{ return await fn(); } finally{ if(btn){ btn.disabled=false; btn.textContent=t; } }
+  }
+  async function xCopy(text){
+    try{ await navigator.clipboard.writeText(text); return true; }
+    catch(_){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); let ok=false; try{ ok=document.execCommand('copy'); }catch(__){ } ta.remove(); return ok; }
+  }
+  function xFail(e){ const m=String((e&&e.message)||e); if(/세션/.test(m)) authFail(e); else toast(m); }
+
+  /* ── 공용 모달 ── */
+  function xOpen(o){
+    $('#xm-title').textContent=o.title||'';
+    $('#xm-sub').textContent=o.sub||''; $('#xm-sub').hidden=!o.sub;
+    $('#xm-body').innerHTML=o.body||'';
+    const m=$('#xmodal .modal'); m.classList.toggle('x-wide', !!o.wide); m.classList.toggle('x-mid', !o.wide);
+    const f=$('#xm-foot'); f.innerHTML='';
+    (o.foot||[{label:'닫기', ghost:true}]).forEach(b=>{
+      const el=document.createElement('button'); el.type='button';
+      el.className='btn-sm'+(b.ghost?' ghost':'')+(b.danger?' danger':''); el.textContent=b.label; if(b.id) el.id=b.id;
+      el.addEventListener('click', async ()=>{
+        if(b.onClick){ let keep=false; try{ keep=await b.onClick(el); }catch(e){ xFail(e); keep=true; } if(keep===true) return; }
+        xClose();
+      });
+      f.appendChild(el);
+    });
+    $('#xmodal').classList.add('on');
+    if(o.onOpen) o.onOpen($('#xm-body'));
+  }
+  function xClose(){ $('#xmodal').classList.remove('on'); }
+  $$('#xmodal [data-xclose]').forEach(el=>el.addEventListener('click', xClose));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && $('#xmodal').classList.contains('on')) xClose(); });
+
+  /* ── 작은 차트 ── */
+  function xSpark(vals){
+    const W=120,H=30,P=3,n=vals.length,max=Math.max(1,...vals);
+    const x=i=>P+i*(W-2*P)/Math.max(1,n-1), y=v=>H-P-(v/max)*(H-2*P);
+    const pts=vals.map((v,i)=>x(i).toFixed(1)+','+y(v).toFixed(1));
+    return `<svg class="x-spark" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true"><path class="a" d="M${x(0).toFixed(1)},${H-P} L${pts.join(' L')} L${x(n-1).toFixed(1)},${H-P} Z"/><polyline class="l" points="${pts.join(' ')}"/><circle class="p" cx="${x(n-1).toFixed(1)}" cy="${y(vals[n-1]).toFixed(1)}" r="2.6"/></svg>`;
+  }
+  function xBars(rows, minN){
+    if(!rows||!rows.length) return '';
+    return '<div class="x-bars">'+rows.map(r=>{
+      const cls=r.rate>=70?'hi':(r.rate>=50?'mid':'lo'), thin=r.n<(minN||5);
+      return `<div class="x-bar ${thin?'thin':''}" title="${esc(r.k)} · ${r.ok}/${r.n}명 근속${thin?' · 표본 적음':''}"><span class="lb">${esc(r.k)}</span><span class="t"><i class="${cls}" style="width:${r.rate}%"></i></span><span class="v">${r.rate}%<small>n=${r.n}</small></span></div>`;
+    }).join('')+'</div><div class="x-axis"><span></span><div class="s"><span>0</span><span>50%</span><span>100%</span></div><span></span></div>';
+  }
+  function xHospSelects(){
+    const hs=hospitalCache||[];
+    if($('#wk-hosp')){ const v=$('#wk-hosp').value; $('#wk-hosp').innerHTML='<option value="">전체 병원</option>'+hs.map(h=>`<option value="${esc(h['병원명'])}">${esc(h['병원명'])}</option>`).join(''); $('#wk-hosp').value=v; }
+    if($('#kn-h')){ const v=$('#kn-h').value; $('#kn-h').innerHTML=hs.map(h=>`<option value="${esc(h['병원ID'])}">${esc(h['병원명'])}</option>`).join(''); if(v) $('#kn-h').value=v; }
+  }
+  function xHospOptions(sel, withNone){ return (withNone?'<option value="">선택 안 함</option>':'')+(hospitalCache||[]).map(h=>`<option value="${esc(h['병원ID'])}" ${String(sel)===String(h['병원ID'])?'selected':''}>${esc(h['병원명'])}</option>`).join(''); }
+
+  /* ═══════ 학습 흐름 ═══════ */
+  V2_LOAD.flow=async(force)=>{
+    if(force) invalidate('v2flow');
+    if(!hasCache('v2flow')) $('#flow-rows').innerHTML='<tr><td colspan="5" class="loading">불러오는 중…</td></tr>';
+    v2Ai().then(ai=>{ $('#flow-ai').innerHTML=xAiBadge(ai); });
+    try{ await swr('v2flow', ()=>call('getFlow',TOKEN), renderFlow); }catch(e){ xFail(e); }
+  };
+  function renderFlow(d){
+    const note=$('#flow-note');
+    if(!d.ai){ note.innerHTML=X_NOKEY+' 지금도 기록·점수·예측은 모두 동작하고, 문구는 기본 문구로 만들어집니다.'; note.hidden=false; } else note.hidden=true;
+    const arr='<div class="x-arr" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12h15M14 6l6 6-6 6"/></svg></div>';
+    $('#flow-cycle').innerHTML=
+      `<div class="x-node"><div class="eyebrow">01 · 기록</div><h3>일하면 자동으로 쌓입니다</h3><p>인터뷰 답변, 초안 수정, 만족도 응답, 병원 규칙, 결원 이력</p><div class="m"><div><b>${d.total.toLocaleString('ko-KR')}</b><span>누적 기록</span></div><div><b>+${d.month}</b><span>이번 달</span></div></div></div>`+arr+
+      `<div class="x-node mid"><div class="eyebrow">02 · 학습</div><h3>기준과 문구를 고칩니다</h3><p>무엇이 근속·퇴사·수정과 이어졌는지 찾아 수정안을 만듭니다</p><div class="m"><div><b>${d.rules}</b><span>켜진 규칙</span></div><div><b>${d.pending.length}</b><span>승인 대기</span></div></div></div>`+arr+
+      `<div class="x-node"><div class="eyebrow">03 · 실행</div><h3>다음 일이 더 정확해집니다</h3><p>스크리닝, 안내문, 위험 알림, 재연락에 바로 반영됩니다</p><div class="m"><div><b>${d.auto}</b><span>이번 달 자동 처리</span></div><div><b>${xPct(d.editRatio)}</b><span>초안 수정 비율</span></div></div></div>`+
+      `<div class="x-loop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>실행 결과(배치, 6개월 근속, 퇴사, 응답)가 다시 01 기록으로 들어갑니다.</div>`;
+    $('#flow-rows').innerHTML=d.series.map(s=>`<tr class="x-click" data-go="${esc(s.view)}"><td class="hname">${esc(s.label)}</td><td>${xSpark(s.series)}</td><td class="r x-num">${s.total.toLocaleString('ko-KR')}</td><td class="r x-num">${s.month?'+'+s.month:'–'}</td><td class="x-mut x-small">${esc(s.use)}</td></tr>`).join('');
+    $('#flow-pending').innerHTML=d.pending.length
+      ? '<div class="x-props">'+d.pending.map(p=>`<div class="x-prop"><div><b>${esc(p.title)}</b><p>${esc(p.desc)}</p></div><button class="x-btn" data-go="${esc(p.view)}">검토하기</button></div>`).join('')+'</div>'
+      : '<div class="x-empty">승인을 기다리는 제안이 없습니다. 기록이 쌓이면 수정안이 여기에 올라옵니다.</div>';
+  }
+  $('#view-flow').addEventListener('click', e=>{ const g=e.target.closest('[data-go]'); if(g) gotoView(g.dataset.go); });
+
+  /* ═══════ 근무자 마스터 ═══════ */
+  let wkFilter={ seg:'재직', hosp:'', q:'' };
+  V2_LOAD.workers=async(force)=>{
+    if(force) invalidate('v2wk');
+    ensureHospitals().then(xHospSelects).catch(()=>{});
+    try{ await swr('v2wk', ()=>call('getWorkers',TOKEN), renderWorkers); }
+    catch(e){ xFail(e); $('#wk-rows').innerHTML='<tr><td colspan="10" class="empty-row">불러오지 못했습니다.</td></tr>'; }
+  };
+  function wkLists(d){
+    const act=d.list.filter(w=>w.status==='재직'), nm=d.nextMonth, ym=xYm();
+    return {
+      act, birth: act.filter(w=>w.birthMonth===nm), checkup: act.filter(w=>Number(w.checkup)===nm),
+      daily: act.filter(w=>w.emp==='일용'), missing: act.filter(w=>!w.birth),
+      newJoin: act.filter(w=>(w.join||'').replace(/\./g,'-').slice(0,7)===ym)
+    };
+  }
+  function renderWorkers(d){
+    const L=wkLists(d), nm=d.nextMonth;
+    $('#wk-kpis').innerHTML=[
+      [L.act.length,'재직'], [L.newJoin.length,'이번 달 입사'], [L.birth.length, nm+'월 생일쿠폰 대상'], [L.checkup.length, nm+'월 건강검진 대상'], [L.missing.length,'생년월일 미입력']
+    ].map(k=>`<div class="kpi"><div class="k-val">${k[0]}</div><div class="k-lab">${esc(k[1])}</div></div>`).join('');
+    $('#wk-outs').innerHTML=[
+      ['birth', nm+'월 생일쿠폰 대상자', L.birth.length, '명단 받기'], ['checkup', nm+'월 건강검진 대상자', L.checkup.length, '명단 받기'],
+      ['daily', '일용 근무자', L.daily.length, '명단 받기'], ['missing', '정보 미입력 (생년월일)', L.missing.length, '목록 보기']
+    ].map(o=>`<div class="x-out"><div><b>${esc(o[1])}</b><div class="v">${o[2]}<small>명</small></div></div><div><button class="x-btn" data-wkout="${o[0]}" ${o[2]?'':'disabled'}>${o[3]}</button></div></div>`).join('');
+    renderWorkerRows();
+  }
+  function renderWorkerRows(){
+    const c=DATA['v2wk']; if(!c) return;
+    const d=c.v, q=wkFilter.q.replace(/\s/g,'');
+    let list=d.list;
+    if(wkFilter.seg==='재직') list=list.filter(w=>w.status==='재직');
+    else if(wkFilter.seg==='퇴사') list=list.filter(w=>w.status!=='재직');
+    else if(wkFilter.seg==='미입력') list=list.filter(w=>w.status==='재직' && !w.birth);
+    if(wkFilter.hosp) list=list.filter(w=>w.hospital===wkFilter.hosp);
+    if(q) list=list.filter(w=>(String(w.name)+String(w.dept)).replace(/\s/g,'').indexOf(q)>=0);
+    const tb=$('#wk-rows');
+    if(!list.length){ tb.innerHTML=`<tr><td colspan="10" class="empty-row">${d.list.length?'조건에 맞는 근무자가 없습니다.':'아직 근무자가 없습니다. <b>파견·계약</b>에서 계약을 등록하면 자동으로 생깁니다.'}</td></tr>`; return; }
+    tb.innerHTML=list.map(w=>{
+      const dd=(w.dday!=null && w.status==='재직' && w.dday>=0 && w.dday<=90) ? ` <span class="dday ${w.dday<=30?'soon':'near'}">D-${w.dday}</span>` : '';
+      const sv=w.survey ? `<button class="x-link" data-wksv="${esc(w.id)}">${w.survey.overall!=null?'만족 '+w.survey.overall:''}${w.survey.overall!=null&&w.survey.enps!=null?' · ':''}${w.survey.enps!=null?'추천 '+w.survey.enps:''}${w.survey.overall==null&&w.survey.enps==null?'응답':''}</button><div class="x-sub">${w.survey.n}건 · ${esc(w.survey.last)}</div>` : '<span class="x-mut">–</span>';
+      return `<tr><td><div class="x-who"><b>${esc(w.name)}</b><small>${esc(w.hospital||'병원 미지정')}${w.dept?' · '+esc(w.dept):''}${w.status!=='재직'?' · 퇴사 '+esc(w.left||''):''}</small></div></td>`+
+        `<td>${esc(w.emp)}</td><td class="x-num">${esc(w.join||'–')}</td><td class="r x-num">${esc(w.expiry||'–')}${dd}</td>`+
+        `<td class="x-num">${w.birth?esc(w.birth.replace(/-/g,'.')):'<span class="x-pill warn">미입력</span>'}</td><td class="r">${w.checkup?w.checkup+'월':'–'}</td>`+
+        `<td class="r x-num">${w.attend===''||w.attend==null?'–':w.attend+'회'}</td><td>${sv}</td>`+
+        `<td><div class="x-chips">${(w.outs||[]).map(o=>`<span class="x-pill ghost">${esc(o)}</span>`).join('')}</div></td>`+
+        `<td class="r"><button class="x-btn" data-wkedit="${esc(w.id)}">수정</button></td></tr>`;
+    }).join('');
+  }
+  $('#wk-seg').addEventListener('click', e=>{ const b=e.target.closest('.seg'); if(!b) return; $$('#wk-seg .seg').forEach(x=>x.classList.toggle('active', x===b)); wkFilter.seg=b.dataset.f; renderWorkerRows(); });
+  $('#wk-hosp').addEventListener('change', e=>{ wkFilter.hosp=e.target.value; renderWorkerRows(); });
+  $('#wk-q').addEventListener('input', e=>{ wkFilter.q=e.target.value; renderWorkerRows(); });
+  function wkFind(id){ const c=DATA['v2wk']; return c ? c.v.list.find(w=>String(w.id)===String(id)) : null; }
+  $('#view-workers').addEventListener('click', e=>{
+    const ed=e.target.closest('[data-wkedit]'), sv=e.target.closest('[data-wksv]'), out=e.target.closest('[data-wkout]');
+    if(ed) wkEdit(wkFind(ed.dataset.wkedit));
+    else if(sv) wkEdit(wkFind(sv.dataset.wksv), true);
+    else if(out) wkOutput(out.dataset.wkout);
+  });
+  async function wkXlsx(rows, name){
+    try{
+      const X=await loadLib('xlsx');
+      const ws=X.utils.json_to_sheet(rows); const wb=X.utils.book_new(); X.utils.book_append_sheet(wb, ws, '명단');
+      X.writeFile(wb, name); toast(rows.length+'명 명단을 받았습니다.');
+    }catch(e){ toast('엑셀 모듈을 불러오지 못했습니다. 새로고침 후 다시 시도하세요.'); }
+  }
+  function wkRow(w, cols){ const m={ '이름':w.name, '병원':w.hospital, '부서':w.dept, '고용형태':w.emp, '입사일':w.join, '파견만료일':w.expiry, '생년월일':w.birth, '연락처':w.tel, '검진월':w.checkup?w.checkup+'월':'', '근태이상':w.attend, '상태':w.status, '퇴사일':w.left, '비고':w.memo }; const o={}; cols.forEach(c=>o[c]=m[c]==null?'':m[c]); return o; }
+  function wkOutput(k){
+    const c=DATA['v2wk']; if(!c) return; const d=c.v, L=wkLists(d), nm=d.nextMonth, y=new Date().getFullYear()+(nm===1?1:0);
+    const tag=y+'-'+String(nm).padStart(2,'0');
+    if(k==='birth') wkXlsx(L.birth.map(w=>wkRow(w,['이름','병원','부서','생년월일','연락처'])), `생일쿠폰_대상자_${tag}.xlsx`);
+    else if(k==='checkup') wkXlsx(L.checkup.map(w=>wkRow(w,['이름','병원','부서','생년월일','검진월','연락처'])), `건강검진_대상자_${tag}.xlsx`);
+    else if(k==='daily') wkXlsx(L.daily.map(w=>wkRow(w,['이름','병원','부서','입사일','생년월일','연락처'])), `일용_근무자_${xYm()}.xlsx`);
+    else if(k==='missing'){ $$('#wk-seg .seg').forEach(x=>x.classList.toggle('active', x.dataset.f==='미입력')); wkFilter.seg='미입력'; renderWorkerRows(); $('#wk-rows').scrollIntoView({behavior:'smooth', block:'start'}); }
+  }
+  $('#wk-export').addEventListener('click', ()=>{ const c=DATA['v2wk']; if(!c){ toast('명단을 불러오는 중입니다.'); return; } wkXlsx(c.v.list.map(w=>wkRow(w,['이름','병원','부서','고용형태','입사일','파견만료일','생년월일','연락처','검진월','근태이상','상태','퇴사일','비고'])), `근무자_명단_${xYm()}.xlsx`); });
+  async function svList(){
+    const c=DATA['sv']; if(c && c.v) return c.v;
+    const r=await call('getSatisfaction', TOKEN, ''); DATA['sv']={ t:Date.now(), v:Array.isArray(r)?r:[] }; return DATA['sv'].v;
+  }
+  function svOfWorker(list, w){ const n=String(w.name||'').replace(/\s/g,''), h=String(w.hospital||'').replace(/\s/g,''); return list.filter(s=>String(s.name||'').replace(/\s/g,'')===n && String(s.hospital||'').replace(/\s/g,'')===h); }
+  async function wkEdit(w, focusSurvey){
+    if(!w) return;
+    const months='<option value="">–</option>'+Array.from({length:12},(_,i)=>`<option value="${i+1}" ${Number(w.checkup)===i+1?'selected':''}>${i+1}월</option>`).join('');
+    xOpen({
+      title: w.name+' · 근무자 정보', sub: (w.hospital||'병원 미지정')+(w.dept?' · '+w.dept:'')+' · 입사 '+(w.join||'–')+(w.expiry?' · 만료 '+w.expiry:''), wide:true,
+      body:
+        `<div class="x-sub" style="margin:-6px 0 16px">${w.contractId?'이름·병원·부서·입사·만료는 <b>파견·계약</b>에서 바꿉니다.':'계약 없이 등록한 근무자입니다.'}</div>`+
+        `<div class="x-form2">`+
+          `<div><label class="x-lab" for="wf-emp">고용형태</label><select id="wf-emp" class="x-select">${['파견','도급','일용'].map(x=>`<option ${w.emp===x?'selected':''}>${x}</option>`).join('')}</select></div>`+
+          `<div><label class="x-lab" for="wf-birth">생년월일</label><input id="wf-birth" type="date" class="x-input" value="${esc(w.birth||'')}"></div>`+
+          `<div><label class="x-lab" for="wf-tel">연락처</label><input id="wf-tel" class="x-input" value="${esc(w.tel||'')}" placeholder="010-0000-0000"></div>`+
+          `<div><label class="x-lab" for="wf-chk">건강검진 월</label><select id="wf-chk" class="x-select">${months}</select></div>`+
+          `<div><label class="x-lab" for="wf-att">근태 이상 (최근 한 달 · 지각·결근 횟수)</label><input id="wf-att" type="number" min="0" class="x-input" value="${w.attend===''||w.attend==null?'':esc(w.attend)}"></div>`+
+          `<div><label class="x-lab" for="wf-memo">비고</label><input id="wf-memo" class="x-input" value="${esc(w.memo||'')}"></div>`+
+        `</div>`+
+        `<div class="b-head" style="margin-top:26px;border-bottom:1px solid var(--ink);padding-bottom:9px;display:flex;justify-content:space-between"><h3 style="margin:0;font-size:15px">만족도 응답</h3><span class="meta x-mut x-small">이름·병원이 같은 응답</span></div><div id="wf-sv"><div class="loading" style="padding:16px 2px">불러오는 중…</div></div>`,
+      foot:[{label:'닫기', ghost:true}, ...(!w.contractId && w.status==='재직' ? [{label:'퇴사 처리', ghost:true, onClick: async(btn)=>{
+              if(!await confirmAction('퇴사 처리할까요?', w.name+' 님을 오늘 날짜로 퇴사 처리합니다.')) return true;
+              await xRun(btn,'처리 중…',()=>call('setWorkerLeft',TOKEN,w.id,''));
+              invalidate('v2wk'); V2_LOAD.workers(); toast('퇴사 처리했습니다.'); }}] : []),
+            {label:'저장', onClick: async(btn)=>{
+              const att=$('#wf-att').value;
+              const patch={ '고용형태':$('#wf-emp').value, '생년월일':$('#wf-birth').value, '연락처':$('#wf-tel').value.trim(), '검진월':$('#wf-chk').value?Number($('#wf-chk').value):'', '근태이상':att===''?'':Number(att), '비고':$('#wf-memo').value.trim() };
+              await xRun(btn,'저장 중…',()=>call('updateWorker',TOKEN,w.id,patch));
+              invalidate('v2wk','v2rk','v2fc'); V2_LOAD.workers(); toast('저장했습니다.'); }}],
+      onOpen: async()=>{
+        try{
+          const all=await svList(); const mine=svOfWorker(all, w);
+          $('#wf-sv').innerHTML = mine.length ? '<table class="htbl x-tbl" style="min-width:0"><tbody>'+mine.map(s=>`<tr class="x-click" data-svid="${esc(s.id)}"><td class="x-num">${esc(s.date||'')}</td><td>${esc(svTypeOf(s))}</td><td class="r">${s.overall!=null?'만족 '+s.overall:''}</td><td class="r">${s.enps!=null?'추천 '+s.enps:''}</td><td class="r"><span class="x-link">열기</span></td></tr>`).join('')+'</tbody></table>'
+            : '<div class="x-empty">아직 응답이 없습니다. <b>퇴사 위험</b> 화면의 월 1문항 링크를 보내면 여기에 쌓입니다.</div>';
+          $('#wf-sv').onclick=e=>{ const r=e.target.closest('[data-svid]'); if(r){ const s=all.find(x=>String(x.id)===r.dataset.svid); if(s) svDetailOpen(s, all); } };
+          if(focusSurvey) $('#wf-sv').scrollIntoView({block:'nearest'});
+        }catch(e){ $('#wf-sv').innerHTML='<div class="x-empty">응답을 불러오지 못했습니다.</div>'; }
+      }
+    });
+  }
+  $('#wk-add').addEventListener('click', async ()=>{
+    try{ await ensureHospitals(); }catch(e){ xFail(e); return; }
+    xOpen({ title:'근무자 추가', sub:'계약이 없는 인력(일용 등)을 등록합니다. 파견 근무자는 파견·계약에서 계약을 등록하면 자동으로 추가됩니다.',
+      body:`<div class="x-form2">
+        <div><label class="x-lab" for="wa-name">이름 *</label><input id="wa-name" class="x-input"></div>
+        <div><label class="x-lab" for="wa-h">병원</label><select id="wa-h" class="x-select">${xHospOptions('',true)}</select></div>
+        <div><label class="x-lab" for="wa-dept">부서·직무</label><input id="wa-dept" class="x-input"></div>
+        <div><label class="x-lab" for="wa-emp">고용형태</label><select id="wa-emp" class="x-select"><option>일용</option><option>도급</option><option>파견</option></select></div>
+        <div><label class="x-lab" for="wa-join">입사일</label><input id="wa-join" type="date" class="x-input"></div>
+        <div><label class="x-lab" for="wa-birth">생년월일</label><input id="wa-birth" type="date" class="x-input"></div>
+        <div><label class="x-lab" for="wa-tel">연락처</label><input id="wa-tel" class="x-input"></div>
+        <div><label class="x-lab" for="wa-chk">건강검진 월</label><select id="wa-chk" class="x-select"><option value="">–</option>${Array.from({length:12},(_,i)=>`<option value="${i+1}">${i+1}월</option>`).join('')}</select></div>
+      </div>`,
+      foot:[{label:'취소', ghost:true}, {label:'추가', onClick: async(btn)=>{
+        const nm=$('#wa-name').value.trim(); if(!nm){ toast('이름을 입력하세요.'); $('#wa-name').focus(); return true; }
+        await xRun(btn,'추가 중…',()=>call('addWorker',TOKEN,{ '이름':nm, '병원ID':$('#wa-h').value, '부서':$('#wa-dept').value.trim(), '고용형태':$('#wa-emp').value, '입사일':$('#wa-join').value, '생년월일':$('#wa-birth').value, '연락처':$('#wa-tel').value.trim(), '검진월':$('#wa-chk').value?Number($('#wa-chk').value):'' }));
+        invalidate('v2wk'); V2_LOAD.workers(); toast('근무자를 추가했습니다.'); }}],
+      onOpen:()=>setTimeout(()=>$('#wa-name').focus(),50) });
+  });
+
+  /* ═══════ 퇴사 위험 ═══════ */
+  V2_LOAD.risk=async(force)=>{
+    if(force) invalidate('v2rk');
+    if(!hasCache('v2rk')) $('#rk-rows').innerHTML='<tr><td colspan="4" class="loading">불러오는 중…</td></tr>';
+    try{ await swr('v2rk', ()=>call('getRisk',TOKEN), renderRisk); }catch(e){ xFail(e); }
+  };
+  function xScorePill(s){ return s==null ? '<span class="x-pill ghost">–</span>' : `<span class="x-pill ${s>=70?'bad':(s>=50?'warn':'ghost')} x-num">${s}</span>`; }
+  function renderRisk(d){
+    const p=d.pulse;
+    $('#rk-when').innerHTML=`<b>${esc(xMonthLabel(p.month))} 기준</b>재직 ${d.active}명`;
+    const tot=p.n||0, w=x=>tot?Math.round(x/tot*100):0;
+    $('#rk-pulse').innerHTML=
+      `<div><div class="eyebrow">이번 달 월 1문항 · ${esc(xMonthLabel(p.month))}</div><h3>"지금 일하는 곳을 친구에게 추천하시겠어요?" (0~10점)</h3>`+
+      `<div class="x-sub">낮은 점수(0~6점)를 준 사람에게만 이유를 한 줄 묻습니다. 병원별 링크를 근무자 단톡방·문자로 보내세요.</div>`+
+      `<div class="x-chips" style="margin-top:12px">${p.links.map(l=>`<button class="x-chip" data-pulse="${esc(l.url)}">${esc(l.hospital)} 링크 복사</button>`).join('')}</div></div>`+
+      `<div>${tot ? `<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><span class="x-mut x-small">응답 ${tot}명 · 응답률 ${xPct(p.rate)}</span><span><span class="x-mut x-small">eNPS</span> <b class="x-num" style="font-size:24px">${p.enps>0?'+':''}${p.enps}</b></span></div>`+
+        `<div class="x-stack" role="img" aria-label="비추천 ${p.detractor}명, 중립 ${p.passive}명, 추천 ${p.promoter}명"><i class="d" style="width:${w(p.detractor)}%"></i><i class="p" style="width:${w(p.passive)}%"></i><i class="o" style="width:${w(p.promoter)}%"></i></div>`+
+        `<div class="x-legend"><span style="--c:var(--danger)">비추천 0~6점 · ${p.detractor}명</span><span style="--c:#D9D5CC">중립 7~8점 · ${p.passive}명</span><span style="--c:#1F7A3E">추천 9~10점 · ${p.promoter}명</span></div>`
+        : '<div class="x-empty" style="padding:4px 0">이번 달 응답이 아직 없습니다. 왼쪽 링크를 보내면 여기에 집계됩니다.</div>'}</div>`;
+    const scored=d.list.filter(r=>r.score!=null);
+    $('#rk-rows').innerHTML = scored.length ? scored.slice(0,40).map(r=>
+      `<tr><td><div class="x-who"><b>${esc(r.name)}</b><small>${esc(r.hospital)}${r.dept?' · '+esc(r.dept):''}${r.last?' · 응답 '+esc(r.last):''}</small></div></td>`+
+      `<td><div class="x-chips">${r.tags.map(t=>`<span class="x-pill ghost">${esc(t)}</span>`).join('')}</div></td><td class="r">${xScorePill(r.score)}</td>`+
+      `<td class="r"><button class="x-btn" data-rkfu="${esc(r.id)}">면담 기록</button></td></tr>`).join('')
+      : '<tr><td colspan="4" class="empty-row">점수를 매길 응답이 아직 없습니다. 위 월 1문항 링크를 보내 주세요.</td></tr>';
+    $('#rk-nodata').textContent = d.noData ? `응답이 없어 점수를 매기지 못한 재직자 ${d.noData}명 — 월 1문항에 답하면 다음 조회부터 점수가 붙습니다.` : '';
+    const W=d.weights.w, keys=['sat','drop','enps','expiry','attend'];
+    $('#rk-wver').textContent='가중치 v'+d.weights.version;
+    let wh='<div class="x-wts">'+keys.map(k=>`<div class="x-wt"><span>${esc(d.labels[k])}</span><span class="bs"><i class="b1" style="width:${W[k]}%"></i></span><span class="v">${W[k]}</span></div>`).join('')+'</div>';
+    wh+='<div class="x-sub" style="margin-top:10px">점수 = 요인별 위험도(0~1) × 가중치의 합. 응답이 있는 요인만 계산합니다. 근태 이상은 근무자 마스터에 횟수를 넣으면 반영되며, 실제 퇴사 결과로 효과가 확인되면 가중치 수정안에 들어갑니다.</div>';
+    if(d.pending){
+      const P=d.pending.w;
+      wh+=`<div class="x-card" style="margin-top:16px;background:var(--trace-wash);border-color:var(--trace)"><div class="eyebrow">승인 대기 · 실제 퇴사 결과로 계산</div><h3>가중치 v${d.pending.version} 수정안</h3>`+
+        '<div class="x-wts">'+keys.map(k=>`<div class="x-wt"><span>${esc(d.labels[k])}</span><span class="bs"><i class="b0" style="width:${W[k]}%"></i><i class="b1" style="width:${P[k]}%"></i></span><span class="v">${W[k]} → <b>${P[k]}</b></span></div>`).join('')+'</div>'+
+        `<div class="x-legend" style="margin-top:10px"><span style="--c:#D9D5CC">현재</span><span style="--c:var(--ink)">수정안</span></div><div class="x-sub" style="margin-top:8px">${esc(d.pending.basis)}</div>`+
+        `<div class="x-acts" style="margin-top:12px"><button class="x-btn dark" data-rkw="1">승인</button><button class="x-btn" data-rkw="0">보류</button></div></div>`;
+    } else wh+=`<div class="x-acts" style="margin-top:14px"><button class="x-btn" id="rk-propose">수정안 만들기</button><span class="x-sub">90일이 지난 기록에서 퇴사 5건 이상 확인되면 만들 수 있습니다.</span></div>`;
+    $('#rk-weights').innerHTML=wh;
+    const c=d.calibration;
+    $('#rk-cal').innerHTML = c.matured
+      ? `<table class="tbl" style="margin-top:6px"><thead><tr><th>위험 점수</th><th>기록</th><th>실제 퇴사</th><th>퇴사율</th></tr></thead><tbody>${c.bands.map(b=>`<tr><td>${esc(b.label)}</td><td>${b.n}명</td><td>${b.left}명</td><td><b>${b.rate==null?'–':b.rate+'%'}</b></td></tr>`).join('')}</tbody></table><div class="x-sub" style="margin-top:8px">점수가 높을수록 실제 퇴사율이 높으면 점수가 제 역할을 하는 것입니다. 표본이 작을 때는 분기마다 다시 봅니다.</div>`
+      : `<div class="x-empty">아직 비교할 결과가 없습니다. ${c.firstMonth?esc(xMonthLabel(c.firstMonth))+' 점수 기록이 저장되어 있고, ':''}점수를 매긴 날로부터 90일이 지나면 실제 퇴사와 비교한 표가 여기에 나옵니다.</div>`;
+  }
+  $('#view-risk').addEventListener('click', async e=>{
+    const pl=e.target.closest('[data-pulse]'), fu=e.target.closest('[data-rkfu]'), wv=e.target.closest('[data-rkw]'), pr=e.target.closest('#rk-propose');
+    if(pl){ if(await xCopy(pl.dataset.pulse)) toast('월 1문항 링크를 복사했습니다.'); else prompt('아래 링크를 복사하세요', pl.dataset.pulse); }
+    else if(fu){
+      const r=(DATA['v2rk'].v.list||[]).find(x=>String(x.id)===fu.dataset.rkfu); if(!r) return;
+      xOpen({ title:r.name+' · 면담 기록', sub:'점수 '+r.score+' · '+r.tags.join(' · '),
+        body:`<div class="x-form"><div><label class="x-lab" for="fu-act">조치</label><select id="fu-act" class="x-select"><option>면담</option><option>관찰</option><option>조치 없음</option></select></div><div><label class="x-lab" for="fu-memo">메모</label><input id="fu-memo" class="x-input" placeholder="예: 10.23 면담 예정 · 교대 일정 조정 요청"></div></div>`,
+        foot:[{label:'취소', ghost:true},{label:'기록', onClick: async(btn)=>{ await xRun(btn,'기록 중…',()=>call('logRiskFollowUp',TOKEN,r.id,$('#fu-act').value,$('#fu-memo').value)); invalidate('v2au','v2flow'); toast('결정 기록에 남겼습니다.'); }}] });
+    }
+    else if(wv){ await xRun(wv,'처리 중…',()=>call('decideWeights',TOKEN, wv.dataset.rkw==='1')).catch(xFail); invalidate('v2rk','v2flow','v2au','v2fc'); V2_LOAD.risk(); toast(wv.dataset.rkw==='1'?'가중치를 바꿨습니다.':'수정안을 보류했습니다.'); }
+    else if(pr){ const r=await xRun(pr,'계산 중…',()=>call('proposeWeights',TOKEN)).catch(xFail); if(!r) return; if(!r.ok){ toast(r.reason); return; } invalidate('v2rk','v2flow'); V2_LOAD.risk(); toast('수정안을 만들었습니다. 승인해야 반영됩니다.'); }
+  });
+
+  /* ═══════ AI 1차 인터뷰 ═══════ */
+  let ivSel=null;
+  V2_LOAD.interview=async(force)=>{
+    if(force) invalidate('v2iv');
+    try{ await swr('v2iv', ()=>call('getInterviews',TOKEN), renderInterviews); }catch(e){ xFail(e); $('#iv-list').innerHTML='<div class="x-empty">불러오지 못했습니다.</div>'; }
+  };
+  function ivStatusPill(x){
+    if(x.status==='완료') return x.score==null?'<span class="x-pill ok">완료</span>':`<span class="x-pill ${x.rec==='면접 추천'?'ok':(x.rec==='확인 필요'?'warn':'bad')} x-num">${x.score}</span>`;
+    if(x.status==='진행') return `<span class="x-pill info">진행 ${x.progress.i}/${x.progress.n}</span>`;
+    if(x.status==='만료') return '<span class="x-pill ghost">만료</span>';
+    return '<span class="x-pill ghost">링크 발송</span>';
+  }
+  function renderInterviews(d){
+    const cr=d.criteria;
+    $('#iv-lead').innerHTML=`지원자에게 링크를 보내면 근무 조건과 경력을 대화로 확인하고, 답변을 정리해 점수를 붙입니다. 면접 여부는 담당자가 결정합니다. <span class="x-mut">현재 기준 v${cr.version}: ${cr.items.map(i=>esc(i.label)+' '+i.weight).join(' · ')}</span>`;
+    const list=d.list;
+    if(!list.length){
+      $('#iv-list').innerHTML='<div class="x-empty">아직 인터뷰가 없습니다.<br><b>＋ 인터뷰 링크 만들기</b>로 서류 단계 지원자에게 링크를 보내세요.</div>';
+      $('#iv-msgs').innerHTML='<div class="x-empty" style="padding:14px 6px">지원자가 링크를 열면 대화가 여기에 표시됩니다.</div>';
+      $('#iv-card').innerHTML=`<div class="eyebrow">진행 방식</div><h3>링크 → 상담 → 점수 → 담당자 결정</h3><ol class="x-princ"><li><div><b>링크 만들기</b><span>지원자를 고르면 전용 링크가 만들어집니다 (14일 유효).</span></div></li><li><div><b>지원자 상담</b><span>주 5일·주 40시간·경력·통근 등 9~11개 질문에 버튼으로 답합니다. 병원 지식의 근무 조건도 함께 묻습니다.</span></div></li><li><div><b>점수 · 총평</b><span>스크리닝 기준으로 점수를 매기고, AI가 켜져 있으면 면접에서 확인할 점을 정리합니다.</span></div></li><li><div><b>담당자 결정</b><span>면접 확정·보류·탈락을 누르면 이력서 관리 상태가 바뀌고 결정 기록에 남습니다.</span></div></li></ol>`;
+      return;
+    }
+    if(!ivSel || !list.some(x=>x.id===ivSel)) ivSel=list[0].id;
+    $('#iv-list').innerHTML=list.map(x=>`<button type="button" class="x-ivrow ${x.id===ivSel?'on':''}" data-iv="${esc(x.id)}"><span><b>${esc(x.name)}</b><small>${esc(x.hospital||'')}${x.job?' · '+esc(x.job):''}</small></span><span class="r">${ivStatusPill(x)}<small class="x-num">${esc(x.done||x.created)}</small></span></button>`).join('');
+    renderIvDetail(list.find(x=>x.id===ivSel), d);
+  }
+  function renderIvDetail(x, d){
+    $('#iv-phone-meta').textContent=(x.hospital||'')+(x.job?' · '+x.job:'');
+    $('#iv-msgs').innerHTML = x.messages.length ? x.messages.map(m=>`<div class="x-bub ${m.r==='me'?'me':''}">${esc(m.t)}</div>`).join('') : '<div class="x-empty" style="padding:14px 6px">지원자가 아직 링크를 열지 않았습니다.</div>';
+    const mk={y:'✓',w:'!',n:'✕',i:'·'};
+    const done=x.status==='완료';
+    let h=`<div class="eyebrow">${done?'지원자 시트에 정리됨':(x.status==='진행'?'상담 진행 중':(x.status==='만료'?'링크 만료':'지원자 응답 대기'))}</div>`+
+      `<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-top:6px"><h3>${esc(x.name)}${x.job?' · '+esc(x.job):''}</h3>`+
+      (done&&x.score!=null?`<div class="x-score"><b>${x.score}</b><span class="x-mut">/ 100 · ${esc(x.rec)} · 기준 v${esc(x.version)}</span></div>`:'')+`</div>`;
+    if(x.fields.length) h+='<div class="x-fields">'+x.fields.map(f=>`<div class="x-fld"><span class="mk ${f.mark}">${mk[f.mark]||'·'}</span><span class="k">${esc(f.label)}</span><span>${esc(f.value)}${f.cond?`<div class="x-sub">${esc(f.cond)}</div>`:''}</span></div>`).join('')+'</div>';
+    if(done){
+      if(x.ai) h+=`<div class="x-aibox">${esc(x.ai.comment)}${x.ai.checks&&x.ai.checks.length?'<br><b>면접에서 확인:</b> '+x.ai.checks.map(esc).join(' · '):''}</div>`;
+      else if(d.ai) h+=`<div class="x-acts" style="margin-top:6px"><button class="x-btn" data-ivsum="${esc(x.id)}">AI 총평 만들기</button></div>`;
+      else h+='<div class="x-sub">AI 키를 넣으면 면접에서 확인할 점을 정리한 총평이 붙습니다.</div>';
+    }
+    h+='<div class="x-acts" style="margin-top:16px">';
+    if(done && !x.decision) h+=`<button class="x-btn dark" data-ivd="면접">면접 확정</button><button class="x-btn" data-ivd="보류">보류</button><button class="x-btn" data-ivd="탈락">탈락</button>`;
+    if(x.decision) h+=`<span class="x-pill ${x.decision==='면접'?'ok':(x.decision==='보류'?'warn':'bad')}">결정: ${esc(x.decision)}</span>`;
+    if(done) h+=`<button class="x-btn" data-ivdraft="${x.decision==='탈락'||(!x.decision&&x.rec==='비추천')?'탈락안내':'면접안내'}">${x.decision==='탈락'||(!x.decision&&x.rec==='비추천')?'탈락 안내문':'면접 안내문'}</button>`;
+    if(!done && x.status!=='만료') h+=`<button class="x-btn" data-ivcopy="1">링크 복사</button><button class="x-btn" data-ivdraft="인터뷰요청">요청 문구</button>`;
+    h+=`<button class="x-link mut" data-ivdel="1" style="margin-left:auto">삭제</button></div>`;
+    if(done && !x.decision) h+='<div class="x-sub" style="margin-top:8px">결정하면 이력서 관리의 상태가 바뀌고, AI 추천과 함께 결정 기록에 남습니다.</div>';
+    $('#iv-card').innerHTML=h;
+  }
+  $('#iv-list').addEventListener('click', e=>{ const b=e.target.closest('[data-iv]'); if(!b) return; ivSel=b.dataset.iv; renderInterviews(DATA['v2iv'].v); });
+  $('#iv-card').addEventListener('click', async e=>{
+    const d=DATA['v2iv'] && DATA['v2iv'].v; if(!d) return; const x=d.list.find(i=>i.id===ivSel); if(!x) return;
+    const dec=e.target.closest('[data-ivd]'), cp=e.target.closest('[data-ivcopy]'), dr=e.target.closest('[data-ivdraft]'), del=e.target.closest('[data-ivdel]'), sm=e.target.closest('[data-ivsum]');
+    if(dec){
+      try{ await xRun(dec,'처리 중…',()=>call('ivDecide',TOKEN,x.id,dec.dataset.ivd)); }catch(err){ xFail(err); return; }
+      invalidate('v2iv','cand','dash','v2au','v2flow'); candListCache=null; V2_LOAD.interview(); toast(x.name+' 님을 '+dec.dataset.ivd+'(으)로 바꿨습니다.');
+    } else if(cp){ if(await xCopy(x.url)) toast('인터뷰 링크를 복사했습니다.'); else prompt('아래 링크를 복사하세요', x.url); }
+    else if(dr){ xDraft({ kind:dr.dataset.ivdraft, candidateId:x.candidateId, link:x.url }); }
+    else if(sm){ try{ const r=await xRun(sm,'작성 중…',()=>call('ivSummarize',TOKEN,x.id)); if(r&&r.error==='NO_KEY') toast('AI 키가 없습니다.'); }catch(err){ xFail(err); return; } invalidate('v2iv'); V2_LOAD.interview(); }
+    else if(del){ if(!await confirmAction('인터뷰를 삭제할까요?', x.name+' 님의 상담 기록과 링크가 삭제됩니다.')) return; try{ await call('ivDelete',TOKEN,x.id); }catch(err){ xFail(err); return; } ivSel=null; invalidate('v2iv'); V2_LOAD.interview(); toast('삭제했습니다.'); }
+  });
+  async function xCandOptions(filterFn){
+    const list=await getCandListCached();
+    return list.filter(filterFn||(()=>true)).map(c=>`<option value="${esc(c.id)}">${esc(c.name)} · ${esc(c.hospital||'병원 미지정')}${c.job?' · '+esc(c.job):''} · ${esc(c.status)}</option>`).join('');
+  }
+  $('#iv-new').addEventListener('click', async ()=>{
+    let opts=''; try{ opts=await xCandOptions(c=>c.status==='서류'||c.status==='면접'||c.status==='보류'); }catch(e){ xFail(e); return; }
+    if(!opts){ toast('서류·면접·보류 단계 지원자가 없습니다.'); return; }
+    xOpen({ title:'인터뷰 링크 만들기', sub:'지원자를 고르면 전용 링크가 만들어집니다. 링크는 14일 동안 유효합니다.',
+      body:`<div class="x-form"><div><label class="x-lab" for="ivn-c">지원자</label><select id="ivn-c" class="x-select">${opts}</select></div></div>`,
+      foot:[{label:'취소', ghost:true},{label:'링크 만들기', onClick: async(btn)=>{
+        const cid=$('#ivn-c').value;
+        const r=await xRun(btn,'만드는 중…',()=>call('ivCreate',TOKEN,cid));
+        invalidate('v2iv'); ivSel=r.id; V2_LOAD.interview();
+        setTimeout(()=>xOpen({ title:r.existing?'진행 중인 링크가 있습니다':'링크를 만들었습니다', sub:'지원자에게 보내면 바로 상담을 시작할 수 있습니다.',
+          body:`<div class="x-form"><input class="x-input" id="ivn-url" readonly value="${esc(r.url)}"></div>`,
+          foot:[{label:'닫기', ghost:true},{label:'링크 복사', onClick: async()=>{ if(await xCopy(r.url)) toast('링크를 복사했습니다.'); return true; }},{label:'요청 문구 만들기', onClick: ()=>{ setTimeout(()=>xDraft({ kind:'인터뷰요청', candidateId:cid, link:r.url }),0); }}],
+          onOpen:()=>{ const i=$('#ivn-url'); i.focus(); i.select(); } }),0);
+      }}] });
+  });
+
+  /* ═══════ 문서 초안 (공용) ═══════ */
+  const DRAFT_KINDS=[['면접안내','면접 안내'],['탈락안내','탈락 안내'],['인터뷰요청','인터뷰 요청'],['재연락','재연락']];
+  async function xDraft(o){
+    o=o||{};
+    let cOpts=''; if(!o.candidateId){ try{ cOpts=await xCandOptions(); }catch(e){ xFail(e); return; } }
+    let cur={ original:'', ai:false, rules:[], target:'', hospital:'' };
+    xOpen({ title:'문서 초안', sub:'초안을 고친 뒤 복사하면 원본과 최종본이 함께 기록되고, 반복되는 수정은 규칙이 됩니다.', wide:true,
+      body:`<div class="x-draft">
+        <div class="x-form2">
+          <div><label class="x-lab" for="xd-kind">문서</label><select id="xd-kind" class="x-select" ${o.kind&&o.fixed?'disabled':''}>${DRAFT_KINDS.map(k=>`<option value="${k[0]}" ${o.kind===k[0]?'selected':''}>${k[1]}</option>`).join('')}</select></div>
+          ${o.candidateId?'':`<div><label class="x-lab" for="xd-c">지원자</label><select id="xd-c" class="x-select">${cOpts}</select></div>`}
+          <div id="xd-datebox"><label class="x-lab" for="xd-date">면접 일정</label><input id="xd-date" class="x-input" placeholder="예: 10월 24일(금) 오후 2시 · 본관 1층"></div>
+          ${o.link?'':`<div id="xd-linkbox"><label class="x-lab" for="xd-link">인터뷰 링크</label><input id="xd-link" class="x-input" placeholder="AI 1차 인터뷰 화면에서 만든 링크"></div>`}
+        </div>
+        <div class="x-acts"><button class="x-btn dark" id="xd-gen">초안 만들기</button><span class="x-sub" id="xd-state"></span></div>
+        <div><label class="x-lab" for="xd-text">문구 (고쳐서 쓰세요)</label><textarea id="xd-text" class="x-text" rows="7" placeholder="초안 만들기를 누르면 여기에 문구가 채워집니다."></textarea></div>
+        <div class="used" id="xd-used"></div>
+        <div><label class="x-lab" for="xd-why">고친 이유 (선택 · 학습에 쓰임)</label><input id="xd-why" class="x-input" placeholder="예: 톤, 병원 규칙, 사실 정정"></div>
+      </div>`,
+      foot:[{label:'닫기', ghost:true},{label:'복사하고 기록', onClick: async(btn)=>{
+        const fin=$('#xd-text').value.trim(); if(!fin){ toast('먼저 초안을 만드세요.'); return true; }
+        if(/\[(면접 일정 입력|인터뷰 링크 입력|병원|직무)\]/.test(fin)){ toast('대괄호 [ ] 로 표시된 부분을 채운 뒤 복사하세요.'); $('#xd-text').focus(); return true; }
+        const ok=await xCopy(fin);
+        const kind=$('#xd-kind').value, cid=o.candidateId||($('#xd-c')?$('#xd-c').value:'');
+        await xRun(btn,'기록 중…',()=>call('saveDraft',TOKEN,{ kind, targetId:cid, target:cur.target, hospital:cur.hospital, original:cur.original||fin, final:fin, reason:$('#xd-why').value.trim(), ai:cur.ai, rules:cur.rules.map(r=>r.id) }));
+        invalidate('v2ln','v2flow','v2au'); toast(ok?'복사하고 기록했습니다.':'기록했습니다. 복사가 막혀 있어 문구를 직접 선택해 복사하세요.');
+        if(o.onDone) o.onDone();
+        if(!ok) return true;
+      }}],
+      onOpen:()=>{
+        const kindSel=$('#xd-kind');
+        const sync=()=>{ $('#xd-datebox').hidden=kindSel.value!=='면접안내'; if($('#xd-linkbox')) $('#xd-linkbox').hidden=kindSel.value!=='인터뷰요청'; };
+        kindSel.addEventListener('change', sync); sync();
+        $('#xd-gen').addEventListener('click', async ()=>{
+          const cid=o.candidateId||($('#xd-c')?$('#xd-c').value:'');
+          const ctx={ candidateId:cid, '면접일':$('#xd-date').value.trim(), '링크':o.link||($('#xd-link')?$('#xd-link').value.trim():''), '병원ID':o.hospitalId||'', '직무':o.job||'' };
+          try{
+            const r=await xRun($('#xd-gen'),'만드는 중…',()=>call('aiDraft',TOKEN,kindSel.value,ctx));
+            cur={ original:r.text, ai:r.ai, rules:r.rules||[], target:r.target, hospital:r.hospital };
+            $('#xd-text').value=r.text;
+            $('#xd-state').textContent=r.ai?'AI가 학습 규칙과 병원 지식을 반영해 썼습니다.':'기본 문구입니다. (AI 꺼짐 · 병원 지식은 문구 끝에 덧붙임)';
+            $('#xd-used').innerHTML=(r.rules||[]).map(x=>`<span class="x-pill info">규칙 · ${esc(x.text)}</span>`).join('')+(r.knowledge||[]).map(x=>`<span class="x-pill ghost">병원 지식 · ${esc(x.text)}</span>`).join('');
+          }catch(e){ xFail(e); }
+        });
+        if(o.candidateId && o.kind) $('#xd-gen').click();
+      } });
+  }
+
+  /* ═══════ 채용 결과 학습 ═══════ */
+  let qDim='source';
+  const Q_DIMS=[['source','지원경로'],['score','인터뷰 점수'],['eval','면접 평가'],['commute','통근'],['lastTenure','직전 근속'],['career','경력'],['shift','야간·교대']];
+  V2_LOAD.quality=async(force)=>{
+    if(force) invalidate('v2q');
+    try{ await swr('v2q', ()=>call('getQuality',TOKEN), renderQuality); }catch(e){ xFail(e); }
+  };
+  function renderQuality(d){
+    $('#q-when').innerHTML='<b>6개월 = 시작일부터 180일</b>결과가 확인된 배치만 집계';
+    $('#q-kpis').innerHTML=[[d.total,'결과가 확인된 배치'],[xPct(d.rate),'6개월 근속률'],[d.linked,'지원자 기록과 연결'],[d.withInterview,'인터뷰 답변까지 연결']].map(k=>`<div class="kpi"><div class="k-val">${k[0]}</div><div class="k-lab">${esc(k[1])}</div></div>`).join('');
+    $('#q-dept').innerHTML = d.byDept.length ? xBars(d.byDept, d.minN)+`<div class="x-sub" style="margin-top:10px">흐린 막대는 표본이 ${d.minN}건 미만입니다.</div>` : '<div class="x-empty">시작한 지 6개월이 지난 계약이 아직 없습니다.</div>';
+    $('#q-dim').innerHTML=Q_DIMS.map(x=>`<button class="x-chip ${qDim===x[0]?'on':''}" data-qdim="${x[0]}">${x[1]}</button>`).join('');
+    const rows = qDim==='source'?d.bySource : qDim==='score'?d.byScore : qDim==='eval'?d.byEval : (d.byField[qDim]||[]);
+    $('#q-dimbars').innerHTML = rows.length ? xBars(rows, d.minN) : `<div class="x-empty">${qDim==='source'?'지원자 기록과 연결된 배치가 아직 없습니다.':'아직 연결된 결과가 없습니다. AI 1차 인터뷰를 거쳐 배치된 사람이 6개월을 채우면 여기에 쌓입니다.'}</div>`;
+    const act=d.criteria.find(c=>c.status==='사용'), props=d.criteria.filter(c=>c.status==='제안');
+    $('#q-cver').textContent=act?'현재 v'+act.version:'';
+    const critTable=(c)=>`<table class="tbl" style="margin-top:6px"><thead><tr><th>항목</th><th>배점</th><th>답변별 점수 (1 = 만점)</th></tr></thead><tbody>${c.items.map(i=>`<tr><td>${esc(i.label)}</td><td>${i.weight}</td><td style="text-align:left;padding-left:14px"><div class="x-chips" style="justify-content:flex-end">${Object.keys(i.points).map(k=>`<span class="x-pill ghost">${esc(k)} ${i.points[k]}</span>`).join('')}</div></td></tr>`).join('')}</tbody></table>`;
+    let h = act ? critTable(act) : '';
+    props.forEach(p=>{ h+=`<div class="x-card" style="margin-top:16px;background:var(--trace-wash);border-color:var(--trace)"><div class="eyebrow">승인 대기 · 6개월 근속 결과로 계산</div><h3>기준 v${p.version} 수정안</h3>${critTable(p)}<div class="x-sub" style="margin-top:8px">${esc(p.basis)}</div><div class="x-acts" style="margin-top:12px"><button class="x-btn dark" data-qc="${p.version}" data-ok="1">승인</button><button class="x-btn" data-qc="${p.version}" data-ok="0">보류</button></div></div>`; });
+    if(!props.length) h+=`<div class="x-acts" style="margin-top:14px"><button class="x-btn" id="q-propose">수정안 만들기</button><span class="x-sub">인터뷰 답변과 6개월 결과가 함께 있는 사례가 10건 이상이면 만들 수 있습니다.</span></div>`;
+    $('#q-crit').innerHTML=h;
+    $('#q-vers').innerHTML='<div class="x-rules">'+d.criteria.map(c=>`<div class="x-rule"><div><b class="x-num">v${c.version}</b> · ${esc(c.basis||'')}<small>${c.status==='사용'?'사용 중 · 승인 '+esc(c.approved||c.created):c.status==='제안'?'승인 대기 · '+esc(c.created):'보관 · '+esc(c.created)}</small></div><span class="x-pill ${c.status==='사용'?'ok':(c.status==='제안'?'warn':'ghost')}">${esc(c.status)}</span></div>`).join('')+'</div>';
+  }
+  $('#view-quality').addEventListener('click', async e=>{
+    const dm=e.target.closest('[data-qdim]'), qc=e.target.closest('[data-qc]'), pr=e.target.closest('#q-propose');
+    if(dm){ qDim=dm.dataset.qdim; renderQuality(DATA['v2q'].v); }
+    else if(qc){ try{ await xRun(qc,'처리 중…',()=>call('decideCriteria',TOKEN,Number(qc.dataset.qc),qc.dataset.ok==='1')); }catch(err){ xFail(err); return; } invalidate('v2q','v2iv','v2flow','v2au'); V2_LOAD.quality(); toast(qc.dataset.ok==='1'?'새 기준을 적용했습니다. 다음 인터뷰부터 반영됩니다.':'수정안을 보류했습니다.'); }
+    else if(pr){ let r; try{ r=await xRun(pr,'계산 중…',()=>call('proposeCriteria',TOKEN)); }catch(err){ xFail(err); return; } if(!r.ok){ toast(r.reason); return; } invalidate('v2q','v2flow'); V2_LOAD.quality(); toast('기준 v'+r.version+' 수정안을 만들었습니다.'); }
+  });
+
+  /* ═══════ 결원 예측 · 인재풀 ═══════ */
+  V2_LOAD.forecast=async(force)=>{
+    if(force) invalidate('v2fc');
+    if(!hasCache('v2fc')) $('#fc-rows').innerHTML='<div class="loading">불러오는 중…</div>';
+    try{ await swr('v2fc', ()=>call('getForecast',TOKEN), renderForecast); }catch(e){ xFail(e); }
+  };
+  function renderForecast(d){
+    $('#fc-when').innerHTML=`<b>${esc(d.window.from)} ~ ${esc(d.window.to)}</b>예상 결원 ${d.total}명`;
+    const max=Math.max(5, ...d.rows.map(r=>r.high));
+    $('#fc-rows').innerHTML = d.rows.length ? '<div class="x-fc">'+d.rows.map(r=>
+      `<div class="x-fr" title="${esc(r.names.join(' · '))}"><span><b style="font-weight:600">${esc(r.dept)}</b><small>${esc(r.hospital)}</small></span>`+
+      `<span><span class="x-ft"><span class="b" style="width:${r.expected/max*100}%"></span><span class="rg" style="left:${r.low/max*100}%;width:${Math.max(0,(r.high-r.low))/max*100}%"></span></span><small>${esc(r.why)}</small></span>`+
+      `<span class="v">${r.expected}명<small class="x-mut x-small" style="display:block">${r.low}~${r.high}</small></span></div>`).join('')+'</div>'
+      : '<div class="x-empty">앞으로 90일 안에 예상되는 결원이 없습니다.</div>';
+    $('#fc-formula').textContent=`예상 = 만료 예정 + 위험 근무자 × 퇴사 확률(70점 이상 ${Math.round(d.probs.hi*100)}%, 50~69점 ${Math.round(d.probs.mid*100)}% · ${d.probs.calibrated?'실제 퇴사 결과로 보정됨':'보정 전 기본값'}) + 작년 같은 기간 결원 × 0.5. 범위는 30일 안 만료(최소)부터 해당 인원 전체(최대)까지입니다.`;
+    $('#fc-poolmeta').textContent=`인재풀 ${d.poolCount}명 · 이번 달 재연락 ${d.recontact.month}명 · 응답 ${d.recontact.replied}명 · 블랙·불참 이력 자동 제외`;
+    $('#fc-pool').innerHTML = d.pool.length ? d.pool.slice(0,60).map(p=>
+      `<tr><td><div class="x-who"><b>${esc(p.name)}</b><small>${esc(p.status)}${p.iv!=null?' · 인터뷰 '+p.iv+'점':''}</small></div></td>`+
+      `<td>${p.match?`<span class="x-pill warn">${esc(p.match)}</span>`:'<span class="x-mut">–</span>'}</td>`+
+      `<td class="x-small">${esc(p.hospital||'')}${p.job?' · '+esc(p.job):''}<div class="x-sub">등록 ${esc(p.registered||'')}</div></td>`+
+      `<td class="x-small">${p.last?esc(p.last.at)+' · '+esc(p.last.result):'<span class="x-mut">–</span>'}</td>`+
+      `<td class="r"><div class="x-acts" style="justify-content:flex-end"><button class="x-btn" data-fcdraft="${esc(p.id)}">재연락 문구</button><button class="x-btn" data-fcres="${esc(p.id)}">결과 기록</button></div></td></tr>`).join('')
+      : '<tr><td colspan="5" class="empty-row">인재풀이 비어 있습니다. 보류한 지원자와 인터뷰 60점 이상으로 탈락한 지원자가 여기에 모입니다.</td></tr>';
+  }
+  $('#fc-pool').addEventListener('click', e=>{
+    const d=DATA['v2fc'] && DATA['v2fc'].v; if(!d) return;
+    const dr=e.target.closest('[data-fcdraft]'), rs=e.target.closest('[data-fcres]');
+    const p=d.pool.find(x=>String(x.id)===String((dr||rs||{}).dataset ? (dr||rs).dataset.fcdraft||(dr||rs).dataset.fcres : ''));
+    if(!p) return;
+    if(dr) xDraft({ kind:'재연락', candidateId:p.id, onDone: async()=>{ try{ await call('addRecontact',TOKEN,{ candidateId:p.id, target:p.match, result:'연락함', fromAi:!!p.match, name:p.name }); invalidate('v2fc','v2au'); V2_LOAD.forecast(); }catch(err){ xFail(err); } } });
+    else xOpen({ title:p.name+' · 재연락 결과', sub:p.match?'맞는 자리: '+p.match:'',
+      body:`<div class="x-form"><div><label class="x-lab" for="rc-res">결과</label><select id="rc-res" class="x-select"><option>연락함</option><option>응답</option><option>가능</option><option>불가</option><option>미응답</option></select></div><div><label class="x-lab" for="rc-memo">메모</label><input id="rc-memo" class="x-input" placeholder="예: 12월부터 가능"></div></div>`,
+      foot:[{label:'취소', ghost:true},{label:'기록', onClick: async(btn)=>{ await xRun(btn,'기록 중…',()=>call('addRecontact',TOKEN,{ candidateId:p.id, target:p.match, result:$('#rc-res').value, memo:$('#rc-memo').value, fromAi:!!p.match, name:p.name })); invalidate('v2fc','v2au','v2flow'); V2_LOAD.forecast(); toast('기록했습니다.'); }}] });
+  });
+
+  /* ═══════ 담당자 수정 학습 ═══════ */
+  V2_LOAD.learn=async(force)=>{
+    if(force) invalidate('v2ln');
+    try{ await swr('v2ln', ()=>call('getLearning',TOKEN), renderLearn); }catch(e){ xFail(e); }
+  };
+  function xDiff(a, b){
+    const A=String(a||'').split(/(\s+)/).slice(0,600), B=String(b||'').split(/(\s+)/).slice(0,600);
+    const n=A.length, m=B.length, L=Array.from({length:n+1},()=>new Uint16Array(m+1));
+    for(let i=n-1;i>=0;i--) for(let j=m-1;j>=0;j--) L[i][j]=A[i]===B[j]?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
+    let i=0,j=0,out=[]; const push=(t,s)=>{ if(out.length&&out[out.length-1][0]===t) out[out.length-1][1]+=s; else out.push([t,s]); };
+    while(i<n&&j<m){ if(A[i]===B[j]){ push('=',A[i]); i++; j++; } else if(L[i+1][j]>=L[i][j+1]){ push('-',A[i]); i++; } else { push('+',B[j]); j++; } }
+    while(i<n){ push('-',A[i++]); } while(j<m){ push('+',B[j++]); }
+    return out.map(([t,s])=>t==='='?esc(s):(t==='-'?(s.trim()?'<del>'+esc(s)+'</del>':esc(s)):(s.trim()?'<ins>'+esc(s)+'</ins>':esc(s)))).join('');
+  }
+  function xLineChart(months, vals, counts){
+    const W=560,H=200,Lp=38,R=18,T=24,B=40, iw=W-Lp-R, ih=H-T-B, n=months.length;
+    const x=i=>Lp+i*iw/Math.max(1,n-1), y=v=>T+ih-(v/100)*ih;
+    let s='';
+    [0,25,50,75,100].forEach(t=>{ s+=`<line class="g" x1="${Lp}" x2="${W-R}" y1="${y(t)}" y2="${y(t)}"/><text class="ax" x="${Lp-8}" y="${y(t)+4}" text-anchor="end">${t}%</text>`; });
+    months.forEach((m,i)=>{ s+=`<text class="ax" x="${x(i)}" y="${H-20}" text-anchor="middle">${esc(xMonthLabel(m))}</text><text class="cnt" x="${x(i)}" y="${H-6}" text-anchor="middle">${counts[i]}건</text>`; });
+    const pts=vals.map((v,i)=>v==null?null:[x(i),y(v)]);
+    let seg=[]; const segs=[]; pts.forEach(p=>{ if(p) seg.push(p); else if(seg.length){ segs.push(seg); seg=[]; } }); if(seg.length) segs.push(seg);
+    segs.forEach(sg=>{ if(sg.length>1) s+=`<path class="ar" d="M${sg[0][0]},${y(0)} L${sg.map(p=>p.join(',')).join(' L')} L${sg[sg.length-1][0]},${y(0)} Z"/><polyline class="ln" points="${sg.map(p=>p.join(',')).join(' ')}"/>`; });
+    const lastI=vals.map((v,i)=>v==null?-1:i).filter(i=>i>=0).pop();
+    pts.forEach((p,i)=>{ if(p) s+=`<circle class="${i===lastI?'end':'pt'}" cx="${p[0]}" cy="${p[1]}" r="${i===lastI?5:3.5}"/>`; });
+    if(lastI!=null && lastI>=0) s+=`<text class="vt" x="${x(lastI)}" y="${y(vals[lastI])-11}" text-anchor="middle">${vals[lastI]}%</text>`;
+    return `<svg class="x-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="월별 초안 수정 비율">${s}</svg>`;
+  }
+  function renderLearn(d){
+    const any=d.monthly.some(m=>m.total);
+    $('#ln-chart').innerHTML = any ? xLineChart(d.monthly.map(m=>m.m), d.monthly.map(m=>m.ratio), d.monthly.map(m=>m.total))+`<div class="x-sub">전체 ${d.total}건 중 ${d.editedTotal}건을 고쳐서 썼습니다. 비율이 내려갈수록 초안이 담당자 기준에 가까워진 것입니다.</div>`
+      : '<div class="x-empty">아직 기록이 없습니다. <b>＋ 문서 초안 만들기</b>로 안내문을 만들고 복사하면 여기에 쌓입니다.</div>';
+    $('#ln-edits').innerHTML = d.recent.length ? '<div class="x-edits">'+d.recent.slice(0,10).map(r=>
+      `<div class="x-edit"><div class="top"><span><b style="color:var(--ink)">${esc(r.kind)}</b>${r.target?' · '+esc(r.target):''}${r.hospital?' · '+esc(r.hospital):''} · ${esc(r.at)}</span><span class="x-acts">${r.reason?`<span class="x-pill info">${esc(r.reason)}</span>`:''}<button class="x-link" data-mkrule="${esc(r.id)}">규칙으로</button></span></div><div class="txt">${xDiff(r.original, r.final)}</div></div>`).join('')+'</div>'
+      : '<div class="x-empty">고쳐서 쓴 초안이 아직 없습니다.</div>';
+    const lb=$('#ln-learn'); lb.disabled=!d.ai; lb.title=d.ai?`분석 안 한 수정 ${d.unanalyzed}건`:'AI 키가 있어야 합니다';
+    lb.textContent=d.ai?`Claude로 반복 수정 찾기 (${d.unanalyzed}건)`:'Claude로 반복 수정 찾기 · AI 꺼짐';
+    $('#ln-rules').innerHTML = d.rules.length ? d.rules.map(r=>{
+      const meta=[r.scope==='전체'?'모든 문서':r.scope, r.hospital, r.source].filter(Boolean).map(esc).join(' · ');
+      if(r.status==='후보') return `<div class="x-rule cand"><div>${esc(r.text)}<small>새 규칙 후보 · ${meta}</small></div><div class="x-acts"><button class="x-btn dark" data-rule="${esc(r.id)}" data-st="사용">켜기</button><button class="x-btn" data-rule="${esc(r.id)}" data-st="끔">버리기</button></div></div>`;
+      return `<div class="x-rule"><div>${esc(r.text)}<small>${meta}</small></div><div class="x-acts"><button class="x-sw" role="switch" aria-checked="${r.status==='사용'}" aria-label="규칙 사용" data-rule="${esc(r.id)}" data-st="${r.status==='사용'?'끔':'사용'}"></button><button class="x-link mut" data-rdel="${esc(r.id)}">삭제</button></div></div>`;
+    }).join('') : '<div class="x-empty">아직 규칙이 없습니다. 자주 고치는 표현이 있으면 <b>＋ 규칙 추가</b>로 바로 넣거나, 수정 기록에서 <b>규칙으로</b>를 누르세요.</div>';
+  }
+  function xRuleModal(pref){
+    pref=pref||{};
+    ensureHospitals().catch(()=>{});
+    xOpen({ title:'규칙 추가', sub:'켜진 규칙은 다음 초안부터 반영됩니다.',
+      body:`<div class="x-form"><div><label class="x-lab" for="ru-text">규칙</label><input id="ru-text" class="x-input" maxlength="200" value="${esc(pref.text||'')}" placeholder="예: 탈락 안내는 '함께하기 어렵게 되었습니다'로 쓴다"></div>
+        <div class="x-form2"><div><label class="x-lab" for="ru-scope">적용 문서</label><select id="ru-scope" class="x-select"><option value="전체">모든 문서</option>${DRAFT_KINDS.map(k=>`<option value="${k[0]}" ${pref.scope===k[0]?'selected':''}>${k[1]}</option>`).join('')}</select></div>
+        <div><label class="x-lab" for="ru-h">병원 (선택)</label><select id="ru-h" class="x-select"><option value="">모든 병원</option>${(hospitalCache||[]).map(h=>`<option ${pref.hospital===h['병원명']?'selected':''}>${esc(h['병원명'])}</option>`).join('')}</select></div></div>
+        ${pref.example?`<div class="x-sub">참고 수정: ${esc(pref.example)}</div>`:''}</div>`,
+      foot:[{label:'취소', ghost:true},{label:'추가', onClick: async(btn)=>{ const t=$('#ru-text').value.trim(); if(!t){ toast('규칙을 입력하세요.'); return true; } await xRun(btn,'추가 중…',()=>call('addRule',TOKEN,{ text:t, scope:$('#ru-scope').value, hospital:$('#ru-h').value, source:pref.source||'담당자 입력' })); invalidate('v2ln','v2flow'); V2_LOAD.learn(); toast('규칙을 추가했습니다.'); }}],
+      onOpen:()=>setTimeout(()=>$('#ru-text').focus(),50) });
+  }
+  $('#ln-new').addEventListener('click', ()=>xDraft({ kind:'면접안내' }));
+  $('#ln-addrule').addEventListener('click', ()=>xRuleModal());
+  $('#ln-learn').addEventListener('click', async e=>{
+    let r; try{ r=await xRun(e.currentTarget,'분석 중…',()=>call('learnRules',TOKEN)); }catch(err){ xFail(err); return; }
+    if(r.error==='NO_KEY'){ toast('AI 키가 없습니다.'); return; }
+    if(!r.ok){ toast(r.reason); return; }
+    invalidate('v2ln','v2flow'); V2_LOAD.learn(); toast(`수정 ${r.analyzed}건을 읽고 규칙 후보 ${r.added}건을 찾았습니다.`);
+  });
+  $('#view-learn').addEventListener('click', async e=>{
+    const ru=e.target.closest('[data-rule]'), rd=e.target.closest('[data-rdel]'), mk=e.target.closest('[data-mkrule]');
+    if(ru){ try{ await call('setRuleStatus',TOKEN,ru.dataset.rule,ru.dataset.st); }catch(err){ xFail(err); return; } invalidate('v2ln','v2flow','v2au'); V2_LOAD.learn(); toast(ru.dataset.st==='사용'?'규칙을 켰습니다.':'규칙을 껐습니다.'); }
+    else if(rd){ if(!await confirmAction('규칙을 삭제할까요?','삭제하면 다음 초안부터 빠집니다.')) return; try{ await call('deleteRule',TOKEN,rd.dataset.rdel); }catch(err){ xFail(err); return; } invalidate('v2ln','v2flow'); V2_LOAD.learn(); }
+    else if(mk){ const r=DATA['v2ln'].v.recent.find(x=>x.id===mk.dataset.mkrule); if(r) xRuleModal({ text:r.reason||'', scope:r.kind, hospital:r.hospital, source:'수정 기록에서 · '+r.at, example:String(r.final||'').slice(0,120) }); }
+  });
+
+  /* ═══════ 병원별 운영 지식 ═══════ */
+  let knHosp='';
+  V2_LOAD.knowledge=async(force)=>{
+    if(force) invalidate('v2kn');
+    v2Ai().then(ai=>{ $('#kn-when').innerHTML=xAiBadge(ai); $('#kn-extract').disabled=!ai.hasKey; $('#kn-exnote').innerHTML=ai.hasKey?'':X_NOKEY; });
+    try{ await ensureHospitals(); xHospSelects(); }catch(_){ }
+    try{ await swr('v2kn', ()=>call('getKnowledge',TOKEN), renderKnowledge); }catch(e){ xFail(e); }
+  };
+  function renderKnowledge(d){
+    const hs=hospitalCache||[], all=d.list;
+    $('#kn-hosp').innerHTML=`<button class="x-chip ${knHosp===''?'on':''}" data-knh="">전체 · ${all.filter(k=>k.status==='확정').length}</button>`+hs.map(h=>`<button class="x-chip ${knHosp===h['병원ID']?'on':''}" data-knh="${esc(h['병원ID'])}">${esc(h['병원명'])} · ${all.filter(k=>k.status==='확정'&&String(k.hospitalId)===String(h['병원ID'])).length}</button>`).join('');
+    const inH=k=>!knHosp || String(k.hospitalId)===String(knHosp);
+    const pend=all.filter(k=>k.status==='대기' && inH(k));
+    $('#kn-pending').innerHTML = pend.length ? `<div class="x-note" style="margin:0"><b>새로 뽑힌 내용 · 확인 대기 ${pend.length}건</b><div class="x-rules" style="margin-top:6px">${pend.map(k=>`<div class="x-rule" style="border-bottom-color:rgba(160,126,0,.25)"><div><span class="x-pill ghost" style="background:#fff">${esc(k.cat)}</span> <b style="font-weight:600;color:var(--ink)">${esc(k.text)}</b><small>${esc(k.hospital)} · ${esc(k.source)}</small></div><div class="x-acts"><button class="x-btn dark" data-kns="${esc(k.id)}" data-st="확정">반영</button><button class="x-btn" data-kns="${esc(k.id)}" data-st="무시">무시</button></div></div>`).join('')}</div></div>` : '';
+    const ok=all.filter(k=>k.status==='확정' && inH(k));
+    const hn=knHosp ? ((hs.find(h=>String(h['병원ID'])===String(knHosp))||{})['병원명']||'') : '전체';
+    $('#kn-title').textContent=hn+' · 확정 '+ok.length+'건';
+    $('#kn-rows').innerHTML = ok.length ? ok.map(k=>`<tr><td><span class="x-pill ghost">${esc(k.cat)}</span></td><td class="hname" style="font-weight:500">${esc(k.text)}${!knHosp?`<div class="x-sub">${esc(k.hospital)}</div>`:''}</td><td class="x-small x-mut">${esc(k.source)}</td><td class="r x-num">${k.used}</td><td class="r"><button class="x-link mut" data-kndel="${esc(k.id)}">삭제</button></td></tr>`).join('')
+      : '<tr><td colspan="5" class="empty-row">확정된 지식이 없습니다. 오른쪽에서 직접 추가하거나 메모에서 뽑으세요.</td></tr>';
+    if(knHosp && $('#kn-h')) $('#kn-h').value=knHosp;
+  }
+  $('#view-knowledge').addEventListener('click', async e=>{
+    const hh=e.target.closest('[data-knh]'), st=e.target.closest('[data-kns]'), dl=e.target.closest('[data-kndel]');
+    if(hh){ knHosp=hh.dataset.knh; renderKnowledge(DATA['v2kn'].v); }
+    else if(st){ try{ await xRun(st,'처리 중…',()=>call('setKnowledgeStatus',TOKEN,st.dataset.kns,st.dataset.st)); }catch(err){ xFail(err); return; } invalidate('v2kn','v2flow','v2au'); V2_LOAD.knowledge(); toast(st.dataset.st==='확정'?'반영했습니다. 다음 인터뷰·초안부터 쓰입니다.':'무시했습니다.'); }
+    else if(dl){ if(!await confirmAction('지식을 삭제할까요?','삭제하면 인터뷰·초안에 더 이상 쓰이지 않습니다.')) return; try{ await call('deleteKnowledge',TOKEN,dl.dataset.kndel); }catch(err){ xFail(err); return; } invalidate('v2kn','v2flow'); V2_LOAD.knowledge(); }
+  });
+  $('#kn-add').addEventListener('click', async e=>{
+    const text=$('#kn-text').value.trim(); if(!text){ toast('내용을 입력하세요.'); $('#kn-text').focus(); return; }
+    try{ await xRun(e.currentTarget,'추가 중…',()=>call('addKnowledge',TOKEN,{ hospitalId:$('#kn-h').value, cat:$('#kn-cat').value, text, source:$('#kn-src').value.trim() })); }catch(err){ xFail(err); return; }
+    $('#kn-text').value=''; invalidate('v2kn','v2flow'); V2_LOAD.knowledge(); toast('추가했습니다.');
+  });
+  $('#kn-extract').addEventListener('click', async e=>{
+    const memo=$('#kn-memo').value.trim(); if(memo.length<10){ toast('메모 내용을 붙여넣으세요.'); return; }
+    let r; try{ r=await xRun(e.currentTarget,'뽑는 중…',()=>call('extractKnowledge',TOKEN,$('#kn-h').value,memo,$('#kn-memosrc').value.trim())); }catch(err){ xFail(err); return; }
+    if(r.error==='NO_KEY'){ toast('AI 키가 없습니다.'); return; }
+    $('#kn-memo').value=''; knHosp=$('#kn-h').value; invalidate('v2kn','v2flow'); V2_LOAD.knowledge();
+    toast(r.added?`규칙 ${r.added}건을 뽑았습니다. 위에서 확인 후 반영하세요.`:'계속 쓸 규칙을 찾지 못했습니다.');
+  });
+
+  /* ═══════ AI 결정 기록 ═══════ */
+  let auMonth='';
+  V2_LOAD.audit=async(force)=>{
+    if(force) invalidate('v2au');
+    try{ await swr('v2au', ()=>call('getDecisions',TOKEN,auMonth), renderAudit); }catch(e){ xFail(e); }
+  };
+  function renderAudit(d){
+    const sel=$('#au-month');
+    if(!sel.options.length){ sel.innerHTML=d.months.map(m=>`<option value="${esc(m)}">${esc(m.replace('-','년 '))}월</option>`).join(''); }
+    sel.value=d.month;
+    const s=d.summary;
+    $('#au-kpis').innerHTML=[[s.total,'결정 기록'],[s.total?'100%':'–','담당자가 최종 확정'],[xPct(s.agreeRate),'AI 추천과 일치'],[s.mismatch,'다름 → 학습 재료']].map(k=>`<div class="kpi"><div class="k-val">${k[0]}</div><div class="k-lab">${esc(k[1])}</div></div>`).join('');
+    $('#au-rows').innerHTML = d.list.length ? d.list.map(r=>`<tr><td class="x-num x-small" style="white-space:nowrap">${esc(r.at)}</td><td style="white-space:nowrap">${esc(r.feature)}</td><td>${esc(r.target)}</td><td class="x-small">${esc(r.ai)}</td><td>${esc(r.decision)}</td><td>${r.match==='Y'?'<span class="x-pill ok">일치</span>':(r.match==='N'?'<span class="x-pill warn">다름 → 학습</span>':'<span class="x-mut">–</span>')}</td></tr>`).join('')
+      : '<tr><td colspan="6" class="empty-row">이 달의 기록이 없습니다. 인터뷰 결정, 초안 사용, 수정안 승인, 면담 기록이 여기에 남습니다.</td></tr>';
+  }
+  $('#au-month').addEventListener('change', e=>{ auMonth=e.target.value; invalidate('v2au'); V2_LOAD.audit(); });
+
+  /* ═══════ 만족도 응답 상세 (기존 만족도 조사 화면에 추가) ═══════ */
+  const SV_FORM={
+    resident:[['응답자 정보',[['name','이름','t'],['tenure','근무 기간','t'],['empType','고용형태','t'],['dept','부서·직무','t']]],
+      ['근무 만족도',[['q_pay','급여와 수당 수준','s'],['q_payAccuracy','급여 정확·적시 지급','s'],['q_workload','근무 강도·교대 일정','s'],['q_rest','휴게 시간·휴가 사용','s'],['q_siteManager','현장 관리자와의 관계','s'],['q_companySupport','엔젤스태프 담당자 지원·소통','s'],['q_environment','업무 환경·안전','s'],['q_grievance','불만 처리 과정','s'],['q_overall','전반적 만족도','s']]],
+      ['이직·추천',[['turnoverIntent','최근 이직 고려','t'],['enps','동료에게 추천 의향','n']]],
+      ['자유 의견',[['improve','가장 개선이 필요한 한 가지','l'],['freeNote','회사·현장에 바라는 점','l']]]],
+    exit:[['응답자 정보',[['name','이름','t'],['tenure','총 근속 기간','t'],['empType','고용형태','t'],['dept','부서·직무','t']]],
+      ['퇴직 사유',[['primaryReason','가장 큰 이유','t'],['factors','그 밖의 요인','m']]],
+      ['만족도 회고',[['q_pay','급여와 수당','s'],['q_workload','근무 강도·교대','s'],['q_siteManager','현장 관리자와의 관계','s'],['q_companySupport','엔젤스태프 담당자 지원','s'],['q_overall','전반적 만족도','s']]],
+      ['재입사·기타',[['rehire','다시 함께 일할 의향','t'],['couldRetain','무엇을 했다면 계속 근무했을지','l'],['freeNote','남기고 싶은 말','l']]]],
+    pulse:[['월 1문항',[['name','이름','t'],['enps','지금 일하는 곳을 친구에게 추천','n'],['freeNote','아쉬운 점','l']]]]
+  };
+  const SV_LEVEL=['','매우 불만족','불만족','보통','만족','매우 만족'];
+  function svTypeOf(s){ return (s.raw&&s.raw.formType==='pulse') ? '월간' : (s.type||'재직'); }
+  let svdState={ type:'전체', q:'', limit:50 }, svdList=[];
+  function svDetailRender(list){
+    svdList=Array.isArray(list)?list:[];
+    const q=svdState.q.replace(/\s/g,'');
+    let rows=svdList.filter(s=>svdState.type==='전체' || svTypeOf(s)===svdState.type);
+    if(q) rows=rows.filter(s=>(String(s.name||'')+String(s.dept||'')+String((s.raw&&s.raw.dept)||'')).replace(/\s/g,'').indexOf(q)>=0);
+    $('#svd-meta').textContent=`${rows.length}건 · 행을 누르면 전체 답변`;
+    const tb=$('#svd-rows'); if(!tb) return;
+    tb.innerHTML = rows.length ? rows.slice(0, svdState.limit).map(s=>{
+      const r=s.raw||{}, t=svTypeOf(s);
+      const extra = t==='퇴직' ? (r.primaryReason||'') : (r.turnoverIntent||'');
+      return `<tr class="x-click" data-svd="${esc(s.id)}"><td class="x-num x-small" style="white-space:nowrap">${esc(s.date||'')}</td><td class="hname">${esc(s.name||'(이름 없음)')}</td><td class="x-small">${esc(s.hospital||'')}${(s.dept||r.dept)?' · '+esc(s.dept||r.dept):''}</td>`+
+        `<td><span class="x-pill ${t==='퇴직'?'bad':(t==='월간'?'info':'ghost')}">${esc(t)}</span></td><td class="r x-num">${s.overall!=null?s.overall:'–'}</td><td class="r x-num">${s.enps!=null?s.enps:'–'}</td><td class="x-small">${esc(extra)||'<span class="x-mut">–</span>'}</td></tr>`;
+    }).join('') : '<tr><td colspan="7" class="empty-row">조건에 맞는 응답이 없습니다.</td></tr>';
+    const more=$('#svd-more'); if(more){ more.hidden=rows.length<=svdState.limit; more.textContent=`더 보기 (${rows.length-svdState.limit}건)`; }
+  }
+  window.svDetailRender=svDetailRender;
+  function svDetailOpen(s, pool){
+    const r=s.raw||{}, t=svTypeOf(s);
+    const form = t==='월간' ? SV_FORM.pulse : (t==='퇴직' ? SV_FORM.exit : SV_FORM.resident);
+    const used=new Set(['formType','hospital']);
+    const val=(k,kind)=>{
+      let v=r[k]; if(k==='name' && (v==null||v==='')) v=s.name; if(k==='dept' && (v==null||v==='')) v=s.dept;
+      if(v==null || v==='' || (Array.isArray(v)&&!v.length)) return null;
+      if(kind==='s'){ const n=Number(v); return `<span class="x-dots">${[1,2,3,4,5].map(i=>`<i class="${i<=n?'on':''}"></i>`).join('')}</span>${n} · ${esc(SV_LEVEL[n]||'')}`; }
+      if(kind==='n') return `<b class="x-num">${esc(v)}</b> / 10 · ${Number(v)>=9?'추천':(Number(v)<=6?'비추천':'중립')}`;
+      if(kind==='m') return esc((Array.isArray(v)?v:[v]).join(', '));
+      return esc(v);
+    };
+    let body='<div class="x-ans">';
+    form.forEach(([sec, items])=>{
+      const rowsH=items.map(([k,label,kind])=>{ used.add(k); const v=val(k,kind); if(v==null) return ''; return kind==='l' ? `<div class="row2 txt"><span class="q">${esc(label)}</span><span class="a">${v}</span></div>` : `<div class="row2"><span class="q">${esc(label)}</span><span class="a">${v}</span></div>`; }).join('');
+      if(rowsH) body+=`<div class="sec">${esc(sec)}</div>`+rowsH;
+    });
+    const rest=Object.keys(r).filter(k=>!used.has(k) && r[k]!=='' && r[k]!=null && !(Array.isArray(r[k])&&!r[k].length));
+    if(rest.length) body+='<div class="sec">기타</div>'+rest.map(k=>`<div class="row2"><span class="q">${esc(k)}</span><span class="a">${esc(Array.isArray(r[k])?r[k].join(', '):r[k])}</span></div>`).join('');
+    if(!Object.keys(r).length && s.comment) body+=`<div class="sec">코멘트</div><div class="row2 txt"><span class="a">${esc(s.comment)}</span></div>`;
+    body+='</div>';
+    const n=String(s.name||'').replace(/\s/g,''), h=String(s.hospital||'').replace(/\s/g,'');
+    const others=(pool||svdList).filter(x=>x.id!==s.id && n && String(x.name||'').replace(/\s/g,'')===n && String(x.hospital||'').replace(/\s/g,'')===h);
+    if(others.length) body+=`<div class="sec" style="padding-top:22px">이 근무자의 다른 응답 ${others.length}건</div><div class="x-chips">${others.map(o=>`<button class="x-chip" data-svo="${esc(o.id)}">${esc(o.date)} · ${esc(svTypeOf(o))}${o.overall!=null?' · 만족 '+o.overall:''}${o.enps!=null?' · 추천 '+o.enps:''}</button>`).join('')}</div>`;
+    xOpen({ title:(s.name||'이름 없음')+' · '+t+' 응답', sub:[s.hospital, s.date].filter(Boolean).join(' · '), wide:true, body,
+      onOpen:(el)=>{ el.onclick=e=>{ const b=e.target.closest('[data-svo]'); if(b){ const o=others.find(x=>String(x.id)===b.dataset.svo); if(o) svDetailOpen(o, pool); } }; } });
+  }
+  if($('#svd-type')) $('#svd-type').addEventListener('click', e=>{ const b=e.target.closest('.seg'); if(!b) return; $$('#svd-type .seg').forEach(x=>x.classList.toggle('active', x===b)); svdState.type=b.dataset.t; svdState.limit=50; svDetailRender(svdList); });
+  if($('#svd-q')) $('#svd-q').addEventListener('input', e=>{ svdState.q=e.target.value; svdState.limit=50; svDetailRender(svdList); });
+  if($('#svd-more')) $('#svd-more').addEventListener('click', ()=>{ svdState.limit+=100; svDetailRender(svdList); });
+  if($('#svd-rows')) $('#svd-rows').addEventListener('click', e=>{ const tr=e.target.closest('[data-svd]'); if(!tr) return; const s=svdList.find(x=>String(x.id)===tr.dataset.svd); if(s) svDetailOpen(s, (DATA['sv']&&DATA['sv'].v)||svdList); });
+  /* HR2:END */
 
   /* 세션 유지: 새로고침(F5·브라우저 버튼)해도 로그인 화면으로 튕기지 않음.
      토큰이 만료됐으면 첫 호출이 실패하면서 자동 로그아웃된다. */
