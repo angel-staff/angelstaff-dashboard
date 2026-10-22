@@ -829,6 +829,21 @@
   .h3-hb p{margin:0;height:10px;border-radius:99px;background:var(--line-2);overflow:hidden}
   .h3-hb p i{display:block;height:100%;border-radius:99px;background:var(--ink)}
   .h3-hb b{font-family:var(--gr);text-align:right}
+  .h3-chips{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 10px}
+  .h3-chips button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600;color:var(--ink-2)}
+  .h3-chips button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .h3-mnav{display:flex;align-items:center;gap:4px}
+  .h3-mnav b{font-size:12.5px;min-width:86px;text-align:center}
+  .h3-mnav button{border:1px solid var(--line);background:#fff;border-radius:7px;padding:2px 8px;font-size:12px;font-weight:600;color:var(--ink-2)}
+  .h3-mnav button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .h3-mini{display:flex;gap:6px;align-items:flex-end;height:58px;margin:2px 0 12px}
+  .h3-mini button{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:2px;border:0;background:none;padding:0;cursor:pointer}
+  .h3-mini i{display:block;width:100%;max-width:30px;border-radius:4px 4px 2px 2px;background:#E4E0D7}
+  .h3-mini button.on i{background:var(--ink)}
+  .h3-mini button:hover i{background:var(--trace)}
+  .h3-mini em{font:600 10.5px var(--gr);font-style:normal;color:var(--ink-3)}
+  .h3-mini u{font:700 10.5px var(--gr);text-decoration:none;color:var(--ink-2);order:-1}
+  .h3-note b{color:var(--ink-2)}
   .h3-note{font-size:11.5px;color:var(--ink-3);margin-top:10px}
 
   @media (max-width:1180px){ .h3-kpis{grid-template-columns:repeat(2,minmax(0,1fr))} .h3-main{grid-template-columns:1fr} .h3-charts{grid-template-columns:1fr} }
@@ -1008,8 +1023,8 @@
         <div class="h3-sec"><h2>추이와 분포</h2><span>휴먼관리시스템 재직자·이력서 관리 기준</span></div>
         <div class="h3-charts">
           <div class="h3-card h3-chart"><div class="h3-ch" style="padding:0 0 10px;border:0"><h3>월별 입사 (최근 12개월)</h3></div><div class="h3-bars" id="h3-c1"></div><div class="h3-note">현재 근무자 명단에 있는 사람 기준 · 막대에 마우스를 올리면 인원</div></div>
-          <div class="h3-card h3-chart"><div class="h3-ch" style="padding:0 0 10px;border:0"><h3>근속 기간 분포</h3></div><div class="h3-hb" id="h3-c2"></div><div class="h3-note" id="h3-c2n"></div></div>
-          <div class="h3-card h3-chart"><div class="h3-ch" style="padding:0 0 10px;border:0"><h3>채용 단계</h3></div><div class="h3-hb" id="h3-c3"></div><div class="h3-note" id="h3-c3n"></div></div>
+          <div class="h3-card h3-chart"><div class="h3-ch" style="padding:0 0 8px;border:0"><h3>근속 기간 분포</h3></div><div class="h3-chips" id="h3-c2h"></div><div class="h3-hb" id="h3-c2"></div><div class="h3-note" id="h3-c2n"></div></div>
+          <div class="h3-card h3-chart"><div class="h3-ch" style="padding:0 0 8px;border:0"><h3>채용 단계 · 월별</h3><div class="h3-mnav" id="h3-c3nav"></div></div><div class="h3-mini" id="h3-c3m"></div><div class="h3-hb" id="h3-c3"></div><div class="h3-note" id="h3-c3n"></div></div>
         </div>
       </div>
       <div id="dash-legacy" hidden>
@@ -1301,11 +1316,11 @@
       </div>
       <div class="tbl-scroll">
         <table class="htbl x-tbl" style="min-width:900px">
-          <thead><tr><th>근무자</th><th>고용형태</th><th>입사일</th><th class="r">계약 종료</th><th>생년월일</th><th>연락처</th><th class="r">검진월</th><th class="r">관리</th></tr></thead>
+          <thead><tr><th>근무자</th><th>고용형태</th><th>입사일</th><th class="r">파견 만료 (2년)</th><th>생년월일</th><th>연락처</th><th class="r">검진월</th><th class="r">관리</th></tr></thead>
           <tbody id="wk-rows"><tr><td colspan="8" class="loading">불러오는 중…</td></tr></tbody>
         </table>
       </div>
-      <p class="muted" style="font-size:12.5px;margin-top:10px">정렬: 계약 만료 60일 이내 재직자가 맨 위(만료 가까운 순), 그다음 계약종료일이 지난 재직자, 나머지는 입사일 순으로 최근 입사자가 맨 아래에 옵니다.</p>
+      <p class="muted" style="font-size:12.5px;margin-top:10px">만료 기준: 파견은 입사일 + 2년(파견 최대 기간). 1년 단위 계약 갱신은 만료로 보지 않습니다 · 도급·위탁은 만료 표시 없음.<br>정렬: 파견 만료 60일 이내 재직자가 맨 위(만료 가까운 순), 그다음 2년이 지난 재직자, 나머지는 입사일 순으로 최근 입사자가 맨 아래에 옵니다.</p>
     </section>
 
     <!-- ═══ HR 2.0 ═══ 퇴사 위험 -->
@@ -1706,7 +1721,23 @@
   function preloadLibs(){ const a=[].slice.call(arguments); idle(()=>a.forEach(k=>loadLib(k).catch(()=>{})), 1500); }
 
   /* ═══ SWR 캐시: 캐시가 있으면 즉시 렌더 → 백그라운드 갱신 (체감속도 대폭 개선) ═══ */
-  const DATA = {};                    // key -> {t, v}
+  /* 제외 병원: 강동경희대 (2026-10-23 요청) — 화면 전체에서 숨김 */
+  function xHospOut(n){ return /강동경희/.test(String(n||'')); }
+  function xExcl(k,v){
+    try{
+      if(!v || typeof v!=='object') return v;
+      const L=a=>Array.isArray(a)?a.filter(x=>!xHospOut(x && (x.hospital||x['병원명']))):a;
+      const d=v.v;
+      if(k==='v2wk' && d && Array.isArray(d.list)) d.list=L(d.list);
+      else if(k==='hosp' && Array.isArray(d)) v.v=L(d);
+      else if(k==='sv' && Array.isArray(d)) v.v=L(d);
+      else if(k.indexOf('cand:')===0 && Array.isArray(d)) v.v=L(d);
+      else if(k==='ev' && d){ d.cands=L(d.cands); d.evals=L(d.evals); }
+      else if(k==='dash' && d){ if(Array.isArray(d.hospitals)) d.hospitals=d.hospitals.filter(h=>!xHospOut(h.name)); if(Array.isArray(d.expiring)) d.expiring=d.expiring.filter(x=>!xHospOut(x.hospital)); }
+    }catch(_){ }
+    return v;
+  }
+  const DATA = new Proxy({}, { set(t,k,v){ t[k]=xExcl(String(k),v); return true; } });   // key -> {t, v}
   const SWR_TTL = 60000;              // 60초 내 재방문은 서버 호출 자체를 생략
   let __pfP = null, __pfAt = 0;       // 전체 메뉴 미리 불러오기 (진행 중인 요청 · 마지막 완료 시각)
   const PF_KEY = /^(v2(flow|wk|rk|iv|q|fc|ln|kn|au)|sv|ev|hosp|cand:전체:|ct:)/;
@@ -2136,7 +2167,7 @@
     return hospitalCache;
   }
   function applyHospitals(r){
-    hospitalCache = Array.isArray(r) ? r : [];
+    hospitalCache = (Array.isArray(r) ? r : []).filter(h=>!xHospOut(h['병원명']));
     const opts = hospitalCache.map(h=>`<option value="${esc(h['병원ID'])}">${esc(h['병원명'])}</option>`).join('');
     if($('#filter-hospital')) $('#filter-hospital').innerHTML = '<option value="">전체 병원</option>'+opts;
     if($('#cm-hospital')) $('#cm-hospital').innerHTML = '<option value="">선택 안 함</option>'+opts;
@@ -2172,7 +2203,8 @@
     return SURNAMES.indexOf(s.charAt(0))>=0;
   }
   const HEALED=new Set();
-  function healCandidates(list){
+  function healCandidates(list0){
+    const list=(list0||[]).filter(c=>!c || !xHospOut(c.hospital));
     (list||[]).forEach(c=>{
       if(!c) return;
       const nm=String(c.name==null?'':c.name).trim(), jb=String(c.job==null?'':c.job).trim();
@@ -3349,6 +3381,19 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   function v3Key(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
   function v3Dot(s){ const d=v3Date(s); return d ? d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0') : ''; }
   function v3Today(){ const t=new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
+  const V3_EXCL=/강동경희/;
+  function v3Two(j){ return new Date(j.getFullYear()+2, j.getMonth(), j.getDate()-1); }
+  function v3Norm(v){
+    if(!v || !Array.isArray(v.list) || v._n) return v;
+    v.list=v.list.filter(w=>!V3_EXCL.test(String(w.hospital||'')));
+    v.list.forEach(w=>{
+      if(w.contractEnd===undefined) w.contractEnd=w.expiry||'';      // 휴먼관리시스템 계약종료일(1년 단위) 보관
+      const j=v3Date(w.join);
+      w.expiry = (w.emp==='파견' && j) ? v3Dot(v3Key(v3Two(j))) : '';  // 만료 기준 = 파견 최대 2년
+    });
+    v._n=true; return v;
+  }
+  function v3NormAll(){ if(DATA['v2wk'] && DATA['v2wk'].v) v3Norm(DATA['v2wk'].v); }
   function v3Dday(w){ const d=v3Date(w && w.expiry); return d ? Math.round((d - v3Today())/86400000) : null; }
   function v3DdPill(n){
     if(n==null) return '';
@@ -3358,11 +3403,12 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   }
   function v3ExpKey(w){ const n=v3Dday(w); return n>=0 ? n : 100000-n; }
   function v3IsExp(w){ const n=v3Dday(w); return w.status==='재직' && n!=null && n<=V3_EXP_TOP; }
-  const V3_HOSP_ORDER=['강동성심','의정부','강남하트스캔','강동경희'];
+  const V3_HOSP_ORDER=['강동성심','의정부','강남하트스캔'];
   function v3HospRank(name){ const i=V3_HOSP_ORDER.findIndex(k=>String(name||'').indexOf(k)>=0); return i<0?99:i; }
 
   /* ── 근무자 마스터 ── */
   function renderWorkers(d){
+    v3Norm(d);
     const rs=d.roster, sy=$('#wk-sync');
     if(sy){ if(rs){ sy.hidden=false; sy.innerHTML=`<i></i>휴먼관리시스템 자동 동기화 · 마지막 ${esc(rs.at)} · 재직 ${rs.total}명${(rs.added||rs.left||rs.changed||rs.rejoined)?` · 입사 ${rs.added} · 퇴사 ${rs.left} · 변경 ${rs.changed}${rs.rejoined?' · 재입사 '+rs.rejoined:''}`:' · 변동 없음'}`; } else sy.hidden=true; }
     const act=d.list.filter(w=>w.status==='재직');
@@ -3382,9 +3428,9 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     const n30=up.filter(w=>v3Dday(w)<=V3_EXP_POP).length;
     const item=w=>`<div class="it" data-wkedit="${esc(w.id)}">${v3DdPill(v3Dday(w))}<div class="w"><b>${esc(w.name)}</b><small>${esc(w.hospital||'')}${w.dept?' · '+esc(w.dept):''} · ${esc(w.emp||'')}</small></div><div class="d">${esc(v3Dot(w.expiry))}</div></div>`;
     $('#wk-expire').className='w3-exp'+(exp.length?'':' ok');
-    $('#wk-expire').innerHTML = `<div class="h"><b>계약 만료 임박</b><span>${wkFilter.hosp?esc(wkFilter.hosp)+' · ':''}30일 이내 <b style="color:#B42318">${n30}명</b> · ${V3_EXP_TOP}일 이내 ${up.length}명</span></div>`+
-      (up.length ? `<div class="list">${up.map(item).join('')}</div>` : `<div class="none">${V3_EXP_TOP}일 안에 계약이 끝나는 재직자가 없습니다.</div>`)+
-      (over.length ? `<details class="w3-over"><summary><b>계약종료일이 지났는데 재직 중 ${over.length}명</b><span>재계약했다면 휴먼관리시스템의 계약종료일을 갱신하세요. 다음 날 아침 자동으로 맞춰집니다.</span></summary><div class="list">${over.map(item).join('')}</div></details>` : '');
+    $('#wk-expire').innerHTML = `<div class="h"><b>파견 만료 임박 (입사 2년)</b><span>${wkFilter.hosp?esc(wkFilter.hosp)+' · ':''}30일 이내 <b style="color:#B42318">${n30}명</b> · ${V3_EXP_TOP}일 이내 ${up.length}명</span></div>`+
+      (up.length ? `<div class="list">${up.map(item).join('')}</div>` : `<div class="none">${V3_EXP_TOP}일 안에 파견 2년이 되는 재직자가 없습니다.</div>`)+
+      (over.length ? `<details class="w3-over"><summary><b>파견 2년이 지난 재직자 ${over.length}명</b><span>입사일 기준 2년 경과 · 파견 기간 초과 여부(공백·재입사 포함)를 확인하세요.</span></summary><div class="list">${over.map(item).join('')}</div></details>` : '');
     /* 명단 받기 */
     const L=wkLists(d), nm=d.nextMonth;
     $('#wk-outs').className='w3-tools';
@@ -3406,6 +3452,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   }
   function renderWorkerRows(){
     const c=DATA['v2wk']; if(!c) return;
+    v3Norm(c.v);
     const d=c.v, q=wkFilter.q.replace(/\s/g,'');
     let list=d.list;
     if(wkFilter.seg==='재직') list=list.filter(w=>w.status==='재직');
@@ -3434,8 +3481,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   const V3_BDAY_BLOCKS=[
     { key:'강동성심', title:m=>`강동성심병원 (${m}월) 생일쿠폰 지급대상자`, none:'강동성심병원', org:'강동성심병원' },
     { key:'강남하트스캔', title:m=>`강남하트스캔의원 (${m}월) 생일쿠폰 지급대상자`, none:'강남하트스캔의원', org:'강남하트스캔의원' },
-    { key:'의정부', title:m=>`의정부성모병원 (${m}월) 생일쿠폰 지급 대상자`, none:'의정부성모병원', org:'의정부성모병원' },
-    { key:'강동경희', title:m=>`강동경희대병원 (${m}월) 생일쿠폰 지급 대상자`, none:'강동경희대병원', org:'강동경희대' }
+    { key:'의정부', title:m=>`의정부성모병원 (${m}월) 생일쿠폰 지급 대상자`, none:'의정부성모병원', org:'의정부성모병원' }
   ];
   async function v3BirthdayXlsx(d){
     let E; try{ E=await loadLib('exceljs'); }catch(_){ toast('엑셀 모듈을 불러오지 못했습니다. 새로고침 후 다시 시도하세요.'); return; }
@@ -3480,6 +3526,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     toast(nm+'월 생일쿠폰 대상자 '+L.birth.length+'명 명단을 받았습니다.');
   }
   function wkOutput(k){
+    v3NormAll();
     const c=DATA['v2wk']; if(!c) return;
     if(k==='birth') return v3BirthdayXlsx(c.v);
     return wkOutputOld(k);
@@ -3489,6 +3536,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   let v3PopDone=false;
   function v3ExpiryPopup(){
     if(v3PopDone || !TOKEN) return;
+    v3NormAll();
     const c=DATA['v2wk']; if(!c || !c.v || !Array.isArray(c.v.list)) return;
     try{ if(Date.now() < Number(localStorage.getItem('hr2_exp_snooze')||0)) { v3PopDone=true; return; } }catch(_){ }
     try{ if(sessionStorage.getItem('hr2_exp_seen')) { v3PopDone=true; return; } }catch(_){ }
@@ -3500,8 +3548,8 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     if($('#xmodal').classList.contains('on')) return;
     try{ sessionStorage.setItem('hr2_exp_seen','1'); }catch(_){ }
     xOpen({
-      title:'계약 만료 임박 '+up.length+'명'+(over.length?' · 종료일 지남 '+over.length+'명':''), sub:'계약종료일까지 '+V3_EXP_POP+'일 이내인 재직자입니다. 종료일이 이미 지난 재직자는 아래에 따로 모았습니다.',
-      body:`<div class="v3-pop">${up.length?'':'<div class="sec">30일 안에 만료되는 재직자는 없습니다.</div>'}${up.map(w=>`<div class="it">${v3DdPill(v3Dday(w))}<div class="w"><b>${esc(w.name)}</b><small>${esc(w.hospital||'')}${w.dept?' · '+esc(w.dept):''} · ${esc(w.emp||'')}</small></div><div class="d">${esc(v3Dot(w.expiry))}</div></div>`).join('')}${over.length?`<div class="sec">계약종료일 지남 · 재직 중 ${over.length}명 — 재계약이면 휴먼관리시스템 종료일 갱신 필요</div>`+over.map(w=>`<div class="it">${v3DdPill(v3Dday(w))}<div class="w"><b>${esc(w.name)}</b><small>${esc(w.hospital||'')}${w.dept?' · '+esc(w.dept):''} · ${esc(w.emp||'')}</small></div><div class="d">${esc(v3Dot(w.expiry))}</div></div>`).join(''):''}</div>`,
+      title:'파견 만료 임박 '+up.length+'명'+(over.length?' · 2년 경과 '+over.length+'명':''), sub:'파견 최대 2년(입사일 기준)까지 '+V3_EXP_POP+'일 이내인 재직자입니다. 1년 단위 계약 갱신은 포함하지 않습니다.',
+      body:`<div class="v3-pop">${up.length?'':'<div class="sec">30일 안에 파견 2년이 되는 재직자는 없습니다.</div>'}${up.map(w=>`<div class="it">${v3DdPill(v3Dday(w))}<div class="w"><b>${esc(w.name)}</b><small>${esc(w.hospital||'')}${w.dept?' · '+esc(w.dept):''} · ${esc(w.emp||'')}</small></div><div class="d">${esc(v3Dot(w.expiry))}</div></div>`).join('')}${over.length?`<div class="sec">파견 2년 경과 · 재직 중 ${over.length}명 — 파견 기간 초과 여부 확인 필요</div>`+over.map(w=>`<div class="it">${v3DdPill(v3Dday(w))}<div class="w"><b>${esc(w.name)}</b><small>${esc(w.hospital||'')}${w.dept?' · '+esc(w.dept):''} · ${esc(w.emp||'')}</small></div><div class="d">${esc(v3Dot(w.expiry))}</div></div>`).join(''):''}</div>`,
       foot:[
         { label:'7일간 표시하지 않기', ghost:true, onClick:()=>{ try{ localStorage.setItem('hr2_exp_snooze', String(Date.now()+7*86400000)); }catch(_){ } toast('7일 동안 이 알림을 띄우지 않습니다.'); } },
         { label:'닫기', ghost:true },
@@ -3547,7 +3595,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     const y=evCal.y, m=evCal.m, first=new Date(y,m,1), start=new Date(y,m,1-first.getDay()), today=v3Key(v3Today());
     let iv=0, done=0;
     Object.keys(evs).forEach(k=>{ const d=v3Date(k); if(d.getFullYear()===y && d.getMonth()===m) evs[k].forEach(x=>{ if(x.kind==='done') done++; else if(x.kind==='iv') iv++; }); });
-    const hosps=(hospitalCache||[]).map(h=>h['병원명']);
+    const hosps=(hospitalCache||[]).map(h=>h['병원명']).filter(n=>!V3_EXCL.test(n));
     let html=`<div class="cal3-top"><div class="ym">${y}년 ${m+1}월</div><div class="nav"><button data-cnav="-1" aria-label="이전 달">‹</button><button data-cnav="0">오늘</button><button data-cnav="1" aria-label="다음 달">›</button></div>`+
       `<div class="sum">면접 예정 <b>${iv}</b> · 평가 완료 <b>${done}</b> · 날짜를 누르면 면접 일정을 등록합니다</div></div>`+
       `<div class="cal3-hosp"><button class="${!hf?'on':''}" data-chosp="">전체 병원</button>${hosps.map(h=>`<button class="${hf===h?'on':''}" data-chosp="${esc(h)}">${esc(h)}</button>`).join('')}</div>`+
@@ -3680,6 +3728,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   function h3CouponDue(y,m){ const d=new Date(y,m,15), w=d.getDay(); return w===6?new Date(y,m,17):(w===0?new Date(y,m,16):d); }
   function h3Cands(){ return candListCache || (DATA['cand:전체:'] && DATA['cand:전체:'].v) || []; }
   function h3Model(){
+    v3NormAll();
     const wk=DATA['v2wk'] && DATA['v2wk'].v; if(!wk || !Array.isArray(wk.list)) return null;
     const T=v3Today(), all=wk.list, act=all.filter(w=>w.status==='재직');
     const dd=w=>v3Dday(w);
@@ -3689,7 +3738,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     /* 파견 2년: 입사일 + 2년 */
     const two=w=>{ const j=v3Date(w.join); return j ? new Date(j.getFullYear()+2, j.getMonth(), j.getDate()-1) : null; };
     const disp=act.filter(w=>w.emp==='파견' && v3Date(w.join));
-    const two90=disp.filter(w=>{ const n=h3Diff(two(w)); return n>=0 && n<=90; }).sort((a,b)=>two(a)-two(b));
+    const two90=disp.filter(w=>{ const n=h3Diff(two(w)); return n>30 && n<=90; }).sort((a,b)=>two(a)-two(b));
     const twoOver=disp.filter(w=>h3Diff(two(w))<0);
     /* 지원자 */
     const cands=h3Cands(), byId={}; cands.forEach(c=>{ byId[String(c.id)]=c; });
@@ -3730,17 +3779,16 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   function h3Todos(M){
     const t=[];
     const gw=(seg,q)=>()=>{ wkFilter.seg=seg||'재직'; wkFilter.hosp=''; wkFilter.q=q||''; if($('#wk-q')) $('#wk-q').value=wkFilter.q; $$('#wk-seg .seg').forEach(x=>x.classList.toggle('active', x.dataset.f===wkFilter.seg)); gotoView('workers'); };
-    if(M.exp30.length) t.push({ k:'exp30', lv:'r', ic:'⏳', n:M.exp30.length, title:'계약 만료 30일 이내', sub:h3Names(M.exp30.map(w=>({name:w.name+' D-'+v3Dday(w)}))), go:'근무자 보기', fn:gw('재직') });
-    if(M.twoOver.length) t.push({ k:'two', lv:'r', ic:'⚖', n:M.twoOver.length, title:'입사 2년 지난 파견 근로자', sub:'파견 기간(최대 2년) 확인 필요 · '+h3Names(M.twoOver), go:'명단 보기', fn:()=>h3TwoList(M) });
+    if(M.exp30.length) t.push({ k:'exp30', lv:'r', ic:'⏳', n:M.exp30.length, title:'파견 만료 30일 이내 (입사 2년)', sub:h3Names(M.exp30.map(w=>({name:w.name+' D-'+v3Dday(w)}))), go:'근무자 보기', fn:gw('재직') });
+    if(M.twoOver.length) t.push({ k:'two', lv:'r', ic:'⚖', n:M.twoOver.length, title:'파견 2년이 지난 재직자', sub:'파견 기간 초과 여부 확인 필요 · '+h3Names(M.twoOver), go:'명단 보기', fn:()=>h3TwoList(M) });
     if(M.ivToday.length) t.push({ k:'ivt', u:'건', lv:'b', ic:'🗓', n:M.ivToday.length, title:'오늘 면접', sub:h3Names(M.ivToday.map(x=>({name:x.c.name+(x.c.hospital?' · '+x.c.hospital:'')}))), go:'캘린더', fn:()=>gotoView('evals') });
     if(M.docs.length) t.push({ k:'docs', lv:'a', ic:'📄', n:M.docs.length, title:'서류 검토 대기 지원자', sub:(M.new7.length?'최근 7일 신규 '+M.new7.length+'명 · ':'')+'합격·탈락을 정해 주세요', go:'검토하기', fn:()=>gotoCandidates('서류') });
     if(M.ivNoEval.length) t.push({ k:'noeval', u:'건', lv:'a', ic:'✍', n:M.ivNoEval.length, title:'면접 후 평가 미작성', sub:h3Names(M.ivNoEval.map(x=>({name:x.c.name}))), go:'평가 쓰기', fn:()=>gotoView('evals') });
-    if(M.two90.length) t.push({ k:'two90', lv:'a', ic:'⚖', n:M.two90.length, title:'파견 2년 도래 (90일 이내)', sub:h3Names(M.two90.map(w=>({name:w.name+' '+h3Md(M.two(w))}))), go:'명단 보기', fn:()=>h3TwoList(M) });
+    if(M.two90.length) t.push({ k:'two90', lv:'a', ic:'⚖', n:M.two90.length, title:'파견 만료 31~90일', sub:h3Names(M.two90.map(w=>({name:w.name+' '+h3Md(M.two(w))}))), go:'명단 보기', fn:()=>h3TwoList(M) });
     const dueN=h3Diff(M.due);
     if(dueN<=10) t.push({ k:'bd', lv:dueN<=3?'a':'b', ic:'🎂', n:M.bdTarget.length, title:M.tMon+'월 생일쿠폰 명단 제출 '+(dueN===0?'오늘':'D-'+dueN), sub:h3Md(M.due)+' 경영지원부 제출 · 대상 '+M.bdTarget.length+'명', go:'양식 받기', dark:true, fn:()=>{ if(DATA['v2wk'] && M.tMon===DATA['v2wk'].v.nextMonth) wkOutput('birth'); else { gotoView('workers'); toast(M.tMon+'월 명단은 해당 월 전달에 받을 수 있습니다.'); } } });
     if(M.ivWeek.length>M.ivToday.length) t.push({ k:'ivw', u:'건', lv:'b', ic:'🗓', n:M.ivWeek.length-M.ivToday.length, title:'이번 주 면접 예정', sub:h3Names(M.ivWeek.filter(x=>h3Diff(x.d)>0).map(x=>({name:x.c.name+' '+h3Md(x.d)}))), go:'캘린더', fn:()=>gotoView('evals') });
     if(M.L.checkup.length) t.push({ k:'chk', lv:'n', ic:'🩺', n:M.L.checkup.length, title:M.wk.nextMonth+'월 건강검진 대상', sub:h3Names(M.L.checkup), go:'명단 받기', fn:()=>wkOutput('checkup') });
-    if(M.over.length) t.push({ k:'over', lv:'n', ic:'↻', n:M.over.length, title:'계약종료일이 지난 재직자', sub:'재계약이면 휴먼관리시스템 종료일만 고치면 다음 날 자동 반영', go:'명단 보기', fn:gw('재직') });
     if(M.missing.length) t.push({ k:'miss', lv:'n', ic:'✎', n:M.missing.length, title:'생년월일·연락처 빠진 재직자', sub:h3Names(M.missing), go:'채우기', fn:gw('미입력') });
     const lastN=M.lastSv?-h3Diff(M.lastSv):null;
     if(!M.sv30.length || lastN>14) t.push({ k:'sv', lv:'n', ic:'💬', n:M.sv30.length, title:'최근 30일 만족도 응답', sub:(lastN==null?'아직 응답이 없습니다':'마지막 응답 '+lastN+'일 전')+' · 병원별 설문 링크를 다시 보내 보세요', go:'링크 복사', fn:()=>gotoView('surveys') });
@@ -3758,8 +3806,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   function h3Agenda(M){
     const ev=[], T=M.T, add=(d,o)=>{ const n=h3Diff(d); if(n>=0 && n<=14) ev.push(Object.assign({ d, n }, o)); };
     M.act.forEach(w=>{
-      const e=v3Date(w.expiry); if(e) add(e,{ tg:'exp', tl:'계약 만료', nm:w.name, sub:w.hospital, fn:()=>wkEdit(w) });
-      if(w.emp==='파견' && v3Date(w.join)) add(M.two(w),{ tg:'two', tl:'파견 2년', nm:w.name, sub:w.hospital, fn:()=>wkEdit(w) });
+      const e=v3Date(w.expiry); if(e) add(e,{ tg:'exp', tl:'파견 만료', nm:w.name, sub:w.hospital, fn:()=>wkEdit(w) });
       const b=v3Date(w.birth); if(b){ [T.getFullYear(), T.getFullYear()+1].forEach(y=>add(new Date(y,b.getMonth(),b.getDate()),{ tg:'bd', tl:'생일', nm:w.name, sub:w.hospital, fn:()=>wkEdit(w) })); }
     });
     M.ivs.forEach(x=>{ if(x.c.status!=='탈락') add(x.d,{ tg:'iv', tl:x.done?'면접 완료':'면접', nm:x.c.name, sub:x.c.hospital||x.c.job||'', fn:()=>gotoView('evals') }); });
@@ -3767,7 +3814,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     const ord={ due:0, exp:1, two:2, iv:3, bd:4 };
     return ev.sort((a,b)=>a.n-b.n || ord[a.tg]-ord[b.tg]);
   }
-  let h3AgTab='all', h3Sig='';
+  let h3AgTab='all', h3Sig='', h3TenH='', h3FunYm='';
   function h3Greeting(){ const h=new Date().getHours(); return h<6?'늦은 시간까지 수고 많으십니다':(h<12?'좋은 아침입니다':(h<18?'좋은 오후입니다':'오늘도 수고 많으셨습니다')); }
   function renderHome3(force){
     const box=$('#h3'); if(!box) return;
@@ -3796,7 +3843,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     $('#h3-kpis').innerHTML=
       `<div class="h3-kpi" data-h3go="workers"><div class="l">재직 인원</div><div class="v">${M.act.length}<small>명</small></div><div class="h3-stack">${stack}</div><div class="h3-leg">${leg}</div></div>`+
       `<div class="h3-kpi" data-h3go="workers"><div class="l">이번 달 입사<span>${T.getMonth()+1}월</span></div><div class="v">${M.joinThis.length}<small>명</small></div><div class="s">지난달 ${M.joinPrev.length}명 ${jd>0?`<span class="up">▲${jd}</span>`:(jd<0?`<span class="dn">▼${-jd}</span>`:'· 동일')}</div><div class="s">${M.joinThis.length?esc(h3Names(M.joinThis)):'아직 없음'}</div></div>`+
-      `<div class="h3-kpi ${M.exp30.length?'alert':''}" data-h3go="exp"><div class="l">계약 만료 30일 이내</div><div class="v">${M.exp30.length}<small>명</small></div><div class="s">60일 이내 ${M.exp60.length}명 · 종료일 경과 ${M.over.length}명</div><div class="s">${M.exp30[0]?'가장 빠름: '+esc(M.exp30[0].name)+' '+esc(v3Dot(M.exp30[0].expiry)):''}</div></div>`+
+      `<div class="h3-kpi ${M.exp30.length?'alert':''}" data-h3go="exp"><div class="l">파견 만료 30일 이내</div><div class="v">${M.exp30.length}<small>명</small></div><div class="s">60일 이내 ${M.exp60.length}명 · 2년 경과 ${M.over.length}명</div><div class="s">${M.exp30[0]?'가장 빠름: '+esc(M.exp30[0].name)+' '+esc(v3Dot(M.exp30[0].expiry)):''}</div></div>`+
       `<div class="h3-kpi" data-h3go="cand"><div class="l">진행 중 지원자</div><div class="v">${prog}<small>명</small></div><div class="h3-stack">${stK.map(k=>M.st[k]?`<i style="width:${M.st[k]/cTot*100}%;background:${stCol[k]}" title="${k} ${M.st[k]}명"></i>`:'').join('')}</div><div class="h3-leg">${stK.filter(k=>M.st[k]).map(k=>`<span><i style="background:${stCol[k]}"></i>${k} ${M.st[k]}</span>`).join('')}</div></div>`;
     /* 할 일 */
     $('#h3-todo-c').textContent=todos.length;
@@ -3816,28 +3863,41 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     const candBy=k=>M.cands.filter(c=>String(c.hospital||'')===k && ['서류','면접'].indexOf(c.status||'서류')>=0).length;
     const svBy=k=>{ const a=M.sv.filter(s=>String(s.hospital||'').replace(/\s/g,'')===k.replace(/\s/g,'')); const o=a.map(s=>Number(s.overall)).filter(v=>v>0); return { n:a.length, avg:o.length?(o.reduce((x,y)=>x+y,0)/o.length).toFixed(1):'–' }; };
     $('#h3-hosp').innerHTML=hn.map(k=>{
-      const a=hs[k], e30=a.filter(w=>{ const n=v3Dday(w); return n!=null && n>=0 && n<=30; }).length, t2=a.filter(w=>M.two90.indexOf(w)>=0 || M.twoOver.indexOf(w)>=0).length;
+      const a=hs[k], e30=a.filter(w=>{ const n=v3Dday(w); return n!=null && n>=0 && n<=30; }).length, t2=a.filter(w=>M.twoOver.indexOf(w)>=0).length;
       const nj=a.filter(w=>M.joinThis.indexOf(w)>=0).length, s=svBy(k), ec={}; a.forEach(w=>{ ec[w.emp]=(ec[w.emp]||0)+1; });
       return `<button class="h3-h" data-h3h="${esc(k)}"><div class="t"><b>${esc(k)}</b>${e30?`<span class="v3-dd r">만료 ${e30}</span>`:''}</div><div class="big">${a.length}<small>명</small></div>`+
         `<div class="h3-stack">${Object.keys(ec).map(x=>`<i style="width:${ec[x]/a.length*100}%;background:${H3_EMP_COL[x]||'#C9C4BA'}" title="${esc(x)} ${ec[x]}명"></i>`).join('')}</div>`+
-        `<div class="rows"><div>이번 달 입사<b>${nj}</b></div><div>진행 지원자<b>${candBy(k)}</b></div><div>30일 내 만료<b class="${e30?'r':''}">${e30}</b></div><div>파견 2년 도래<b class="${t2?'a':''}">${t2}</b></div><div>만족도 응답<b>${s.n}</b></div><div>평균 만족도<b>${s.avg}</b></div></div></button>`;
+        `<div class="rows"><div>이번 달 입사<b>${nj}</b></div><div>진행 지원자<b>${candBy(k)}</b></div><div>만료 30일<b class="${e30?'r':''}">${e30}</b></div><div>2년 경과<b class="${t2?'a':''}">${t2}</b></div><div>만족도 응답<b>${s.n}</b></div><div>평균 만족도<b>${s.avg}</b></div></div></button>`;
     }).join('');
     /* 차트: 입사 추이 */
     const months=[]; for(let i=11;i>=0;i--){ const d=new Date(T.getFullYear(), T.getMonth()-i, 1); months.push(d); }
     const mc=months.map(d=>{ const k=d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0'); return M.all.filter(w=>{ const j=v3Date(w.join); return j && j.getFullYear()+'.'+String(j.getMonth()+1).padStart(2,'0')===k; }).length; });
     const mx=Math.max(1,...mc);
     $('#h3-c1').innerHTML=months.map((d,i)=>`<div class="c ${i===11?'cur':''}" title="${d.getFullYear()}년 ${d.getMonth()+1}월 입사 ${mc[i]}명"><u>${mc[i]||''}</u><i style="height:${mc[i]/mx*100}%"></i><em>${d.getMonth()+1}</em></div>`).join('');
-    /* 근속 분포 */
+    /* 근속 분포 — 병원별 */
+    const tenH=hn.indexOf(h3TenH)>=0?h3TenH:'';
+    $('#h3-c2h').innerHTML=[''].concat(hn).map(k=>`<button class="${tenH===k?'on':''}" data-h3ten="${esc(k)}">${k?esc(k.replace(/병원|의원/g,'')):'전체'}</button>`).join('');
     const bins=[['3개월 미만',0,90],['3–6개월',90,182],['6–12개월',182,365],['1–2년',365,730],['2년 이상',730,1e9]];
-    const tn=M.act.map(w=>{ const j=v3Date(w.join); return j?-h3Diff(j):null; }).filter(v=>v!=null);
+    const tenOf=arr=>arr.map(w=>{ const j=v3Date(w.join); return j?-h3Diff(j):null; }).filter(v=>v!=null);
+    const tn=tenOf(tenH?(hs[tenH]||[]):M.act);
     const bc=bins.map(b=>tn.filter(v=>v>=b[1] && v<b[2]).length), bm=Math.max(1,...bc);
-    const med=tn.slice().sort((a,b)=>a-b)[Math.floor(tn.length/2)];
+    const medOf=a=>{ const x=a.slice().sort((p,q)=>p-q); return x.length?x[Math.floor(x.length/2)]:null; };
+    const fmtT=d=>d==null?'–':(d>=365?(d/365).toFixed(1)+'년':Math.round(d/30)+'개월');
     $('#h3-c2').innerHTML=bins.map((b,i)=>`<div><span>${b[0]}</span><p><i style="width:${bc[i]/bm*100}%"></i></p><b>${bc[i]}</b></div>`).join('');
-    $('#h3-c2n').textContent=tn.length?('재직자 근속 중앙값 '+(med>=365?(med/365).toFixed(1)+'년':Math.round(med/30)+'개월')):'';
-    /* 채용 단계 */
-    const fs=['서류','면접','배치','탈락'], fm=Math.max(1,...fs.map(k=>M.st[k]||0));
-    $('#h3-c3').innerHTML=fs.map(k=>`<div><span>${k}</span><p><i style="width:${(M.st[k]||0)/fm*100}%;background:${stCol[k]}"></i></p><b>${M.st[k]||0}</b></div>`).join('');
-    $('#h3-c3n').textContent='전체 지원자 '+M.cands.length+'명'+(M.cands.length?' · 배치 전환 '+Math.round((M.st['배치']||0)/M.cands.length*100)+'%':'');
+    $('#h3-c2n').innerHTML=tn.length?(`${tenH?esc(tenH):'전체'} ${tn.length}명 · 근속 중앙값 <b>${fmtT(medOf(tn))}</b> · 1년 미만 ${Math.round((bc[0]+bc[1]+bc[2])/tn.length*100)}%`+(tenH?'':'<br>'+hn.map(k=>esc(k.replace(/병원|의원/g,''))+' '+fmtT(medOf(tenOf(hs[k])))).join(' · '))):'근무자 입사일이 없습니다.';
+    /* 채용 단계 — 월별 */
+    const cym=c=>{ const d=v3Date(c.created); return d?d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0'):''; };
+    const ms=[]; for(let i=5;i>=0;i--){ const d=new Date(T.getFullYear(), T.getMonth()-i, 1); ms.push(d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')); }
+    if(!h3FunYm) h3FunYm=ms[5];
+    const mcnt=ms.map(k=>M.cands.filter(c=>cym(c)===k).length), mmx=Math.max(1,...mcnt);
+    const fsel=h3FunYm==='all'?M.cands:M.cands.filter(c=>cym(c)===h3FunYm);
+    const fst={}; fsel.forEach(c=>{ const k=c.status||'서류'; fst[k]=(fst[k]||0)+1; });
+    const ymL=k=>{ const p=k.split('.'); return p[0]+'년 '+Number(p[1])+'월'; };
+    $('#h3-c3nav').innerHTML=`<button data-h3fm="-1" aria-label="이전 달">‹</button><b>${h3FunYm==='all'?'전체 기간':ymL(h3FunYm)}</b><button data-h3fm="1" aria-label="다음 달">›</button><button class="${h3FunYm==='all'?'on':''}" data-h3fm="all">전체</button>`;
+    $('#h3-c3m').innerHTML=ms.map((k,i)=>`<button class="${h3FunYm===k?'on':''}" data-h3fy="${k}" title="${ymL(k)} 지원 ${mcnt[i]}명"><i style="height:${Math.max(6,mcnt[i]/mmx*100)}%"></i><em>${Number(k.split('.')[1])}월</em><u>${mcnt[i]}</u></button>`).join('');
+    const fs=['서류','면접','보류','배치','탈락'], fm=Math.max(1,...fs.map(k=>fst[k]||0));
+    $('#h3-c3').innerHTML=fs.map(k=>`<div><span>${k}</span><p><i style="width:${(fst[k]||0)/fm*100}%;background:${stCol[k]||'#98A2B3'}"></i></p><b>${fst[k]||0}</b></div>`).join('');
+    $('#h3-c3n').textContent=(h3FunYm==='all'?'전체':ymL(h3FunYm))+' 지원 '+fsel.length+'명'+(fsel.length?' · 배치 '+(fst['배치']||0)+'명('+Math.round((fst['배치']||0)/fsel.length*100)+'%) · 탈락 '+(fst['탈락']||0)+'명':'')+' · 등록일 기준';
     h3Sync(M);
   }
   function h3Sync(M){
@@ -3864,6 +3924,9 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     if(e.target.closest('[data-h3un]')){ h3HideSet([]); renderHome3(true); return; }
     const t=e.target.closest('[data-h3t]'); if(t && box._todos){ const x=box._todos[Number(t.dataset.h3t)]; if(x) x.fn(); return; }
     const ev=e.target.closest('[data-h3e]'); if(ev && box._ag){ const x=box._ag[Number(ev.dataset.h3e)]; if(x && x.fn) x.fn(); return; }
+    const ten=e.target.closest('[data-h3ten]'); if(ten){ h3TenH=ten.dataset.h3ten; renderHome3(true); return; }
+    const fy=e.target.closest('[data-h3fy]'); if(fy){ h3FunYm=fy.dataset.h3fy; renderHome3(true); return; }
+    const fmv=e.target.closest('[data-h3fm]'); if(fmv){ const v=fmv.dataset.h3fm; if(v==='all') h3FunYm=(h3FunYm==='all'?'':'all'); else { const base=(h3FunYm&&h3FunYm!=='all')?h3FunYm.split('.'):[String(new Date().getFullYear()),String(new Date().getMonth()+1)]; const d=new Date(Number(base[0]), Number(base[1])-1+Number(v), 1); h3FunYm=d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0'); } renderHome3(true); return; }
     const tb=e.target.closest('#h3-agtabs button'); if(tb){ h3AgTab=tb.dataset.t; renderHome3(true); return; }
     const h=e.target.closest('[data-h3h]'); if(h){ wkFilter.hosp=h.dataset.h3h; wkFilter.seg='재직'; $$('#wk-seg .seg').forEach(x=>x.classList.toggle('active', x.dataset.f==='재직')); gotoView('workers'); return; }
     const g=e.target.closest('[data-h3go]'); if(g){ const k=g.dataset.h3go; if(k==='cand') gotoCandidates('서류'); else { wkFilter.hosp=''; wkFilter.seg='재직'; $$('#wk-seg .seg').forEach(x=>x.classList.toggle('active', x.dataset.f==='재직')); gotoView('workers'); } return; }
@@ -3907,6 +3970,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   function pal3Open(){ $('#pal3').classList.add('on'); const i=$('#pal3-q'); i.value=''; pal3Run(''); setTimeout(()=>i.focus(),10); }
   function pal3Close(){ $('#pal3').classList.remove('on'); }
   function pal3Run(q0){
+    v3NormAll();
     const q=q0.trim(), nq=pal3Norm(q), out=[];
     const hit=(...xs)=>!nq || xs.some(x=>pal3Norm(x).indexOf(nq)>=0);
     PAL3_NAV.filter(n=>hit(n[1],n[0])).slice(0,q?6:5).forEach(n=>out.push({ g:'메뉴', ic:n[2], t:n[1], s:'이동', fn:()=>gotoView(n[0]) }));
@@ -3987,13 +4051,13 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     try{
       const j=v3Date(w.join), e=v3Date(w.expiry), T=v3Today(); if(!j) return '';
       const days=Math.max(0,Math.round((T-j)/864e5)), yrs=Math.floor(days/365), mon=Math.floor((days%365)/30);
-      const two=w.emp==='파견'?new Date(j.getFullYear()+2,j.getMonth(),j.getDate()-1):null;
+      const two=null;
       const end=[e,two].filter(Boolean).sort((a,b)=>b-a)[0] || new Date(T.getFullYear(),T.getMonth()+6,T.getDate());
       const span=Math.max(1,end-j), pos=d=>Math.max(0,Math.min(100,(d-j)/span*100));
       const mk=(d,l,c)=>d?`<div class="tl-mk ${pos(d)>85?'r':(pos(d)<12?'l':'')}" style="left:${pos(d)}%"><i style="background:${c}"></i><span>${l}<br><b>${esc(v3Dot(v3Key(d)))}</b></span></div>`:'';
       const n=e?h3Diff(e):null;
-      return `<div class="tl3"><div class="tl-top"><div><small>근속</small><b>${yrs?yrs+'년 ':''}${mon}개월</b><em>${days}일</em></div><div><small>계약 종료</small><b>${e?esc(v3Dot(w.expiry)):'–'}</b>${n!=null?v3DdPill(n):''}</div>${two?`<div><small>파견 2년 시점</small><b>${esc(v3Dot(v3Key(two)))}</b>${v3DdPill(h3Diff(two))}</div>`:''}</div>`+
-        `<div class="tl-bar"><p><i style="width:${pos(T)}%"></i></p>${mk(j,'입사','#171614')}${mk(e,'계약 종료','#D92D20')}${two?mk(two,'2년','#DC6803'):''}<div class="tl-now" style="left:${pos(T)}%"><span>오늘</span></div></div></div>`;
+      return `<div class="tl3"><div class="tl-top"><div><small>근속</small><b>${yrs?yrs+'년 ':''}${mon}개월</b><em>${days}일</em></div><div><small>파견 만료 (입사+2년)</small><b>${e?esc(v3Dot(w.expiry)):'해당 없음 · '+esc(w.emp||'')}</b>${n!=null?v3DdPill(n):''}</div>${w.contractEnd?`<div><small>휴먼관리시스템 계약종료일</small><b style="font-weight:500;color:var(--ink-3)">${esc(v3Dot(w.contractEnd))}</b></div>`:''}${two?`<div><small>파견 2년 시점</small><b>${esc(v3Dot(v3Key(two)))}</b>${v3DdPill(h3Diff(two))}</div>`:''}</div>`+
+        `<div class="tl-bar"><p><i style="width:${pos(T)}%"></i></p>${mk(j,'입사','#171614')}${mk(e,'파견 만료','#D92D20')}${two?mk(two,'2년','#DC6803'):''}<div class="tl-now" style="left:${pos(T)}%"><span>오늘</span></div></div></div>`;
     }catch(_){ return ''; }
   }
   /* H3:END */
