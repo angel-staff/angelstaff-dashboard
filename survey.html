@@ -351,7 +351,7 @@ function showChooser(){
 
 function showCover(type){
   S.type=type; S.flow=FLOWS[type].q;
-  S.answers={};
+  S.answers={}; S.submitted=false;
   if(window.__PRESET_HOSPITAL && HOSPITALS.indexOf(window.__PRESET_HOSPITAL)>=0){ S.answers.hospital=window.__PRESET_HOSPITAL; }
   $("top").classList.remove("on");
   var cv=FLOWS[type].cover;
@@ -566,6 +566,8 @@ function goBack(){ if(S.i<=0){ showCover(S.type); return; } S.i=prevIdx(S.i); re
 
 /* ───── 제출 ───── */
 function submit(){
+  if(S.submitted) return;          /* 자동 넘김 + 다음 버튼이 겹쳐도 한 번만 제출 */
+  S.submitted=true;
   var payload={ formType:S.type, hospital:FIXED_HOSPITAL };
   S.flow.forEach(function(q){
     var v=(q.when && !q.when(S.answers)) ? undefined : S.answers[q.key];
@@ -593,7 +595,7 @@ function showError(msg){
   var c=E("div","done");
   c.innerHTML='<h2>전송에 실패했습니다</h2><p>'+(msg||"인터넷 연결을 확인하고 다시 시도해 주세요.")+'</p>';
   var b=E("button","start"); b.type="button"; b.style.marginTop="22px"; b.textContent="다시 시도";
-  b.onclick=function(){ render("fwd"); };
+  b.onclick=function(){ S.submitted=false; render("fwd"); };
   c.appendChild(b);
   swap(c,"fwd");
 }
