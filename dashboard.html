@@ -538,6 +538,135 @@
   }
   .x-sync{display:inline-flex;align-items:center;gap:8px;margin:2px 0 14px;padding:7px 12px;border-radius:999px;background:#ecfdf3;color:#05603a;font-size:12.5px;font-weight:600}
   .x-sync i{width:7px;height:7px;border-radius:50%;background:#12b76a;box-shadow:0 0 0 3px rgba(18,183,106,.18)}
+  /* ═══ V3: 가독성 · 근무자 마스터 · 면접 캘린더 · 만족도 링크 카드 ═══ */
+  :root{ --ink-2:#3D3A35; --ink-3:#6E6A62; --line:#E2DED6; }
+  body{font-size:15px}
+  .eyebrow{color:#7E7A71}
+  .x-new{display:none !important}
+  .nav-item{font-size:14.5px !important}
+  .htbl th,.tbl th{font-size:12.5px !important;color:var(--ink-2) !important;font-weight:650 !important}
+  .htbl td,.tbl td{font-size:14px}
+  .k-lab{font-size:13px !important;color:var(--ink-2) !important}
+  .x-lead{font-size:14px !important;color:var(--ink-2) !important;line-height:1.65 !important}
+  .b-head h3{font-size:16px !important}
+  .muted,.x-mut{color:#7A766D !important}
+  .page .head h1{letter-spacing:-.03em}
+
+  /* 공통 칩 · 배지 */
+  .v3-dd{display:inline-flex;align-items:center;justify-content:center;min-width:54px;padding:3px 9px;border-radius:999px;font:700 12px/1.3 var(--gr);letter-spacing:-.01em}
+  .v3-dd.r{background:#FDECEB;color:#B42318}
+  .v3-dd.a{background:#FEF3E2;color:#B54708}
+  .v3-dd.g{background:#F2F1EE;color:#55524C}
+  .v3-row-r td:first-child{box-shadow:inset 3px 0 0 #E5484D}
+  .v3-row-a td:first-child{box-shadow:inset 3px 0 0 #F5A524}
+
+  /* 근무자 마스터 — 병원 카드 */
+  .w3-hosp{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin:6px 0 18px}
+  .w3-hc{position:relative;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px 16px 13px;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s}
+  .w3-hc:hover{border-color:#C9C4BA;transform:translateY(-1px)}
+  .w3-hc.on{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink) inset}
+  .w3-hc .n{font-size:13.5px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .w3-hc .c{font:700 28px/1.1 var(--gr);margin:8px 0 2px;letter-spacing:-.02em}
+  .w3-hc .c small{font:600 13px var(--kr);color:var(--ink-3);margin-left:3px}
+  .w3-hc .s{font-size:12.5px;color:var(--ink-3)}
+  .w3-hc .e{position:absolute;top:12px;right:12px}
+  /* 계약 만료 임박 */
+  .w3-exp{border:1px solid var(--line);border-radius:14px;background:#fff;margin:0 0 18px;overflow:hidden}
+  .w3-exp .h{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line-2);background:#FFFBFA}
+  .w3-exp .h b{font-size:15.5px}
+  .w3-exp .h span{font-size:13px;color:var(--ink-2)}
+  .w3-exp .list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:0}
+  .w3-exp .it{display:flex;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--line-2);cursor:pointer}
+  .w3-exp .it:hover{background:#FAF9F5}
+  .w3-exp .it .w{min-width:0;flex:1}
+  .w3-exp .it .w b{font-size:14.5px}
+  .w3-exp .it .w small{display:block;font-size:12.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .w3-exp .it .d{font:600 12.5px var(--gr);color:var(--ink-2);white-space:nowrap}
+  .w3-exp .none{padding:16px 18px;font-size:13.5px;color:var(--ink-3)}
+  .w3-exp.ok .h{background:#F6FEF9}
+  .w3-tools{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px}
+  .w3-tool{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:12px;padding:11px 14px;background:#fff}
+  .w3-tool b{font-size:13.5px}
+  .w3-tool .v{font:700 20px var(--gr)}
+  .w3-tool .v small{font:600 12px var(--kr);color:var(--ink-3);margin-left:2px}
+
+  /* 면접 평가 캘린더 */
+  .cal3{margin:4px 0 8px}
+  .cal3-top{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 12px}
+  .cal3-top .ym{font:700 22px var(--gr);letter-spacing:-.02em;min-width:150px}
+  .cal3-top .nav{display:flex;gap:6px}
+  .cal3-top .nav button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:6px 11px;font-weight:600;font-size:13px}
+  .cal3-top .nav button:hover{border-color:var(--ink)}
+  .cal3-top .sum{margin-left:auto;font-size:13px;color:var(--ink-2)}
+  .cal3-top .sum b{font-family:var(--gr)}
+  .cal3-hosp{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+  .cal3-hosp button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+  .cal3-hosp button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .cal3-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--line)}
+  .cal3-grid .wd{background:#FAF9F5;padding:8px 10px;font-size:12px;font-weight:700;color:var(--ink-2)}
+  .cal3-grid .wd.wd-sun{color:#C2410C}.cal3-grid .wd.wd-sat{color:#1D4ED8}
+  .cal3-day{background:#fff;min-height:112px;padding:7px 7px 8px;cursor:pointer;position:relative;margin-top:1px;margin-left:0;outline:1px solid var(--line)}
+  .cal3-day:hover{background:#FCFBF8}
+  .cal3-day .dn{font:600 13px var(--gr);color:var(--ink-2);display:flex;justify-content:space-between;align-items:center}
+  .cal3-day .dn .add{opacity:0;font:600 11px var(--kr);color:var(--ink-3)}
+  .cal3-day:hover .dn .add{opacity:1}
+  .cal3-day.out{background:#FBFAF7}.cal3-day.out .dn{color:#BDB8AE}
+  .cal3-day.today .dn b{background:var(--ink);color:#fff;border-radius:999px;padding:1px 7px}
+  .cal3-ev{display:block;width:100%;text-align:left;border:0;border-radius:7px;padding:4px 7px;margin-top:4px;font-size:12px;font-weight:600;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+  .cal3-ev.iv{background:#EAF2FF;color:#1D4ED8}
+  .cal3-ev.done{background:#E9F8EF;color:#067647}
+  .cal3-ev.drop{background:#F2F1EE;color:#6E6A62;text-decoration:line-through}
+  .cal3-ev:hover{filter:brightness(.96)}
+  .cal3-more{font-size:11.5px;color:var(--ink-3);margin-top:3px;padding-left:3px}
+  .cal3-leg{display:flex;gap:14px;font-size:12px;color:var(--ink-2);margin:10px 2px 0}
+  .cal3-leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  .v3-info{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 18px;margin:0 0 16px}
+  .v3-info div{font-size:13.5px}
+  .v3-info span{display:block;font-size:11.5px;color:var(--ink-3);margin-bottom:2px}
+  .v3-sc{display:grid;grid-template-columns:1fr auto;gap:6px 14px;font-size:13.5px;margin:6px 0 12px}
+  .v3-sc b{font-family:var(--gr)}
+  .v3-box{background:#FAF9F5;border-radius:10px;padding:12px 14px;font-size:13.5px;line-height:1.6;white-space:pre-wrap;margin:6px 0 12px}
+  .v3-f{display:flex;flex-direction:column;gap:5px;margin:0 0 12px}
+  .v3-f label{font-size:12.5px;font-weight:600;color:var(--ink-2)}
+  .v3-f input,.v3-f select{border:1px solid var(--line);border-radius:9px;padding:9px 11px;font:inherit;font-size:14px;background:#fff}
+  .v3-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media (max-width:720px){
+    .cal3-day{min-height:74px;padding:5px}
+    .cal3-ev{font-size:10.5px;padding:3px 5px}
+    .cal3-day .dn .add{display:none}
+    .v3-info{grid-template-columns:1fr}
+    .w3-exp .list{grid-template-columns:1fr}
+  }
+
+  #ev-mode .seg{white-space:nowrap}
+  @media (max-width:720px){ #view-evals .head .actions{flex-wrap:wrap;gap:8px} }
+  /* 만족도 조사 — 병원별 링크 카드 */
+  #sv-links{display:none !important}
+  .sv3-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin:6px 0 16px}
+  .sv3-card{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff;cursor:pointer;transition:border-color .15s}
+  .sv3-card:hover{border-color:#C9C4BA}
+  .sv3-card.on{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink) inset}
+  .sv3-card .t{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .sv3-card .t b{font-size:14.5px}
+  .sv3-card .u{font:500 12px var(--gr);color:var(--ink-3);margin:6px 0 10px;word-break:break-all}
+  .sv3-card .m{display:flex;gap:16px;font-size:12.5px;color:var(--ink-2)}
+  .sv3-card .m b{font:700 16px var(--gr);color:var(--ink);display:block}
+  .sv3-card .bt{display:flex;gap:6px;margin-top:12px}
+  .sv3-card .bt button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 11px;font-size:12.5px;font-weight:600}
+  .sv3-card .bt button:hover{border-color:var(--ink)}
+  .sv3-types{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+  .sv3-types button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--ink-2)}
+  .sv3-types button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .sv3-types button small{font:600 11.5px var(--gr);opacity:.7;margin-left:4px}
+
+  /* 계약 만료 팝업 */
+  .v3-pop{max-height:min(56vh,460px);overflow:auto;margin:-4px 0 4px}
+  .v3-pop .it{display:flex;align-items:center;gap:12px;padding:10px 2px;border-bottom:1px solid var(--line-2)}
+  .v3-pop .it .w{flex:1;min-width:0}
+  .v3-pop .it .w b{font-size:14.5px}
+  .v3-pop .it .w small{display:block;font-size:12.5px;color:var(--ink-3)}
+  .v3-pop .it .d{font:600 12.5px var(--gr);color:var(--ink-2)}
+
 </style>
 </head>
 <body>
@@ -583,8 +712,7 @@
     <button class="nav-item" data-view="evals" data-title="면접 평가"><i class="dot"></i>면접 평가</button>
     <button class="nav-item" data-view="quality" data-title="채용 결과 학습"><i class="dot"></i>채용 결과 학습<span class="x-new">NEW</span></button>
     <div class="nav-sec"><div class="eyebrow">운영</div></div>
-    <button class="nav-item" data-view="contracts" data-title="파견·계약"><i class="dot"></i>파견·계약</button>
-    <button class="nav-item" data-view="workers" data-title="근무자 마스터"><i class="dot"></i>근무자 마스터<span class="x-new">NEW</span></button>
+    <button class="nav-item" data-view="workers" data-title="근무자 마스터"><i class="dot"></i>근무자 마스터</button>
     <button class="nav-item" data-view="surveys" data-title="만족도 조사"><i class="dot"></i>만족도 조사</button>
     <button class="nav-item" data-view="risk" data-title="퇴사 위험"><i class="dot"></i>퇴사 위험<span class="x-new">NEW</span></button>
     <button class="nav-item" data-view="forecast" data-title="결원 예측·인재풀"><i class="dot"></i>결원 예측·인재풀<span class="x-new">NEW</span></button>
@@ -701,8 +829,10 @@
     <section class="page" id="view-evals" style="display:none">
       <div class="head">
         <div><div class="eyebrow">Recruitment</div><h1>면접 평가</h1></div>
-        <div class="actions"><button class="btn-sm" id="add-eval">＋ 평가 작성</button></div>
+        <div class="actions"><div class="segs" id="ev-mode" style="margin-right:6px"><button class="seg active" data-m="cal">캘린더</button><button class="seg" data-m="list">목록</button></div><button class="btn-sm ghost" id="add-eval">평가 작성</button><button class="btn-sm" id="add-iv">＋ 면접 일정 등록</button></div>
       </div>
+      <div class="cal3" id="ev-cal"><div class="loading">불러오는 중…</div></div>
+      <div id="ev-list" style="display:none">
       <div class="filterbar">
         <div></div>
         <div class="fgroup">
@@ -717,6 +847,7 @@
           <thead><tr><th>지원자</th><th>병원</th><th>직무</th><th class="r">종합</th><th>평가자</th><th class="r">평가일</th><th class="r">관리</th></tr></thead>
           <tbody id="eval-table"><tr><td colspan="7" class="loading">불러오는 중…</td></tr></tbody>
         </table>
+      </div>
       </div>
       <input type="file" id="resume-input" accept=".pdf,.doc,.docx,.hwp,.hwpx" style="display:none">
     </section>
@@ -817,6 +948,9 @@
       </div>
       <div class="sv-alert" id="sv-alert"></div>
       <div class="sv-links" id="sv-links"></div>
+      <div class="b-head" style="margin-top:4px"><h3>병원별 설문 링크</h3><span class="meta">카드를 누르면 그 병원 결과만 봅니다 · 링크 하나로 재직자/월 1문항/퇴직자 설문을 고릅니다</span></div>
+      <div class="sv3-cards" id="sv3-cards"></div>
+      <div class="sv3-types" id="sv3-types"></div>
       <div class="kpis" style="opacity:1;transform:none">
         <div class="kpi"><div class="k-val" id="sv-count">–</div><div class="k-lab" id="sv-count-lab">응답 수</div></div>
         <div class="kpi"><div class="k-val" id="sv-avg">–</div><div class="k-lab">평균 만족도 · 5점</div></div>
@@ -877,20 +1011,22 @@
         <div><div class="eyebrow">Workforce master</div><h1>근무자 마스터</h1></div>
         <div class="actions"><button class="btn-sm ghost" id="wk-export">전체 명단 받기 (xlsx)</button><button class="btn-sm" id="wk-add">＋ 근무자 추가</button></div>
       </div>
-      <p class="x-lead">재직자는 매일 아침 <b>휴먼관리시스템 재직자관리</b>에서 자동으로 맞춰집니다 (입사·퇴사·부서·연락처·생년월일·계약종료일). 검진월·근태 이상·비고는 여기서 입력하면 그대로 유지됩니다.</p>
+      <p class="x-lead">재직자는 매일 아침 <b>휴먼관리시스템 재직자관리</b>에서 자동으로 맞춰집니다 (입사·퇴사·부서·연락처·생년월일·계약종료일). 검진월·비고는 여기서 입력하면 그대로 유지됩니다. 병원 카드를 누르면 그 병원만 봅니다.</p>
       <div class="x-sync" id="wk-sync" hidden></div>
-      <div class="kpis x-kpis" style="--n:5" id="wk-kpis"></div>
-      <div class="x-outs" id="wk-outs"></div>
+      <div class="w3-hosp" id="wk-hcards"></div>
+      <div class="w3-exp" id="wk-expire"></div>
+      <div class="w3-tools" id="wk-outs"></div>
       <div class="filterbar">
-        <div class="segs" id="wk-seg"><button class="seg active" data-f="재직">재직</button><button class="seg" data-f="퇴사">퇴사</button><button class="seg" data-f="전체">전체</button><button class="seg" data-f="미입력">정보 미입력</button></div>
-        <div class="x-filter"><select id="wk-hosp" class="filter-sel"><option value="">전체 병원</option></select><input id="wk-q" class="x-search" placeholder="이름·부서 검색" aria-label="이름·부서 검색"></div>
+        <div class="segs" id="wk-seg"><button class="seg active" data-f="재직">재직</button><button class="seg" data-f="퇴사">퇴사</button><button class="seg" data-f="전체">전체</button><button class="seg" data-f="미입력">생년월일 미입력</button></div>
+        <div class="x-filter"><span class="muted" id="wk-count" style="font-size:13px;margin-right:6px"></span><select id="wk-hosp" class="filter-sel" hidden><option value="">전체 병원</option></select><input id="wk-q" class="x-search" placeholder="이름·부서·연락처 검색" aria-label="이름·부서·연락처 검색"></div>
       </div>
       <div class="tbl-scroll">
-        <table class="htbl x-tbl" style="min-width:980px">
-          <thead><tr><th>근무자</th><th>고용형태</th><th>입사</th><th class="r">파견 만료</th><th>생년월일</th><th class="r">검진월</th><th class="r">근태 이상</th><th>만족도</th><th>명단 반영</th><th class="r">관리</th></tr></thead>
-          <tbody id="wk-rows"><tr><td colspan="10" class="loading">불러오는 중…</td></tr></tbody>
+        <table class="htbl x-tbl" style="min-width:900px">
+          <thead><tr><th>근무자</th><th>고용형태</th><th>입사일</th><th class="r">계약 종료</th><th>생년월일</th><th>연락처</th><th class="r">검진월</th><th class="r">관리</th></tr></thead>
+          <tbody id="wk-rows"><tr><td colspan="8" class="loading">불러오는 중…</td></tr></tbody>
         </table>
       </div>
+      <p class="muted" style="font-size:12.5px;margin-top:10px">정렬: 계약 만료 60일 이내 재직자가 맨 위(만료 가까운 순), 나머지는 입사일 순으로 최근 입사자가 맨 아래에 옵니다.</p>
     </section>
 
     <!-- ═══ HR 2.0 ═══ 퇴사 위험 -->
@@ -1270,7 +1406,8 @@
     pdf:    ['https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js','pdfjsLib'],
     mammoth:['https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js','mammoth'],
     xlsx:   ['https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js','XLSX'],
-    pizzip: ['https://cdn.jsdelivr.net/npm/pizzip@3.3.0/dist/pizzip.min.js','PizZip']
+    pizzip: ['https://cdn.jsdelivr.net/npm/pizzip@3.3.0/dist/pizzip.min.js','PizZip'],
+    exceljs:['https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js','ExcelJS']
   };
   const _libP={};
   function loadLib(k){
@@ -1488,7 +1625,7 @@
   }
 
   /* ═══ 대시보드 드릴다운: 클릭 → 해당 메뉴로 이동하며 필터 자동 적용 ═══ */
-  function gotoView(v){ const btn=document.querySelector(`.nav-item[data-view="${v}"]`); if(btn) btn.click(); }
+  function gotoView(v){ if(v==='contracts') v='workers'; const btn=document.querySelector(`.nav-item[data-view="${v}"]`); if(btn) btn.click(); }
   function hidByName(name){
     if(!hospitalCache||!name) return '';
     const h=hospitalCache.find(x=>String(x['병원명']).trim()===String(name).trim());
@@ -1503,8 +1640,9 @@
   function gotoContracts(status, hospitalName){
     ctFilter={ status:status||'전체', hospitalId:hidByName(hospitalName) };
     $$('#view-contracts .seg').forEach(x=>x.classList.toggle('active', x.dataset.cf2===ctFilter.status));
-    ensureHospitals().then(()=>{ if($('#filter-hospital2')) $('#filter-hospital2').value=ctFilter.hospitalId; }).catch(()=>{});
-    gotoView('contracts');
+    wkFilter.seg=(status==='종료')?'퇴사':'재직'; wkFilter.hosp=hospitalName||'';
+    $$('#wk-seg .seg').forEach(x=>x.classList.toggle('active', x.dataset.f===wkFilter.seg));
+    gotoView('workers');
   }
   function drillGo(go){
     if(!go) return;
@@ -2047,7 +2185,7 @@
      [평가 작성]을 누르면 그 지원자가 선택된 상태로 작성 창이 열린다.
      평가 저장/삭제 시 자동으로 두 상태를 오간다 — 수기 재등록 불필요.
      병원 필터는 '평가 전'과 작성된 평가 양쪽에 동일하게 적용된다. */
-  function renderEvals(v){
+  function renderEvalsList(v){
     const evalsAll = Array.isArray(v) ? v : ((v&&v.evals)||[]);
     const candsAll = Array.isArray(v) ? [] : ((v&&v.cands)||[]);
     const resumes  = (v&&v.resumes)||{};
@@ -2520,7 +2658,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     });
     el.dataset.ready='1';
   }
-  function renderSurveys(all0){
+  function renderSurveysBase(all0){
     renderSvLinks();
     const all = Array.isArray(all0) ? all0 : [];
     const sel = svFilter.hospital;
@@ -2752,7 +2890,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   $('#menu').addEventListener('click', ()=>app.classList.toggle('menu'));
   $('#scrim').addEventListener('click', ()=>app.classList.remove('menu'));
   $('#logout').addEventListener('click', logout);
-  function logout(){ app.classList.remove('on','ready','menu'); $('#login').style.display=''; $('#pw').value=''; setLoginErr(''); TOKEN=null; invalidateAll(); hospitalCache=null; persistClear(); __prefetched=false; __pfAt=0; try{ localStorage.removeItem('hr2_token'); }catch(_){ } }
+  function logout(){ try{ sessionStorage.removeItem('hr2_exp_seen'); }catch(_){ } try{ v3PopDone=false; }catch(_){ } app.classList.remove('on','ready','menu'); $('#login').style.display=''; $('#pw').value=''; setLoginErr(''); TOKEN=null; invalidateAll(); hospitalCache=null; persistClear(); __prefetched=false; __pfAt=0; try{ localStorage.removeItem('hr2_token'); }catch(_){ } }
 
 
   /* HR2:BEGIN ═══ 통합 HR 2.0 — 학습형 기능 (HR2.gs 와 짝) ═══ */
@@ -2863,7 +3001,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
       newJoin: act.filter(w=>(w.join||'').replace(/\./g,'-').slice(0,7)===ym)
     };
   }
-  function renderWorkers(d){
+  function renderWorkersOld(d){
     const L=wkLists(d), nm=d.nextMonth;
     const rs=d.roster, sy=$('#wk-sync');
     if(sy){ if(rs){ sy.hidden=false; sy.innerHTML=`<i></i>휴먼관리시스템 자동 동기화 · 마지막 ${esc(rs.at)} · 재직 ${rs.total}명${(rs.added||rs.left||rs.changed||rs.rejoined)?` · 입사 ${rs.added} · 퇴사 ${rs.left} · 변경 ${rs.changed}${rs.rejoined?' · 재입사 '+rs.rejoined:''}`:' · 변동 없음'}`; } else sy.hidden=true; }
@@ -2876,7 +3014,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     ].map(o=>`<div class="x-out"><div><b>${esc(o[1])}</b><div class="v">${o[2]}<small>명</small></div></div><div><button class="x-btn" data-wkout="${o[0]}" ${o[2]?'':'disabled'}>${o[3]}</button></div></div>`).join('');
     renderWorkerRows();
   }
-  function renderWorkerRows(){
+  function renderWorkerRowsOld(){
     const c=DATA['v2wk']; if(!c) return;
     const d=c.v, q=wkFilter.q.replace(/\s/g,'');
     let list=d.list;
@@ -2916,7 +3054,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     }catch(e){ toast('엑셀 모듈을 불러오지 못했습니다. 새로고침 후 다시 시도하세요.'); }
   }
   function wkRow(w, cols){ const m={ '이름':w.name, '병원':w.hospital, '부서':w.dept, '고용형태':w.emp, '입사일':w.join, '파견만료일':w.expiry, '생년월일':w.birth, '연락처':w.tel, '검진월':w.checkup?w.checkup+'월':'', '근태이상':w.attend, '상태':w.status, '퇴사일':w.left, '비고':w.memo }; const o={}; cols.forEach(c=>o[c]=m[c]==null?'':m[c]); return o; }
-  function wkOutput(k){
+  function wkOutputOld(k){
     const c=DATA['v2wk']; if(!c) return; const d=c.v, L=wkLists(d), nm=d.nextMonth, y=new Date().getFullYear()+(nm===1?1:0);
     const tag=y+'-'+String(nm).padStart(2,'0');
     if(k==='birth') wkXlsx(L.birth.map(w=>wkRow(w,['이름','병원','부서','생년월일','연락처'])), `생일쿠폰_대상자_${tag}.xlsx`);
@@ -2925,6 +3063,329 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     else if(k==='missing'){ $$('#wk-seg .seg').forEach(x=>x.classList.toggle('active', x.dataset.f==='미입력')); wkFilter.seg='미입력'; renderWorkerRows(); $('#wk-rows').scrollIntoView({behavior:'smooth', block:'start'}); }
   }
   $('#wk-export').addEventListener('click', ()=>{ const c=DATA['v2wk']; if(!c){ toast('명단을 불러오는 중입니다.'); return; } wkXlsx(c.v.list.map(w=>wkRow(w,['이름','병원','부서','고용형태','입사일','파견만료일','생년월일','연락처','검진월','근태이상','상태','퇴사일','비고'])), `근무자_명단_${xYm()}.xlsx`); });
+  /* V3:BEGIN ══════ 근무자 마스터 통합 · 계약 만료 · 면접 캘린더 · 만족도 링크 카드 ══════ */
+  const V3_EXP_TOP = 60;            // 이 일수 안에 만료되는 재직자는 명단 맨 위 + 만료 임박 패널
+  const V3_EXP_POP = 30;            // 로그인 팝업 기준 (만료 한 달 전)
+  function v3Date(s){ const m=String(s||'').match(/(\d{4})[.\-\/](\d{1,2})[.\-\/](\d{1,2})/); return m ? new Date(Number(m[1]), Number(m[2])-1, Number(m[3])) : null; }
+  function v3Key(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function v3Dot(s){ const d=v3Date(s); return d ? d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0') : ''; }
+  function v3Today(){ const t=new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
+  function v3Dday(w){ const d=v3Date(w && w.expiry); return d ? Math.round((d - v3Today())/86400000) : null; }
+  function v3DdPill(n){
+    if(n==null) return '';
+    if(n<0) return `<span class="v3-dd r">만료 ${-n}일 지남</span>`;
+    if(n===0) return '<span class="v3-dd r">오늘 만료</span>';
+    return `<span class="v3-dd ${n<=V3_EXP_POP?'r':(n<=V3_EXP_TOP?'a':'g')}">D-${n}</span>`;
+  }
+  function v3IsExp(w){ const n=v3Dday(w); return w.status==='재직' && n!=null && n<=V3_EXP_TOP; }
+  const V3_HOSP_ORDER=['강동성심','의정부','강남하트스캔','강동경희'];
+  function v3HospRank(name){ const i=V3_HOSP_ORDER.findIndex(k=>String(name||'').indexOf(k)>=0); return i<0?99:i; }
+
+  /* ── 근무자 마스터 ── */
+  function renderWorkers(d){
+    const rs=d.roster, sy=$('#wk-sync');
+    if(sy){ if(rs){ sy.hidden=false; sy.innerHTML=`<i></i>휴먼관리시스템 자동 동기화 · 마지막 ${esc(rs.at)} · 재직 ${rs.total}명${(rs.added||rs.left||rs.changed||rs.rejoined)?` · 입사 ${rs.added} · 퇴사 ${rs.left} · 변경 ${rs.changed}${rs.rejoined?' · 재입사 '+rs.rejoined:''}`:' · 변동 없음'}`; } else sy.hidden=true; }
+    const act=d.list.filter(w=>w.status==='재직');
+    /* 병원 카드 */
+    const g={}; act.forEach(w=>{ const k=w.hospital||'병원 미지정'; (g[k]=g[k]||[]).push(w); });
+    const names=Object.keys(g).sort((a,b)=>v3HospRank(a)-v3HospRank(b) || g[b].length-g[a].length);
+    const empMix=arr=>{ const m={}; arr.forEach(w=>{ m[w.emp]=(m[w.emp]||0)+1; }); return Object.keys(m).map(k=>k+' '+m[k]).join(' · '); };
+    const expN=arr=>arr.filter(w=>{ const n=v3Dday(w); return n!=null && n<=V3_EXP_POP; }).length;
+    const ym=xYm(), newJ=act.filter(w=>(w.join||'').replace(/\./g,'-').slice(0,7)===ym).length;
+    const card=(key,label,arr,sub)=>{ const e=expN(arr); return `<button class="w3-hc ${wkFilter.hosp===key?'on':''}" data-wkh="${esc(key)}">${e?`<span class="e v3-dd r">30일 내 만료 ${e}</span>`:''}<div class="n">${esc(label)}</div><div class="c">${arr.length}<small>명</small></div><div class="s">${esc(sub)}</div></button>`; };
+    $('#wk-hcards').innerHTML = card('', '전체 재직', act, '이번 달 입사 '+newJ+'명') + names.map(n=>card(n, n, g[n], empMix(g[n]))).join('');
+    /* 계약 만료 임박 */
+    const scope=act.filter(w=>!wkFilter.hosp || w.hospital===wkFilter.hosp);
+    const exp=scope.filter(v3IsExp).sort((a,b)=>v3Dday(a)-v3Dday(b));
+    const n30=exp.filter(w=>v3Dday(w)<=V3_EXP_POP).length;
+    $('#wk-expire').className='w3-exp'+(exp.length?'':' ok');
+    $('#wk-expire').innerHTML = `<div class="h"><b>계약 만료 임박</b><span>${wkFilter.hosp?esc(wkFilter.hosp)+' · ':''}30일 이내 <b style="color:#B42318">${n30}명</b> · ${V3_EXP_TOP}일 이내 ${exp.length}명</span></div>`+
+      (exp.length ? `<div class="list">${exp.map(w=>`<div class="it" data-wkedit="${esc(w.id)}">${v3DdPill(v3Dday(w))}<div class="w"><b>${esc(w.name)}</b><small>${esc(w.hospital||'')}${w.dept?' · '+esc(w.dept):''} · ${esc(w.emp||'')}</small></div><div class="d">${esc(v3Dot(w.expiry))}</div></div>`).join('')}</div>`
+                  : `<div class="none">${V3_EXP_TOP}일 안에 계약이 끝나는 재직자가 없습니다.</div>`);
+    /* 명단 받기 */
+    const L=wkLists(d), nm=d.nextMonth;
+    $('#wk-outs').className='w3-tools';
+    $('#wk-outs').innerHTML=[
+      ['birth', nm+'월 생일쿠폰 대상', L.birth.length, '양식으로 받기'], ['checkup', nm+'월 건강검진 대상', L.checkup.length, '명단 받기'],
+      ['daily', '일용 근무자', L.daily.length, '명단 받기'], ['missing', '생년월일 미입력', L.missing.length, '목록 보기']
+    ].map(o=>`<div class="w3-tool"><div><b>${esc(o[1])}</b><div class="v">${o[2]}<small>명</small></div></div><button class="x-btn" data-wkout="${o[0]}" ${o[2]?'':'disabled'}>${o[3]}</button></div>`).join('');
+    renderWorkerRows();
+  }
+  function v3SortWorkers(list){
+    return list.slice().sort((a,b)=>{
+      const ea=v3IsExp(a), eb=v3IsExp(b);
+      if(ea!==eb) return ea?-1:1;                                  // 만료 임박 재직자 → 맨 위
+      if(ea && eb) return v3Dday(a)-v3Dday(b);
+      if((a.status==='재직')!==(b.status==='재직')) return a.status==='재직'?-1:1;
+      const ja=v3Dot(a.join), jb=v3Dot(b.join);                   // 나머지는 입사일 순 → 최근 입사자가 맨 아래
+      return ja.localeCompare(jb) || String(a.name).localeCompare(String(b.name));
+    });
+  }
+  function renderWorkerRows(){
+    const c=DATA['v2wk']; if(!c) return;
+    const d=c.v, q=wkFilter.q.replace(/\s/g,'');
+    let list=d.list;
+    if(wkFilter.seg==='재직') list=list.filter(w=>w.status==='재직');
+    else if(wkFilter.seg==='퇴사') list=list.filter(w=>w.status!=='재직');
+    else if(wkFilter.seg==='미입력') list=list.filter(w=>w.status==='재직' && !w.birth);
+    if(wkFilter.hosp) list=list.filter(w=>w.hospital===wkFilter.hosp);
+    if(q) list=list.filter(w=>(String(w.name)+String(w.dept)+String(w.tel||'')).replace(/[\s-]/g,'').indexOf(q.replace(/-/g,''))>=0);
+    list=v3SortWorkers(list);
+    const tb=$('#wk-rows');
+    $('#wk-count').textContent = list.length+'명';
+    if(!list.length){ tb.innerHTML=`<tr><td colspan="8" class="empty-row">${d.list.length?'조건에 맞는 근무자가 없습니다.':'아직 근무자가 없습니다. 매일 아침 휴먼관리시스템 재직자 명단이 자동으로 들어옵니다.'}</td></tr>`; return; }
+    tb.innerHTML=list.map(w=>{
+      const n=v3Dday(w), on=w.status==='재직';
+      const cls = on && n!=null && n<=V3_EXP_POP ? 'v3-row-r' : (on && n!=null && n<=V3_EXP_TOP ? 'v3-row-a' : '');
+      return `<tr class="${cls}"><td><div class="x-who"><b>${esc(w.name)}</b><small>${esc(w.hospital||'병원 미지정')}${w.dept?' · '+esc(w.dept):''}${!on?' · 퇴사 '+esc(w.left||''):''}</small></div></td>`+
+        `<td>${esc(w.emp||'')}</td><td class="x-num">${esc(v3Dot(w.join)||'–')}</td>`+
+        `<td class="r x-num">${w.expiry?esc(v3Dot(w.expiry)):'<span class="muted">–</span>'} ${on?v3DdPill(n):''}</td>`+
+        `<td class="x-num">${w.birth?esc(w.birth.replace(/-/g,'.')):'<span class="x-pill warn">미입력</span>'}</td>`+
+        `<td class="x-num">${w.tel?esc(w.tel):'<span class="muted">–</span>'}</td><td class="r">${w.checkup?w.checkup+'월':'–'}</td>`+
+        `<td class="r"><button class="x-btn" data-wkedit="${esc(w.id)}">수정</button></td></tr>`;
+    }).join('');
+  }
+  $('#wk-hcards').addEventListener('click', e=>{ const b=e.target.closest('[data-wkh]'); if(!b) return; wkFilter.hosp=b.dataset.wkh; const c=DATA['v2wk']; if(c) renderWorkers(c.v); });
+
+  /* 생일쿠폰 대상자 — 담당자 양식 그대로 (병원별 블록 · 연번/소속/부서/이름/입사일자/생년월일/연락처/금액/비고) */
+  const V3_BDAY_BLOCKS=[
+    { key:'강동성심', title:m=>`강동성심병원 (${m}월) 생일쿠폰 지급대상자`, none:'강동성심병원', org:'강동성심병원' },
+    { key:'강남하트스캔', title:m=>`강남하트스캔의원 (${m}월) 생일쿠폰 지급대상자`, none:'강남하트스캔의원', org:'강남하트스캔의원' },
+    { key:'의정부', title:m=>`의정부성모병원 (${m}월) 생일쿠폰 지급 대상자`, none:'의정부성모병원', org:'의정부성모병원' },
+    { key:'강동경희', title:m=>`강동경희대병원 (${m}월) 생일쿠폰 지급 대상자`, none:'강동경희대병원', org:'강동경희대' }
+  ];
+  async function v3BirthdayXlsx(d){
+    let E; try{ E=await loadLib('exceljs'); }catch(_){ toast('엑셀 모듈을 불러오지 못했습니다. 새로고침 후 다시 시도하세요.'); return; }
+    const L=wkLists(d), nm=d.nextMonth, now=new Date(), y=now.getFullYear()+(nm===1 && now.getMonth()===11?1:0);
+    const wb=new E.Workbook(); const ws=wb.addWorksheet(nm+'월 생일쿠폰 대상자');
+    [4.71,25.14,19,9.43,13.57,24.14,15.29,9.14,9.14].forEach((w,i)=>{ ws.getColumn(i+1).width=w; });
+    const thin={style:'thin', color:{argb:'FF000000'}}, box={top:thin,left:thin,bottom:thin,right:thin};
+    const font=b=>({name:'맑은 고딕', size:10, bold:!!b, color:{argb:'FF000000'}}), mid={horizontal:'center', vertical:'center'};
+    const utc=s=>{ const t=v3Date(s); return t ? new Date(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate())) : ''; };
+    const blocks=V3_BDAY_BLOCKS.map(b=>Object.assign({ rows:[] }, b));
+    L.birth.forEach(w=>{
+      let b=blocks.find(x=>String(w.hospital||'').indexOf(x.key)>=0);
+      if(!b){ b={ key:w.hospital, title:m=>`${w.hospital} (${m}월) 생일쿠폰 지급대상자`, none:w.hospital, org:w.hospital, rows:[] }; blocks.push(b); }
+      b.rows.push(w);
+    });
+    let r=1;
+    blocks.forEach(b=>{
+      ws.mergeCells(r,1,r,9);
+      const t=ws.getCell(r,1); t.value=b.title(nm); t.font=font(true); t.alignment=mid; t.border=box;
+      t.fill={type:'pattern', pattern:'solid', fgColor:{argb:'FFFEFCF0'}};
+      ws.getRow(r).height=13.5; r++;
+      ['연번','소속','부서','이름','입사일자','생년월일','연락처','금액','비고'].forEach((h,i)=>{ const c=ws.getCell(r,i+1); c.value=h; c.font=font(true); c.alignment=mid; c.border=box; });
+      ws.getRow(r).height=13.5; r++;
+      const rows=b.rows.slice().sort((a,c)=>{ const da=v3Date(a.birth), dc=v3Date(c.birth); return (da?da.getDate():99)-(dc?dc.getDate():99) || String(a.name).localeCompare(String(c.name)); });
+      if(!rows.length){
+        for(let i=1;i<=9;i++){ const c=ws.getCell(r,i); c.border=box; c.alignment=mid; c.font=font(i===1); }
+        ws.getCell(r,5).value=`* ${b.none} ${nm}월 지급 대상 없음`;
+        ws.getRow(r).height=13.5; r++;
+      }
+      rows.forEach((w,i)=>{
+        const org=b.org+((w.emp==='파견')?'(파견)':'(위탁)');
+        const vals=[i+1, org, w.dept||'', w.name||'', utc(w.join), utc(w.birth), w.tel||'', '2만원', '모바일'];
+        vals.forEach((v,j)=>{ const c=ws.getCell(r,j+1); c.value=v; c.font=font(j===0); c.alignment=mid; c.border=box; if(j===4||j===5) c.numFmt='mm-dd-yy'; });
+        ws.getRow(r).height=13.5; r++;
+      });
+      r+=2;
+    });
+    const buf=await wb.xlsx.writeBuffer();
+    const blob=new Blob([buf], { type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`${y}년 ${nm}월 생일쿠폰 지급 대상자 명단_의료사업부 고재윤.xlsx`;
+    document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    toast(nm+'월 생일쿠폰 대상자 '+L.birth.length+'명 명단을 받았습니다.');
+  }
+  function wkOutput(k){
+    const c=DATA['v2wk']; if(!c) return;
+    if(k==='birth') return v3BirthdayXlsx(c.v);
+    return wkOutputOld(k);
+  }
+
+  /* ── 로그인 시 계약 만료 알림 (30일 이내 · 7일간 보지 않기) ── */
+  let v3PopDone=false;
+  function v3ExpiryPopup(){
+    if(v3PopDone || !TOKEN) return;
+    const c=DATA['v2wk']; if(!c || !c.v || !Array.isArray(c.v.list)) return;
+    try{ if(Date.now() < Number(localStorage.getItem('hr2_exp_snooze')||0)) { v3PopDone=true; return; } }catch(_){ }
+    try{ if(sessionStorage.getItem('hr2_exp_seen')) { v3PopDone=true; return; } }catch(_){ }
+    v3PopDone=true;
+    const list=c.v.list.filter(w=>{ const n=v3Dday(w); return w.status==='재직' && n!=null && n<=V3_EXP_POP; }).sort((a,b)=>v3Dday(a)-v3Dday(b));
+    if(!list.length) return;
+    if($('#xmodal').classList.contains('on')) return;
+    try{ sessionStorage.setItem('hr2_exp_seen','1'); }catch(_){ }
+    xOpen({
+      title:'계약 만료 임박 '+list.length+'명', sub:'계약종료일까지 '+V3_EXP_POP+'일 이내인 재직자입니다 (이미 지난 인원 포함).',
+      body:`<div class="v3-pop">${list.map(w=>`<div class="it">${v3DdPill(v3Dday(w))}<div class="w"><b>${esc(w.name)}</b><small>${esc(w.hospital||'')}${w.dept?' · '+esc(w.dept):''} · ${esc(w.emp||'')}</small></div><div class="d">${esc(v3Dot(w.expiry))}</div></div>`).join('')}</div>`,
+      foot:[
+        { label:'7일간 표시하지 않기', ghost:true, onClick:()=>{ try{ localStorage.setItem('hr2_exp_snooze', String(Date.now()+7*86400000)); }catch(_){ } toast('7일 동안 이 알림을 띄우지 않습니다.'); } },
+        { label:'닫기', ghost:true },
+        { label:'근무자 마스터에서 보기', onClick:()=>{ wkFilter.seg='재직'; wkFilter.hosp=''; setTimeout(()=>gotoView('workers'),0); } }
+      ]
+    });
+  }
+
+  /* ── 면접 평가 캘린더 ── */
+  const evCal={ y:new Date().getFullYear(), m:new Date().getMonth(), mode:'cal' };
+  try{ const s=localStorage.getItem('hr2_ev_mode'); if(s==='list'||s==='cal') evCal.mode=s; }catch(_){ }
+  function v3EvSetMode(m){
+    evCal.mode=m; try{ localStorage.setItem('hr2_ev_mode', m); }catch(_){ }
+    $$('#ev-mode .seg').forEach(x=>x.classList.toggle('active', x.dataset.m===m));
+    $('#ev-cal').style.display = m==='cal' ? '' : 'none';
+    $('#ev-list').style.display = m==='list' ? '' : 'none';
+  }
+  function v3EvEvents(v){
+    const evals=(v&&v.evals)||[], cands=(v&&v.cands)||[], dates=candDatesCache||{};
+    const cMap={}; cands.forEach(c=>{ cMap[String(c.id)]=c; });
+    const lastEval={}; evals.forEach(e=>{ const k=String(e.candidateId); if(!lastEval[k]) lastEval[k]=e; });   // 최신 평가 1건
+    const ev={}, push=(k,o)=>{ (ev[k]=ev[k]||[]).push(o); };
+    const used=new Set();
+    Object.keys(dates).forEach(id=>{
+      const d=v3Date(dates[id] && dates[id].interview); if(!d) return;
+      const c=cMap[id]; if(!c) return;
+      const e=lastEval[id];
+      push(v3Key(d), { cid:id, c, e, kind: e ? 'done' : (c.status==='탈락'?'drop':'iv') });
+      if(e) used.add(String(e.id));
+    });
+    evals.forEach(e=>{
+      if(used.has(String(e.id))) return;
+      const d=v3Date(e.date); if(!d) return;
+      const c=cMap[String(e.candidateId)] || { id:e.candidateId, name:e.name, hospital:e.hospital, job:e.job, status:'' };
+      push(v3Key(d), { cid:String(e.candidateId), c, e, kind:'done' });
+    });
+    return ev;
+  }
+  function renderEvalCal(v){
+    const box=$('#ev-cal'); if(!box) return;
+    const all=v3EvEvents(v), hf=String(evFilter.hospital||'').trim();
+    const evs={}; Object.keys(all).forEach(k=>{ const a=all[k].filter(x=>!hf || String(x.c.hospital||'').trim()===hf); if(a.length) evs[k]=a; });
+    const y=evCal.y, m=evCal.m, first=new Date(y,m,1), start=new Date(y,m,1-first.getDay()), today=v3Key(v3Today());
+    let iv=0, done=0;
+    Object.keys(evs).forEach(k=>{ const d=v3Date(k); if(d.getFullYear()===y && d.getMonth()===m) evs[k].forEach(x=>{ if(x.kind==='done') done++; else if(x.kind==='iv') iv++; }); });
+    const hosps=(hospitalCache||[]).map(h=>h['병원명']);
+    let html=`<div class="cal3-top"><div class="ym">${y}년 ${m+1}월</div><div class="nav"><button data-cnav="-1" aria-label="이전 달">‹</button><button data-cnav="0">오늘</button><button data-cnav="1" aria-label="다음 달">›</button></div>`+
+      `<div class="sum">면접 예정 <b>${iv}</b> · 평가 완료 <b>${done}</b> · 날짜를 누르면 면접 일정을 등록합니다</div></div>`+
+      `<div class="cal3-hosp"><button class="${!hf?'on':''}" data-chosp="">전체 병원</button>${hosps.map(h=>`<button class="${hf===h?'on':''}" data-chosp="${esc(h)}">${esc(h)}</button>`).join('')}</div>`+
+      `<div class="cal3-grid">`+['일','월','화','수','목','금','토'].map((w,i)=>`<div class="wd ${i===0?'wd-sun':(i===6?'wd-sat':'')}">${w}</div>`).join('');
+    for(let i=0;i<42;i++){
+      const d=new Date(start.getFullYear(), start.getMonth(), start.getDate()+i), k=v3Key(d);
+      if(i>=35 && d.getMonth()!==m) break;
+      const list=(evs[k]||[]).slice().sort((a,b)=>(a.kind==='iv'?0:1)-(b.kind==='iv'?0:1));
+      const chips=list.slice(0,3).map((x,j)=>{
+        const lab = x.kind==='done' ? `✓ ${x.c.name}${x.e && x.e.overall!=null?' '+x.e.overall:''}` : `${x.c.name}${x.c.hospital?' · '+String(x.c.hospital).replace(/병원|의원/g,''):''}`;
+        return `<button class="cal3-ev ${x.kind}" data-cev="${esc(k)}|${j}" title="${esc(x.c.name+' · '+(x.c.hospital||'')+' · '+(x.c.job||''))}">${esc(lab)}</button>`;
+      }).join('');
+      html+=`<div class="cal3-day ${d.getMonth()!==m?'out':''} ${k===today?'today':''}" data-cday="${k}"><div class="dn"><b>${d.getDate()}</b><span class="add">＋ 등록</span></div>${chips}${list.length>3?`<div class="cal3-more">+${list.length-3}건 더</div>`:''}</div>`;
+    }
+    html+=`</div><div class="cal3-leg"><span><i style="background:#EAF2FF"></i>면접 예정</span><span><i style="background:#E9F8EF"></i>평가 완료 (점수)</span><span><i style="background:#F2F1EE"></i>탈락</span></div>`;
+    box.innerHTML=html; box._evs=evs;
+  }
+  function renderEvals(v){ renderEvalsList(v); renderEvalCal(v); v3EvSetMode(evCal.mode); }
+  function v3EvData(){ const c=DATA['ev']; return c ? c.v : { evals:[], cands:candListCache||[], resumes:{} }; }
+  async function v3IvRegister(dateKey){
+    const v=v3EvData(), cands=(v.cands||[]).filter(c=>c && c.status!=='배치').slice().sort((a,b)=>String(b.created||'').localeCompare(String(a.created||'')));
+    const hs=hospitalCache||[];
+    xOpen({
+      title:'면접 일정 등록', sub:'날짜를 정하고 지원자를 고르면 캘린더에 표시되고, 이력서 관리 상태가 \'면접\'으로 바뀝니다.',
+      body:`<div class="v3-f"><label for="v3iv-date">면접일</label><input type="date" id="v3iv-date" value="${esc(dateKey||v3Key(v3Today()))}"></div>`+
+        `<div class="v3-f"><label for="v3iv-c">지원자</label><select id="v3iv-c"><option value="">선택하세요</option><option value="__new__">＋ 새 지원자 직접 입력</option>${cands.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}${c.hospital?' · '+esc(c.hospital):''}${c.job?' · '+esc(c.job):''} (${esc(c.status||'서류')})</option>`).join('')}</select></div>`+
+        `<div id="v3iv-new" hidden><div class="v3-row2"><div class="v3-f"><label for="v3iv-n">이름</label><input id="v3iv-n" placeholder="홍길동"></div><div class="v3-f"><label for="v3iv-h">병원</label><select id="v3iv-h"><option value="">선택</option>${hs.map(h=>`<option value="${esc(h['병원ID'])}">${esc(h['병원명'])}</option>`).join('')}</select></div></div>`+
+        `<div class="v3-row2"><div class="v3-f"><label for="v3iv-j">직무</label><input id="v3iv-j" placeholder="예: 병동 보조"></div><div class="v3-f"><label for="v3iv-t">연락처 (선택)</label><input id="v3iv-t" placeholder="010-0000-0000"></div></div></div>`,
+      onOpen:(el)=>{ el.querySelector('#v3iv-c').addEventListener('change', e=>{ el.querySelector('#v3iv-new').hidden = e.target.value!=='__new__'; }); },
+      foot:[{ label:'취소', ghost:true }, { label:'등록', onClick: async (btn)=>{
+        const date=$('#v3iv-date').value, sel=$('#v3iv-c').value;
+        if(!date){ toast('면접일을 고르세요.'); return true; }
+        if(!sel){ toast('지원자를 고르세요.'); return true; }
+        btn.disabled=true; btn.textContent='등록 중…';
+        try{
+          let cid=sel, prev=cands.find(c=>String(c.id)===String(sel));
+          if(sel==='__new__'){
+            const nm=$('#v3iv-n').value.trim(); if(!nm){ toast('이름을 입력하세요.'); btn.disabled=false; btn.textContent='등록'; return true; }
+            const r=await call('addCandidate', TOKEN, { 이름:nm, 연락처:$('#v3iv-t').value.trim(), 병원ID:$('#v3iv-h').value, 병원명:'', 직무:$('#v3iv-j').value.trim(), 지원경로:'면접 일정 직접 등록', 상태:'면접', 메모:'' });
+            cid=r && r.id; prev=null;
+            if(!cid) throw new Error('지원자 등록에 실패했습니다.');
+          }
+          const join=(candDatesCache && candDatesCache[cid] && candDatesCache[cid].join)||'';
+          await call('setCandidateDates', TOKEN, cid, '', date, join);
+          if(prev && (prev.status||'서류')==='서류') await call('setCandidateStatus', TOKEN, cid, '면접');
+          candDatesCache=Object.assign({}, candDatesCache||{}); candDatesCache[cid]={ interview:date, join };
+          candListCache=null; invalidate('ev','cand','dash');
+          const d=v3Date(date); evCal.y=d.getFullYear(); evCal.m=d.getMonth();
+          toast('면접 일정을 등록했습니다.'); loadEvals();
+        }catch(e){ xFail(e); btn.disabled=false; btn.textContent='등록'; return true; }
+      } }]
+    });
+  }
+  function v3EvDetail(x){
+    const v=v3EvData(), c=x.c||{}, cid=String(x.cid), e=x.e, res=(v.resumes||{})[cid];
+    const iv=(candDatesCache && candDatesCache[cid] && candDatesCache[cid].interview)||'';
+    const sc = e && e.scores ? Object.keys(e.scores).map(k=>`<span>${esc(k)}</span><b>${esc(e.scores[k])}</b>`).join('') : '';
+    xOpen({
+      title:(c.name||'지원자')+(e?' · 면접 평가':' · 면접 예정'), sub:[c.hospital, c.job].filter(Boolean).join(' · '), wide:true,
+      body:`<div class="v3-info"><div><span>상태</span>${esc(c.status||'–')}</div><div><span>연락처</span>${esc(c.tel||'–')}</div><div><span>지원 경로</span>${esc(c.source||'–')}</div><div><span>등록일</span>${esc(c.created||'–')}</div></div>`+
+        `<div class="v3-row2" style="align-items:end"><div class="v3-f"><label for="v3d-iv">면접일</label><input type="date" id="v3d-iv" value="${esc(iv?v3Key(v3Date(iv)):'')}"></div><div class="v3-f"><button class="x-btn" id="v3d-ivsave" type="button">면접일 저장</button></div></div>`+
+        (e ? `<div class="b-head" style="margin-top:6px"><h3>평가 결과 · 종합 ${e.overall==null?'–':esc(e.overall)+' / 5'}</h3><span class="meta">${esc(e.date||'')}${e.evaluator?' · '+esc(e.evaluator):''}</span></div>`+
+             (sc?`<div class="v3-sc">${sc}</div>`:'')+(e.notes?`<div class="v3-box">${esc(e.notes)}</div>`:'')+(e.aiComment?`<div class="v3-box"><b>AI 총평</b>\n${esc(e.aiComment)}</div>`:'')
+           : `<div class="v3-box">아직 평가가 없습니다. 면접 후 <b>평가 작성</b>을 누르면 이 일정이 '평가 완료'로 바뀝니다.</div>`)+
+        (c.memo?`<div class="b-head"><h3>메모</h3></div><div class="v3-box">${esc(c.memo)}</div>`:''),
+      onOpen:(el)=>{ el.querySelector('#v3d-ivsave').addEventListener('click', async ()=>{
+        const nd=el.querySelector('#v3d-iv').value;
+        try{ const join=(candDatesCache && candDatesCache[cid] && candDatesCache[cid].join)||''; await call('setCandidateDates', TOKEN, cid, '', nd, join);
+          candDatesCache=Object.assign({}, candDatesCache||{}); candDatesCache[cid]={ interview:nd, join }; invalidate('ev'); toast(nd?'면접일을 바꿨습니다.':'면접일을 지웠습니다.'); xClose(); loadEvals(); }
+        catch(err){ xFail(err); }
+      }); },
+      foot:[ { label:'닫기', ghost:true } ]
+        .concat(res ? [{ label:'이력서 보기', ghost:true, onClick:()=>{ window.open(res.url,'_blank'); return true; } }] : [])
+        .concat([{ label: e ? '평가 보기·수정' : '평가 작성', onClick:()=>{ setTimeout(()=>{ e ? openEModal(e) : openEModalFor(cid); }, 0); } }])
+    });
+  }
+  $('#ev-cal').addEventListener('click', e=>{
+    const nav=e.target.closest('[data-cnav]');
+    if(nav){ const n=Number(nav.dataset.cnav); if(n===0){ const t=new Date(); evCal.y=t.getFullYear(); evCal.m=t.getMonth(); } else { const d=new Date(evCal.y, evCal.m+n, 1); evCal.y=d.getFullYear(); evCal.m=d.getMonth(); } renderEvalCal(v3EvData()); return; }
+    const hb=e.target.closest('[data-chosp]');
+    if(hb){ evFilter.hospital=hb.dataset.chosp; if($('#filter-hospital-ev')) $('#filter-hospital-ev').value=evFilter.hospital; renderEvals(v3EvData()); return; }
+    const ch=e.target.closest('[data-cev]');
+    if(ch){ const [k,j]=ch.dataset.cev.split('|'); const x=(($('#ev-cal')._evs||{})[k]||[]).slice().sort((a,b)=>(a.kind==='iv'?0:1)-(b.kind==='iv'?0:1))[Number(j)]; if(x) v3EvDetail(x); return; }
+    const mr=e.target.closest('.cal3-more');
+    const day=e.target.closest('[data-cday]');
+    if(day && mr){ const list=(($('#ev-cal')._evs||{})[day.dataset.cday]||[]); xOpen({ title:day.dataset.cday.replace(/-/g,'.')+' 면접 '+list.length+'건', body:`<div class="v3-pop">${list.map((x,i)=>`<div class="it" data-v3more="${i}" style="cursor:pointer"><span class="v3-dd ${x.kind==='done'?'g':'a'}">${x.kind==='done'?'평가 완료':'예정'}</span><div class="w"><b>${esc(x.c.name)}</b><small>${esc(x.c.hospital||'')}${x.c.job?' · '+esc(x.c.job):''}</small></div></div>`).join('')}</div>`, onOpen:(el)=>{ el.onclick=ev2=>{ const it=ev2.target.closest('[data-v3more]'); if(it){ const x=list[Number(it.dataset.v3more)]; setTimeout(()=>v3EvDetail(x),0); xClose(); } }; } }); return; }
+    if(day) v3IvRegister(day.dataset.cday);
+  });
+  $('#ev-mode').addEventListener('click', e=>{ const b=e.target.closest('.seg'); if(b) v3EvSetMode(b.dataset.m); });
+  $('#add-iv').addEventListener('click', ()=>v3IvRegister(''));
+
+  /* ── 만족도 조사: 설문 링크(survey.html?h=) 카드 + 설문 종류별 결과 ── */
+  const SV3_LINKS=[ ['강동성심병원','gd'], ['강남하트스캔의원','gn'], ['의정부성모병원','uj'] ];
+  const SV3_BASE='https://angel-staff.github.io/angelstaff-dashboard/survey.html?h=';
+  let sv3Type='';
+  function sv3TypeOf(s){ const f=s && s.raw && s.raw.formType; return f==='pulse'?'pulse':(f==='exit'||s.type==='퇴직'?'exit':'resident'); }
+  function renderSurveys(all0){
+    const all=Array.isArray(all0)?all0:[];
+    const sel=svFilter.hospital;
+    const cards=SV3_LINKS.map(([h,code])=>{
+      const arr=all.filter(s=>String(s.hospital||'').replace(/\s/g,'')===h.replace(/\s/g,''));
+      const ov=arr.map(s=>Number(s.overall)).filter(v=>v>0), avg=ov.length?(ov.reduce((a,b)=>a+b,0)/ov.length).toFixed(2):'–';
+      const url=SV3_BASE+code;
+      return `<div class="sv3-card ${sel===h?'on':''}" data-sv3h="${esc(h)}"><div class="t"><b>${esc(h)}</b>${sel===h?'<span class="v3-dd g">선택됨</span>':''}</div><div class="u">${esc(url)}</div>`+
+        `<div class="m"><div><b>${arr.length}</b>응답</div><div><b>${avg}</b>평균 만족도</div><div><b>${esc((arr[0]&&arr[0].date)||'–')}</b>최근 응답</div></div>`+
+        `<div class="bt"><button data-sv3copy="${esc(url)}">링크 복사</button><button data-sv3open="${esc(url)}">설문 열기</button></div></div>`;
+    }).join('');
+    const scope=sel?all.filter(s=>s.hospital===sel):all;
+    const cnt=t=>scope.filter(s=>sv3TypeOf(s)===t).length;
+    $('#sv3-cards').innerHTML=cards;
+    $('#sv3-types').innerHTML=[['','전체',scope.length],['resident','재직자 조사',cnt('resident')],['exit','퇴직자 인터뷰',cnt('exit')],['pulse','월 1문항',cnt('pulse')]]
+      .map(([k,l,n])=>`<button class="${sv3Type===k?'on':''}" data-sv3t="${k}">${l}<small>${n}</small></button>`).join('');
+    renderSurveysBase(sv3Type ? all.filter(s=>sv3TypeOf(s)===sv3Type) : all);
+  }
+  $('#view-surveys').addEventListener('click', async e=>{
+    const cp=e.target.closest('[data-sv3copy]'); if(cp){ e.stopPropagation(); if(await xCopy(cp.dataset.sv3copy)) toast('설문 링크를 복사했습니다.'); return; }
+    const op=e.target.closest('[data-sv3open]'); if(op){ e.stopPropagation(); window.open(op.dataset.sv3open,'_blank'); return; }
+    const t=e.target.closest('[data-sv3t]'); if(t){ sv3Type=t.dataset.sv3t; if(DATA['sv']) renderSurveys(DATA['sv'].v); return; }
+    const h=e.target.closest('[data-sv3h]'); if(h){ setSvHospital(h.dataset.sv3h); }
+  });
+  /* V3:END */
+
+  setInterval(()=>{ try{ if(TOKEN && app.classList.contains('on') && !v3PopDone) v3ExpiryPopup(); }catch(_){ } }, 1200);
   async function svList(){
     const c=DATA['sv']; if(c && c.v) return c.v;
     const r=await call('getSatisfaction', TOKEN, ''); DATA['sv']={ t:Date.now(), v:Array.isArray(r)?r:[] }; return DATA['sv'].v;
@@ -2936,7 +3397,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     xOpen({
       title: w.name+' · 근무자 정보', sub: (w.hospital||'병원 미지정')+(w.dept?' · '+w.dept:'')+' · 입사 '+(w.join||'–')+(w.expiry?' · 만료 '+w.expiry:''), wide:true,
       body:
-        `<div class="x-sub" style="margin:-6px 0 16px">${w.contractId?'이름·병원·부서·입사·만료는 <b>파견·계약</b>에서 바꿉니다.':'계약 없이 등록한 근무자입니다.'}</div>`+
+        `<div class="x-sub" style="margin:-6px 0 16px">이름·병원·부서·입사·계약종료일은 매일 아침 휴먼관리시스템에서 자동으로 맞춰집니다.</div>`+
         `<div class="x-form2">`+
           `<div><label class="x-lab" for="wf-emp">고용형태</label><select id="wf-emp" class="x-select">${['파견','도급','일용'].map(x=>`<option ${w.emp===x?'selected':''}>${x}</option>`).join('')}</select></div>`+
           `<div><label class="x-lab" for="wf-birth">생년월일</label><input id="wf-birth" type="date" class="x-input" value="${esc(w.birth||'')}"></div>`+
@@ -3390,7 +3851,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
       return `<tr class="x-click" data-svd="${esc(s.id)}"><td class="x-num x-small" style="white-space:nowrap">${esc(s.date||'')}</td><td class="hname">${esc(s.name||'(이름 없음)')}</td><td class="x-small">${esc(s.hospital||'')}${(s.dept||r.dept)?' · '+esc(s.dept||r.dept):''}</td>`+
         `<td><span class="x-pill ${t==='퇴직'?'bad':(t==='월간'?'info':'ghost')}">${esc(t)}</span></td><td class="r x-num">${s.overall!=null?s.overall:'–'}</td><td class="r x-num">${s.enps!=null?s.enps:'–'}</td><td class="x-small">${esc(extra)||'<span class="x-mut">–</span>'}</td></tr>`;
     }).join('') : '<tr><td colspan="7" class="empty-row">조건에 맞는 응답이 없습니다.</td></tr>';
-    const more=$('#svd-more'); if(more){ more.hidden=rows.length<=svdState.limit; more.textContent=`더 보기 (${rows.length-svdState.limit}건)`; }
+    const more=$('#svd-more'); if(more){ more.hidden=rows.length<=svdState.limit; more.style.display=more.hidden?'none':''; more.textContent=`더 보기 (${rows.length-svdState.limit}건)`; }
   }
   window.svDetailRender=svDetailRender;
   function svDetailOpen(s, pool){
