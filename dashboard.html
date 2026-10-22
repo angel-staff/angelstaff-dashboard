@@ -536,6 +536,8 @@
     .x-search{width:100%}
     .x-ans .row2{grid-template-columns:minmax(0,1fr) 110px}
   }
+  .x-sync{display:inline-flex;align-items:center;gap:8px;margin:2px 0 14px;padding:7px 12px;border-radius:999px;background:#ecfdf3;color:#05603a;font-size:12.5px;font-weight:600}
+  .x-sync i{width:7px;height:7px;border-radius:50%;background:#12b76a;box-shadow:0 0 0 3px rgba(18,183,106,.18)}
 </style>
 </head>
 <body>
@@ -875,7 +877,8 @@
         <div><div class="eyebrow">Workforce master</div><h1>근무자 마스터</h1></div>
         <div class="actions"><button class="btn-sm ghost" id="wk-export">전체 명단 받기 (xlsx)</button><button class="btn-sm" id="wk-add">＋ 근무자 추가</button></div>
       </div>
-      <p class="x-lead">계약을 등록하면 근무자가 자동으로 생깁니다. 이름·병원·부서·입사·만료는 <b>파견·계약</b>에서, 생년월일·연락처·검진월·고용형태·근태 이상은 여기서 한 번만 입력하면 아래 명단 파일에 모두 반영됩니다.</p>
+      <p class="x-lead">재직자는 매일 아침 <b>휴먼관리시스템 재직자관리</b>에서 자동으로 맞춰집니다 (입사·퇴사·부서·연락처·생년월일·계약종료일). 검진월·근태 이상·비고는 여기서 입력하면 그대로 유지됩니다.</p>
+      <div class="x-sync" id="wk-sync" hidden></div>
       <div class="kpis x-kpis" style="--n:5" id="wk-kpis"></div>
       <div class="x-outs" id="wk-outs"></div>
       <div class="filterbar">
@@ -2862,6 +2865,8 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   }
   function renderWorkers(d){
     const L=wkLists(d), nm=d.nextMonth;
+    const rs=d.roster, sy=$('#wk-sync');
+    if(sy){ if(rs){ sy.hidden=false; sy.innerHTML=`<i></i>휴먼관리시스템 자동 동기화 · 마지막 ${esc(rs.at)} · 재직 ${rs.total}명${(rs.added||rs.left||rs.changed||rs.rejoined)?` · 입사 ${rs.added} · 퇴사 ${rs.left} · 변경 ${rs.changed}${rs.rejoined?' · 재입사 '+rs.rejoined:''}`:' · 변동 없음'}`; } else sy.hidden=true; }
     $('#wk-kpis').innerHTML=[
       [L.act.length,'재직'], [L.newJoin.length,'이번 달 입사'], [L.birth.length, nm+'월 생일쿠폰 대상'], [L.checkup.length, nm+'월 건강검진 대상'], [L.missing.length,'생년월일 미입력']
     ].map(k=>`<div class="kpi"><div class="k-val">${k[0]}</div><div class="k-lab">${esc(k[1])}</div></div>`).join('');
@@ -2881,7 +2886,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     if(wkFilter.hosp) list=list.filter(w=>w.hospital===wkFilter.hosp);
     if(q) list=list.filter(w=>(String(w.name)+String(w.dept)).replace(/\s/g,'').indexOf(q)>=0);
     const tb=$('#wk-rows');
-    if(!list.length){ tb.innerHTML=`<tr><td colspan="10" class="empty-row">${d.list.length?'조건에 맞는 근무자가 없습니다.':'아직 근무자가 없습니다. <b>파견·계약</b>에서 계약을 등록하면 자동으로 생깁니다.'}</td></tr>`; return; }
+    if(!list.length){ tb.innerHTML=`<tr><td colspan="10" class="empty-row">${d.list.length?'조건에 맞는 근무자가 없습니다.':'아직 근무자가 없습니다. 매일 아침 휴먼관리시스템 재직자 명단이 자동으로 들어옵니다.'}</td></tr>`; return; }
     tb.innerHTML=list.map(w=>{
       const dd=(w.dday!=null && w.status==='재직' && w.dday>=0 && w.dday<=90) ? ` <span class="dday ${w.dday<=30?'soon':'near'}">D-${w.dday}</span>` : '';
       const sv=w.survey ? `<button class="x-link" data-wksv="${esc(w.id)}">${w.survey.overall!=null?'만족 '+w.survey.overall:''}${w.survey.overall!=null&&w.survey.enps!=null?' · ':''}${w.survey.enps!=null?'추천 '+w.survey.enps:''}${w.survey.overall==null&&w.survey.enps==null?'응답':''}</button><div class="x-sub">${w.survey.n}건 · ${esc(w.survey.last)}</div>` : '<span class="x-mut">–</span>';
