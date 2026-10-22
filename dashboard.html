@@ -1288,23 +1288,36 @@
 
   /* ═══ SWR 캐시: 캐시가 있으면 즉시 렌더 → 백그라운드 갱신 (체감속도 대폭 개선) ═══ */
   const DATA = {};                    // key -> {t, v}
-  const SWR_TTL = 25000;              // 25초 내 재방문은 서버 호출 자체를 생략
+  const SWR_TTL = 60000;              // 60초 내 재방문은 서버 호출 자체를 생략
+  let __pfP = null, __pfAt = 0;       // 전체 메뉴 미리 불러오기 (진행 중인 요청 · 마지막 완료 시각)
+  const PF_KEY = /^(v2(flow|wk|rk|iv|q|fc|ln|kn|au)|sv|ev|hosp|cand:전체:|ct:)/;
   function invalidate(){ [].slice.call(arguments).forEach(p=>{ Object.keys(DATA).forEach(k=>{ if(k===p||k.indexOf(p+':')===0) delete DATA[k]; }); }); }
   function invalidateAll(){ Object.keys(DATA).forEach(k=>delete DATA[k]); }
   async function swr(key, fetcher, render){
     const c = DATA[key];
     if(c) render(c.v);                                   // 1) 캐시 즉시 표시 (0ms)
     if(c && Date.now()-c.t < SWR_TTL) return;            // 2) 신선하면 종료
+    if(__pfP && PF_KEY.test(key)){                       // 2-1) 전체 미리 불러오기 중이면 따로 부르지 않고 기다림
+      try{ await __pfP; }catch(_){ }
+      const n=DATA[key]; if(n && n!==c){ render(n.v); return; }
+    }
     const v = await fetcher();                           // 3) 백그라운드 갱신
     DATA[key] = { t: Date.now(), v: v };
-    if(key==='dash') persistSave();
+    if(key==='dash' || PF_KEY.test(key)) persistSave();
     render(v);
   }
   function hasCache(key){ return !!DATA[key]; }
-  /* 재방문 즉시 표시: 대시보드·병원 목록만 이 브라우저에 보관 (로그아웃 시 삭제) */
+  /* 재방문 즉시 표시: 모든 메뉴 데이터를 이 브라우저에 보관 (로그아웃 시 삭제) */
   const PERSIST_KEY='hr2_cache_v2', PERSIST_MAX_AGE=7*24*3600*1000;
+  let __psT=null;
   function persistSave(){
-    try{ localStorage.setItem(PERSIST_KEY, JSON.stringify({ at:Date.now(), dash:DATA['dash']?DATA['dash'].v:null, hosp:hospitalCache||null })); }catch(_){ }
+    clearTimeout(__psT);
+    __psT=setTimeout(()=>{                                   // 연속 저장은 묶어서 한 번만
+      const all={}; Object.keys(DATA).forEach(k=>{ if(k==='dash'||PF_KEY.test(k)) all[k]=DATA[k].v; });
+      const base={ at:Date.now(), dash:DATA['dash']?DATA['dash'].v:null, hosp:hospitalCache||null };
+      try{ localStorage.setItem(PERSIST_KEY, JSON.stringify(Object.assign({ all, dates:candDatesCache||null, ai:v2AiState||null }, base))); }
+      catch(_){ try{ localStorage.setItem(PERSIST_KEY, JSON.stringify(base)); }catch(__){ } }   // 용량 초과 시 대시보드만
+    }, 400);
   }
   function persistLoad(){
     try{
@@ -1312,6 +1325,10 @@
       if(!o || Date.now()-o.at>PERSIST_MAX_AGE) return;
       if(o.dash && !DATA['dash']) DATA['dash']={ t:0, v:o.dash };             // t:0 → 표시 후 곧바로 서버 갱신
       if(o.hosp && !hospitalCache) applyHospitals(o.hosp);
+      if(o.all) Object.keys(o.all).forEach(k=>{ if(!DATA[k]) DATA[k]={ t:0, v:o.all[k] }; });
+      if(o.all && o.all['cand:전체:'] && !candListCache) candListCache=o.all['cand:전체:'];
+      if(o.dates && !candDatesCache) candDatesCache=o.dates;
+      if(o.ai && !v2AiState) v2AiState=o.ai;
     }catch(_){ }
   }
   function persistClear(){ try{ localStorage.removeItem(PERSIST_KEY); }catch(_){ } }
@@ -1365,21 +1382,49 @@
     requestAnimationFrame(()=>requestAnimationFrame(()=>app.classList.add('ready')));
     persistLoad();
     const first=(location.hash||'').slice(1);
-    if(first && first!=='dash' && document.querySelector('.nav-item[data-view="'+first+'"]')) routeFromHash();
+    if(first && first!=='dash' && document.querySelector('.nav-item[data-view="'+first+'"]')){ routeFromHash(); prefetchAfterDash(); }
     else loadDashboard();
   }
   /* 첫 화면 이후 한가할 때: 이력서 목록·면접일 미리 받아 두기 → 이력서 관리 진입 즉시 표시 */
   let __prefetched=false;
   function prefetchAfterDash(){
     if(__prefetched || !TOKEN) return; __prefetched=true;
-    idle(()=>{
-      swr('cand:전체:', async ()=>{
-        const r=await Promise.all([ensureHospitals(), call('getCandidates', TOKEN, '전체', '')]);
-        const list=healCandidates(Array.isArray(r[1])?r[1]:[]); candListCache=list; return list;
-      }, ()=>{}).catch(()=>{});
-      getCandDatesCached().catch(()=>{});
-    }, 1200);
+    idle(()=>prefetchAll(true), 300);
   }
+  /* 모든 메뉴 데이터를 서버 요청 1번으로 받아 캐시에 채운다 → 메뉴를 누르면 바로 표시 */
+  function prefetchAll(force){
+    if(!TOKEN) return null;
+    if(__pfP) return __pfP;
+    if(!force && Date.now()-__pfAt < 120000) return null;
+    const calls=[
+      {api:'getHospitals'}, {api:'getCandidates',args:['전체','']}, {api:'getCandidateDates'},
+      {api:'getEvaluations'}, {api:'getResumeLinks'},
+      {api:'getContracts',args:[ctFilter.status,ctFilter.hospitalId]}, {api:'getSatisfaction',args:['']},
+      {api:'aiStatus'}, {api:'getFlow'}, {api:'getWorkers'}, {api:'getRisk'}, {api:'getInterviews'},
+      {api:'getQuality'}, {api:'getForecast'}, {api:'getLearning'}, {api:'getKnowledge'}, {api:'getDecisions',args:[auMonth]}
+    ];
+    const ctKey='ct:'+ctFilter.status+':'+ctFilter.hospitalId;
+    __pfP = call('batch', TOKEN, calls).then(rs=>{
+      if(!TOKEN) return;                                 // 그 사이 로그아웃
+      const R={}; calls.forEach((c,i)=>{ if(rs && rs[i] && rs[i].ok) R[c.api]=rs[i].result; });
+      const now=Date.now(), put=(k,v)=>{ DATA[k]={ t:now, v:v }; };
+      if(R.getHospitals){ applyHospitals(R.getHospitals); put('hosp', R.getHospitals); }
+      if(R.getCandidates){ const l=healCandidates(Array.isArray(R.getCandidates)?R.getCandidates:[]); candListCache=l; put('cand:전체:', l); }
+      if(R.getCandidateDates) candDatesCache=(typeof R.getCandidateDates==='object')?R.getCandidateDates:{};
+      if(R.getEvaluations && candListCache) put('ev', { evals:Array.isArray(R.getEvaluations)?R.getEvaluations:[], cands:candListCache, resumes:(R.getResumeLinks&&typeof R.getResumeLinks==='object')?R.getResumeLinks:{} });
+      if(R.getContracts) put(ctKey, Array.isArray(R.getContracts)?R.getContracts:[]);
+      if(R.getSatisfaction) put('sv', Array.isArray(R.getSatisfaction)?R.getSatisfaction:[]);
+      if(R.aiStatus) v2AiState=R.aiStatus;
+      [['getFlow','v2flow'],['getWorkers','v2wk'],['getRisk','v2rk'],['getInterviews','v2iv'],['getQuality','v2q'],
+       ['getForecast','v2fc'],['getLearning','v2ln'],['getKnowledge','v2kn'],['getDecisions','v2au']]
+        .forEach(([a,k])=>{ if(R[a]!==undefined) put(k, R[a]); });
+      __pfAt=now; persistSave();
+    }).catch(e=>{ if(/세션/.test(String(e&&e.message))) authFail(e); })
+      .finally(()=>{ __pfP=null; });
+    return __pfP;
+  }
+  /* 창을 다시 보면(다른 일 하다 돌아오면) 2분 지났을 때만 조용히 전체 갱신 */
+  document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='visible' && TOKEN && app.classList.contains('on')) prefetchAll(false); });
 
   /* ───────── 대시보드 ───────── */
   async function loadDashboard(){
@@ -2704,7 +2749,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   $('#menu').addEventListener('click', ()=>app.classList.toggle('menu'));
   $('#scrim').addEventListener('click', ()=>app.classList.remove('menu'));
   $('#logout').addEventListener('click', logout);
-  function logout(){ app.classList.remove('on','ready','menu'); $('#login').style.display=''; $('#pw').value=''; setLoginErr(''); TOKEN=null; invalidateAll(); hospitalCache=null; persistClear(); __prefetched=false; try{ localStorage.removeItem('hr2_token'); }catch(_){ } }
+  function logout(){ app.classList.remove('on','ready','menu'); $('#login').style.display=''; $('#pw').value=''; setLoginErr(''); TOKEN=null; invalidateAll(); hospitalCache=null; persistClear(); __prefetched=false; __pfAt=0; try{ localStorage.removeItem('hr2_token'); }catch(_){ } }
 
 
   /* HR2:BEGIN ═══ 통합 HR 2.0 — 학습형 기능 (HR2.gs 와 짝) ═══ */
