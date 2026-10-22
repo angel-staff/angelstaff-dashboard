@@ -557,6 +557,7 @@
   .v3-dd.r{background:#FDECEB;color:#B42318}
   .v3-dd.a{background:#FEF3E2;color:#B54708}
   .v3-dd.g{background:#F2F1EE;color:#55524C}
+  .v3-man{font:700 10.5px var(--kr);color:var(--h3-b,#1570EF);background:#EFF8FF;border-radius:4px;padding:1px 5px;margin-right:6px}
   .v3-row-r td:first-child{box-shadow:inset 3px 0 0 #E5484D}
   .v3-row-a td:first-child{box-shadow:inset 3px 0 0 #F5A524}
 
@@ -1320,7 +1321,7 @@
           <tbody id="wk-rows"><tr><td colspan="8" class="loading">불러오는 중…</td></tr></tbody>
         </table>
       </div>
-      <p class="muted" style="font-size:12.5px;margin-top:10px">만료 기준: 파견은 입사일 + 2년(파견 최대 기간). 1년 단위 계약 갱신은 만료로 보지 않습니다 · 도급·위탁은 만료 표시 없음.<br>정렬: 파견 만료 60일 이내 재직자가 맨 위(만료 가까운 순), 그다음 2년이 지난 재직자, 나머지는 입사일 순으로 최근 입사자가 맨 아래에 옵니다.</p>
+      <p class="muted" style="font-size:12.5px;margin-top:10px">만료 기준: 파견은 입사일 + 2년(파견 최대 기간). 1년 단위 계약 갱신은 만료로 보지 않습니다 · 도급·위탁은 만료 표시 없음 · 근무자 [수정]에서 만료일을 직접 지정할 수 있습니다(<span class="v3-man">직접</span> 표시).<br>정렬: 파견 만료 60일 이내 재직자가 맨 위(만료 가까운 순), 그다음 2년이 지난 재직자, 나머지는 입사일 순으로 최근 입사자가 맨 아래에 옵니다.</p>
     </section>
 
     <!-- ═══ HR 2.0 ═══ 퇴사 위험 -->
@@ -3384,14 +3385,15 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   const V3_EXCL=/강동경희/;
   function v3Two(j){ return new Date(j.getFullYear()+2, j.getMonth(), j.getDate()-1); }
   function v3Norm(v){
-    if(!v || !Array.isArray(v.list) || v._n) return v;
+    if(!v || !Array.isArray(v.list) || v._n===2) return v;
     v.list=v.list.filter(w=>!V3_EXCL.test(String(w.hospital||'')));
     v.list.forEach(w=>{
       if(w.contractEnd===undefined) w.contractEnd=w.expiry||'';      // 휴먼관리시스템 계약종료일(1년 단위) 보관
       const j=v3Date(w.join);
-      w.expiry = (w.emp==='파견' && j) ? v3Dot(v3Key(v3Two(j))) : '';  // 만료 기준 = 파견 최대 2년
+      w.expiryAuto = (w.emp==='파견' && j) ? v3Dot(v3Key(v3Two(j))) : '';   // 만료 기준 = 파견 최대 2년
+      w.expiry = w.expiryManual ? v3Dot(w.expiryManual) : w.expiryAuto;      // 담당자가 직접 정한 만료일이 있으면 우선
     });
-    v._n=true; return v;
+    v._n=2; return v;
   }
   function v3NormAll(){ if(DATA['v2wk'] && DATA['v2wk'].v) v3Norm(DATA['v2wk'].v); }
   function v3Dday(w){ const d=v3Date(w && w.expiry); return d ? Math.round((d - v3Today())/86400000) : null; }
@@ -3469,12 +3471,13 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
       const cls = on && n!=null && n<=V3_EXP_POP ? 'v3-row-r' : (on && n!=null && n<=V3_EXP_TOP ? 'v3-row-a' : '');
       return `<tr class="${cls}"><td><div class="x-who"><b>${esc(w.name)}</b><small>${esc(w.hospital||'병원 미지정')}${w.dept?' · '+esc(w.dept):''}${!on?' · 퇴사 '+esc(w.left||''):''}</small></div></td>`+
         `<td>${esc(w.emp||'')}</td><td class="x-num">${esc(v3Dot(w.join)||'–')}</td>`+
-        `<td class="r x-num">${w.expiry?esc(v3Dot(w.expiry)):'<span class="muted">–</span>'} ${on?v3DdPill(n):''}</td>`+
+        `<td class="r x-num">${w.expiryManual?'<span class="v3-man" title="담당자가 직접 지정한 만료일">직접</span>':''}${w.expiry?esc(v3Dot(w.expiry)):'<span class="muted">–</span>'} ${on?v3DdPill(n):''}</td>`+
         `<td class="x-num">${w.birth?esc(w.birth.replace(/-/g,'.')):'<span class="x-pill warn">미입력</span>'}</td>`+
         `<td class="x-num">${w.tel?esc(w.tel):'<span class="muted">–</span>'}</td><td class="r">${w.checkup?w.checkup+'월':'–'}</td>`+
         `<td class="r"><button class="x-btn" data-wkedit="${esc(w.id)}">수정</button></td></tr>`;
     }).join('');
   }
+  document.addEventListener('click', e=>{ if(e.target && e.target.id==='wf-exp-x'){ const i=$('#wf-exp'); if(i) i.value=''; toast('저장하면 입사일 + 2년 자동 계산으로 돌아갑니다.'); } });
   $('#wk-hcards').addEventListener('click', e=>{ const b=e.target.closest('[data-wkh]'); if(!b) return; wkFilter.hosp=b.dataset.wkh; const c=DATA['v2wk']; if(c) renderWorkers(c.v); });
 
   /* 생일쿠폰 대상자 — 담당자 양식 그대로 (병원별 블록 · 연번/소속/부서/이름/입사일자/생년월일/연락처/금액/비고) */
@@ -4056,7 +4059,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
       const span=Math.max(1,end-j), pos=d=>Math.max(0,Math.min(100,(d-j)/span*100));
       const mk=(d,l,c)=>d?`<div class="tl-mk ${pos(d)>85?'r':(pos(d)<12?'l':'')}" style="left:${pos(d)}%"><i style="background:${c}"></i><span>${l}<br><b>${esc(v3Dot(v3Key(d)))}</b></span></div>`:'';
       const n=e?h3Diff(e):null;
-      return `<div class="tl3"><div class="tl-top"><div><small>근속</small><b>${yrs?yrs+'년 ':''}${mon}개월</b><em>${days}일</em></div><div><small>파견 만료 (입사+2년)</small><b>${e?esc(v3Dot(w.expiry)):'해당 없음 · '+esc(w.emp||'')}</b>${n!=null?v3DdPill(n):''}</div>${w.contractEnd?`<div><small>휴먼관리시스템 계약종료일</small><b style="font-weight:500;color:var(--ink-3)">${esc(v3Dot(w.contractEnd))}</b></div>`:''}${two?`<div><small>파견 2년 시점</small><b>${esc(v3Dot(v3Key(two)))}</b>${v3DdPill(h3Diff(two))}</div>`:''}</div>`+
+      return `<div class="tl3"><div class="tl-top"><div><small>근속</small><b>${yrs?yrs+'년 ':''}${mon}개월</b><em>${days}일</em></div><div><small>${w.expiryManual?'파견 만료 (직접 지정)':'파견 만료 (입사+2년)'}</small><b>${e?esc(v3Dot(w.expiry)):'해당 없음 · '+esc(w.emp||'')}</b>${n!=null?v3DdPill(n):''}</div>${w.contractEnd?`<div><small>휴먼관리시스템 계약종료일</small><b style="font-weight:500;color:var(--ink-3)">${esc(v3Dot(w.contractEnd))}</b></div>`:''}${two?`<div><small>파견 2년 시점</small><b>${esc(v3Dot(v3Key(two)))}</b>${v3DdPill(h3Diff(two))}</div>`:''}</div>`+
         `<div class="tl-bar"><p><i style="width:${pos(T)}%"></i></p>${mk(j,'입사','#171614')}${mk(e,'파견 만료','#D92D20')}${two?mk(two,'2년','#DC6803'):''}<div class="tl-now" style="left:${pos(T)}%"><span>오늘</span></div></div></div>`;
     }catch(_){ return ''; }
   }
@@ -4138,6 +4141,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
           `<div><label class="x-lab" for="wf-chk">건강검진 월</label><select id="wf-chk" class="x-select">${months}</select></div>`+
           `<div><label class="x-lab" for="wf-att">근태 이상 (최근 한 달 · 지각·결근 횟수)</label><input id="wf-att" type="number" min="0" class="x-input" value="${w.attend===''||w.attend==null?'':esc(w.attend)}"></div>`+
           `<div><label class="x-lab" for="wf-memo">비고</label><input id="wf-memo" class="x-input" value="${esc(w.memo||'')}"></div>`+
+          `<div><label class="x-lab" for="wf-exp">파견 만료일 직접 지정 <span class="x-mut">(비우면 자동: ${w.expiryAuto?esc(w.expiryAuto):'해당 없음'})</span></label><div style="display:flex;gap:6px"><input id="wf-exp" type="date" class="x-input" value="${esc(w.expiryManual?v3Key(v3Date(w.expiryManual)):'')}"><button type="button" class="x-btn" id="wf-exp-x">자동으로</button></div></div>`+
         `</div>`+
         `<div class="b-head" style="margin-top:26px;border-bottom:1px solid var(--ink);padding-bottom:9px;display:flex;justify-content:space-between"><h3 style="margin:0;font-size:15px">만족도 응답</h3><span class="meta x-mut x-small">이름·병원이 같은 응답</span></div><div id="wf-sv"><div class="loading" style="padding:16px 2px">불러오는 중…</div></div>`,
       foot:[{label:'닫기', ghost:true}, ...(!w.contractId && w.status==='재직' ? [{label:'퇴사 처리', ghost:true, onClick: async(btn)=>{
@@ -4146,7 +4150,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
               invalidate('v2wk'); V2_LOAD.workers(); toast('퇴사 처리했습니다.'); }}] : []),
             {label:'저장', onClick: async(btn)=>{
               const att=$('#wf-att').value;
-              const patch={ '고용형태':$('#wf-emp').value, '생년월일':$('#wf-birth').value, '연락처':$('#wf-tel').value.trim(), '검진월':$('#wf-chk').value?Number($('#wf-chk').value):'', '근태이상':att===''?'':Number(att), '비고':$('#wf-memo').value.trim() };
+              const patch={ '고용형태':$('#wf-emp').value, '생년월일':$('#wf-birth').value, '연락처':$('#wf-tel').value.trim(), '검진월':$('#wf-chk').value?Number($('#wf-chk').value):'', '근태이상':att===''?'':Number(att), '비고':$('#wf-memo').value.trim(), '만료일직접':$('#wf-exp').value||'' };
               await xRun(btn,'저장 중…',()=>call('updateWorker',TOKEN,w.id,patch));
               invalidate('v2wk','v2rk','v2fc'); V2_LOAD.workers(); toast('저장했습니다.'); }}],
       onOpen: async()=>{
