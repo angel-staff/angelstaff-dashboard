@@ -720,7 +720,8 @@
   .h3-brief{font-size:15.5px;line-height:1.65;color:var(--ink-2);margin:10px 0 0;max-width:820px}
   .h3-brief b{color:var(--ink)}
   .h3-brief .r{color:var(--h3-r);font-weight:700}
-  .h3-hd-act{display:flex;gap:8px;flex-wrap:wrap}
+  .h3-hd-act{display:flex;gap:8px;flex-wrap:nowrap;flex:none}
+  @media (max-width:880px){ .h3-hd-act{flex-wrap:wrap} }
   .h3-btn{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:13.5px;font-weight:600;color:var(--ink)}
   .h3-btn:hover{border-color:#CFCAC0;box-shadow:var(--h3-card)}
   .h3-btn.dark{background:var(--ink);border-color:var(--ink);color:#fff}
@@ -768,6 +769,14 @@
   .h3-t .go{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font-size:12.5px;font-weight:600;white-space:nowrap}
   .h3-t .go:hover{border-color:var(--ink)}
   .h3-t .go.dark{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .h3-t .hx{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;color:var(--ink-3);font-size:13px;opacity:.55}
+  .h3-t:hover .hx{opacity:1}
+  .h3-t .hx:hover{color:var(--h3-g);border-color:var(--h3-g)}
+  .h3-unhide{display:block;width:100%;border:0;border-top:1px solid var(--line-2);background:#FCFBF8;padding:10px;font-size:12.5px;color:var(--ink-3)}
+  .h3-unhide:hover{color:var(--ink)}
+  .h3-new{display:flex;align-items:center;gap:14px;justify-content:space-between;border:1px solid #F5D565;background:var(--trace-wash);border-radius:14px;padding:12px 16px;margin:0 0 16px;font-size:13.5px;line-height:1.6}
+  .h3-new b{margin-right:8px}
+  .h3-new button{flex:none;border:0;background:var(--ink);color:#fff;border-radius:8px;padding:7px 14px;font-weight:600;font-size:13px}
   .h3-done{padding:26px 18px;text-align:center;color:var(--ink-3);font-size:13.5px}
   .h3-done b{display:block;font-size:15px;color:var(--h3-g);margin-bottom:4px}
 
@@ -987,6 +996,7 @@
         <div><div class="eyebrow" id="h3-date">Today</div><h1 id="h3-title">오늘 브리핑</h1><p class="h3-brief" id="h3-brief">데이터를 불러오는 중입니다…</p></div>
         <div class="h3-hd-act"><button class="h3-btn" id="h3-print" type="button">🖨 인쇄·PDF</button><button class="h3-btn dark" id="h3-pal" type="button">검색·바로 실행 <span class="kbd" style="background:#2B2925;color:#fff;border-color:#55524C">Ctrl K</span></button></div>
       </div>
+      <div class="h3-new" id="h3-new" hidden><div><b>새로 바뀐 점</b><span><span class="kbd">Ctrl K</span> 로 사람·메뉴를 바로 찾고 실행 · 오늘 할 일은 ✓로 확인 처리 · 이력서 관리는 <b>보드</b>에서 끌어서 상태 변경 · 근무자를 열면 근속·계약 타임라인 · <span class="kbd">?</span> 단축키</span></div><button id="h3-new-x" type="button">확인</button></div>
       <div id="h3">
         <div class="h3-kpis" id="h3-kpis"></div>
         <div class="h3-main">
@@ -3736,6 +3746,8 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     if(!M.sv30.length || lastN>14) t.push({ k:'sv', lv:'n', ic:'💬', n:M.sv30.length, title:'최근 30일 만족도 응답', sub:(lastN==null?'아직 응답이 없습니다':'마지막 응답 '+lastN+'일 전')+' · 병원별 설문 링크를 다시 보내 보세요', go:'링크 복사', fn:()=>gotoView('surveys') });
     return t;
   }
+  function h3HideGet(){ try{ const o=JSON.parse(localStorage.getItem('hr2_todo_hide')||'{}'); return o.d===v3Key(v3Today())?(o.k||[]):[]; }catch(_){ return []; } }
+  function h3HideSet(k){ try{ localStorage.setItem('hr2_todo_hide', JSON.stringify({ d:v3Key(v3Today()), k })); }catch(_){ } }
   function h3TwoList(M){
     const rows=M.twoOver.concat(M.two90).map(w=>({ w, d:M.two(w), n:h3Diff(M.two(w)) })).sort((a,b)=>a.n-b.n);
     xOpen({ title:'파견 2년 도래·경과 '+rows.length+'명', sub:'입사일 기준으로 계산한 2년 시점입니다. 실제 파견 기간 산정(공백·재입사 등)은 계약서로 확인하세요.', wide:true,
@@ -3761,7 +3773,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     const box=$('#h3'); if(!box) return;
     const M=h3Model();
     if(!M){ if($('#h3-todo') && !$('#h3-todo').children.length) $('#h3-todo').innerHTML='<div class="h3-empty">오늘 브리핑을 준비하고 있습니다…</div>'; return; }
-    const todos=h3Todos(M), urgent=todos.filter(x=>x.lv==='r'||x.lv==='a');
+    const hid=h3HideGet(), all=h3Todos(M), todos=all.filter(x=>hid.indexOf(x.k)<0), hidN=all.length-todos.length, urgent=todos.filter(x=>x.lv==='r'||x.lv==='a');
     h3Badges(M, todos);
     /* 헤더 */
     const T=M.T;
@@ -3788,8 +3800,8 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
       `<div class="h3-kpi" data-h3go="cand"><div class="l">진행 중 지원자</div><div class="v">${prog}<small>명</small></div><div class="h3-stack">${stK.map(k=>M.st[k]?`<i style="width:${M.st[k]/cTot*100}%;background:${stCol[k]}" title="${k} ${M.st[k]}명"></i>`:'').join('')}</div><div class="h3-leg">${stK.filter(k=>M.st[k]).map(k=>`<span><i style="background:${stCol[k]}"></i>${k} ${M.st[k]}</span>`).join('')}</div></div>`;
     /* 할 일 */
     $('#h3-todo-c').textContent=todos.length;
-    $('#h3-todo').innerHTML = todos.length ? todos.map((x,i)=>`<div class="h3-t ${x.lv}" data-h3t="${i}"><div class="ic">${x.ic}</div><div class="tx"><b>${esc(x.title)}</b><small>${esc(x.sub||'')}</small></div><div class="rt"><span class="n">${x.n}</span><button class="go ${x.dark?'dark':''}" data-h3t="${i}">${esc(x.go)}</button></div></div>`).join('')
-      : '<div class="h3-done"><b>✓ 모두 처리했습니다</b>새로 생기는 일은 여기에 바로 올라옵니다.</div>';
+    $('#h3-todo').innerHTML = todos.length ? todos.map((x,i)=>`<div class="h3-t ${x.lv}" data-h3t="${i}"><div class="ic">${x.ic}</div><div class="tx"><b>${esc(x.title)}</b><small>${esc(x.sub||'')}</small></div><div class="rt"><span class="n">${x.n}</span><button class="go ${x.dark?'dark':''}" data-h3t="${i}">${esc(x.go)}</button><button class="hx" data-h3x="${esc(x.k)}" title="오늘은 확인함 (내일 다시 표시)" aria-label="오늘은 숨기기">✓</button></div></div>`).join('')+(hidN?`<button class="h3-unhide" data-h3un="1">오늘 확인한 항목 ${hidN}개 다시 보기</button>`:'')
+      : '<div class="h3-done"><b>✓ 모두 처리했습니다</b>새로 생기는 일은 여기에 바로 올라옵니다.</div>'+(hidN?`<button class="h3-unhide" data-h3un="1">오늘 확인한 항목 ${hidN}개 다시 보기</button>`:'');
     box._todos=todos;
     /* 일정 */
     const ag=h3Agenda(M), agF=h3AgTab==='all'?ag:ag.filter(e=>e.tg===h3AgTab || (h3AgTab==='exp' && e.tg==='two'));
@@ -3848,6 +3860,8 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   /* 화면 이벤트 */
   $('#view-dash').addEventListener('click', e=>{
     const box=$('#h3');
+    const hx=e.target.closest('[data-h3x]'); if(hx){ e.stopPropagation(); const k=h3HideGet(); k.push(hx.dataset.h3x); h3HideSet(k); renderHome3(true); toast('오늘은 숨겼습니다. 내일 다시 표시됩니다.'); return; }
+    if(e.target.closest('[data-h3un]')){ h3HideSet([]); renderHome3(true); return; }
     const t=e.target.closest('[data-h3t]'); if(t && box._todos){ const x=box._todos[Number(t.dataset.h3t)]; if(x) x.fn(); return; }
     const ev=e.target.closest('[data-h3e]'); if(ev && box._ag){ const x=box._ag[Number(ev.dataset.h3e)]; if(x && x.fn) x.fn(); return; }
     const tb=e.target.closest('#h3-agtabs button'); if(tb){ h3AgTab=tb.dataset.t; renderHome3(true); return; }
@@ -3867,6 +3881,8 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     finally{ b.classList.remove('spin'); h3Sig=''; renderHome3(true); }
   });
   $('#cmd3-search').addEventListener('click', ()=>pal3Open());
+  try{ if(localStorage.getItem('hr2_new_v4')!=='1') $('#h3-new').hidden=false; }catch(_){ }
+  $('#h3-new-x').addEventListener('click', ()=>{ $('#h3-new').hidden=true; try{ localStorage.setItem('hr2_new_v4','1'); }catch(_){ } });
 
   /* ── 명령 팔레트 ── */
   const PAL3_NAV=[ ['dash','현황 · 오늘 브리핑','🏠'], ['candidates','이력서 관리','📄'], ['evals','면접 평가 · 캘린더','🗓'], ['workers','근무자 마스터','👥'], ['surveys','만족도 조사','💬'], ['postings','직무공고','📢'], ['hospitals','병원 마스터','🏥'], ['interview','AI 1차 인터뷰','🤖'], ['risk','퇴사 위험','⚠'], ['forecast','결원 예측·인재풀','📈'], ['flow','학습 흐름','🧭'], ['quality','채용 결과 학습','🎯'], ['learn','담당자 수정 학습','✎'], ['knowledge','병원별 운영 지식','📚'], ['audit','AI 결정 기록','🧾'] ];
@@ -4032,7 +4048,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   $('#cand-mode').addEventListener('click', e=>{ const b=e.target.closest('.seg'); if(b) k3SetMode(b.dataset.m); });
   /* 목록이 새로 그려질 때 보드도 함께 갱신 */
   let k3Sig='';
-  setInterval(()=>{ if(k3Mode!=='board' || $('#view-candidates').style.display==='none') return; const s=(candListCache?candListCache.map(c=>c.id+c.status).join(''):'')+Object.keys(candDatesCache||{}).length+(candFilter.hospitalId||'')+(candFilter.y||'')+(candFilter.m||'')+(candFilter.d||''); if(s!==k3Sig){ k3Sig=s; k3Render(); } }, 700);
+  setInterval(()=>{ if(k3Mode!=='board' || $('#view-candidates').style.display==='none') return; const s=(candListCache?candListCache.map(c=>c.id+c.status).join(''):'')+Object.keys(candDatesCache||{}).length+'|'+Object.keys((((DATA['ev']||{}).v)||{}).resumes||{}).length+(candFilter.hospitalId||'')+(candFilter.y||'')+(candFilter.m||'')+(candFilter.d||''); if(s!==k3Sig){ k3Sig=s; k3Render(); } }, 700);
   k3SetMode(k3Mode);
   /* K3:END */
 
