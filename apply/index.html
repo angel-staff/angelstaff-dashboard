@@ -102,7 +102,7 @@
 </div>
 
 <script>
-  const API = 'https://script.google.com/macros/s/AKfycbw7eo0dXiP11Zi9QEmaIxN7MEXG0ZzRw-pZjnFEH3ef-kE6uPOzNDaUGJo-4OcKE0H7/exec';
+  const API = 'https://script.google.com/macros/s/AKfycbzSw7NELP79vYINyS7_nquXytYjh908D2w7dV941ABAorRZgYodlLp7iLTSh0rbkH4C/exec';
   const H = [{"key": "kd", "name": "강동성심병원", "depts": ["응급실", "수술실", "통합 중환자실", "중환자실·응급실", "중환자실·수술실", "이송", "병동보조", "린넨·위생 관리", "외래 보조", "외래 헬퍼", "영상의학과", "중앙공급실"]}, {"key": "ui", "name": "의정부성모병원", "depts": ["중앙공급실", "약제팀", "내시경실 세척", "병동 이송"]}, {"key": "hs", "name": "강남하트스캔의원", "depts": ["내시경실 보조", "사무·남자 탈의실 보조", "검진 안내 보조"]}];
   const Q = new URLSearchParams(location.search);
   const PRE_H = H.some(x => x.key === Q.get('h')) ? Q.get('h') : '';
