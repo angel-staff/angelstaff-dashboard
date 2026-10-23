@@ -680,6 +680,19 @@
   .ar3-msg.err b{color:var(--danger)}
   .ar3-spin{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--ink);border-radius:50%;animation:ar3s .8s linear infinite}
   @keyframes ar3s{to{transform:rotate(360deg)}}
+  .ar3-hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:10px;margin:2px 0 18px}
+  .ar3-hc{position:relative;text-align:left;font:inherit;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:13px 14px 12px;cursor:pointer;display:flex;flex-direction:column;gap:3px;transition:border-color .15s,box-shadow .15s,background .15s}
+  .ar3-hc:hover{border-color:var(--ink-3)}
+  .ar3-hc.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);background:var(--panel)}
+  .ar3-hc.on::before{content:'';position:absolute;left:-1px;top:-1px;bottom:-1px;width:3px;background:var(--trace);border-radius:var(--r) 0 0 var(--r)}
+  .ar3-hn{font-size:12.5px;font-weight:600;color:var(--ink-2);padding-right:18px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ar3-hc b{font:600 24px/1.15 var(--gr);color:var(--ink);letter-spacing:-.01em}
+  .ar3-hm{font-size:11.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ar3-hm em{font-style:normal;color:var(--trace-ink);font-weight:600}
+  .ar3-hc.zero b{color:var(--ink-3)}
+  .ar3-hl{position:absolute;top:9px;right:10px;font-size:12px;color:var(--ink-3);text-decoration:none;padding:2px 4px;border-radius:2px}
+  .ar3-hl:hover{color:var(--ink);background:var(--line-2)}
+  @media (max-width:720px){.ar3-hgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
   @media (max-width:720px){.ar3-q{min-width:0;flex:1}.ar3-name span:last-child{max-width:200px}}
   @media (max-width:720px){ #view-evals .head .actions{flex-wrap:wrap;gap:8px} }
   /* 만족도 조사 — 병원별 링크 카드 */
@@ -4130,22 +4143,33 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     const byP=all.filter(x=>!f.p||x.p===f.p);
     const byK=byP.filter(x=>x.k===f.k);
     const hs=arUniq(byK.map(x=>x.h)), ys=arUniq(byK.filter(x=>!f.h||x.h===f.h).map(x=>x.y)).reverse();
-    if(f.h && hs.indexOf(f.h)<0) f.h=''; if(f.y && ys.indexOf(f.y)<0) f.y='';
+    if(f.h && hs.indexOf(f.h)<0 && !(f.p && ((AR.data.hosp||{})[f.p]||[]).some(o=>o.n===f.h))) f.h=''; if(f.y && ys.indexOf(f.y)<0) f.y='';
     const ms=arUniq(byK.filter(x=>(!f.h||x.h===f.h)&&(!f.y||x.y===f.y)).map(x=>x.m));
     if(f.m && ms.indexOf(f.m)<0) f.m='';
     const q=f.q.replace(/\s/g,'').toLowerCase();
     const rows=byK.filter(x=>(!f.h||x.h===f.h)&&(!f.y||x.y===f.y)&&(!f.m||x.m===f.m)&&(!q||(x.n+x.h+x.s).replace(/\s/g,'').toLowerCase().indexOf(q)>=0));
     const cnt=k=>byP.filter(x=>x.k===k).length;
-    const ppl=arUniq(all.map(x=>x.p));
+    const ppl=arUniq(all.map(x=>x.p).concat(Object.keys(AR.data.hosp||{})));
     const showH=f.k!=='reject'&&f.k!=='black';
+    const cards=!!f.p && f.k==='resume';
+    let grid='';
+    if(cards){
+      const hf=((AR.data.hosp||{})[f.p]||[]), hid={}; hf.forEach(o=>{ hid[o.n]=o.id; });
+      const names=arUniq(hf.map(o=>o.n).concat(byK.map(x=>x.h)));
+      const now=new Date(), cy=String(now.getFullYear()), cm=String(now.getMonth()+1).padStart(2,'0');
+      const card=(h,label,list,link)=>{ const thisM=list.filter(x=>x.y===cy&&x.m===cm).length, last=list.length?Math.max(...list.map(x=>x.u)):0;
+        return `<button class="ar3-hc${f.h===h?' on':''}${list.length?'':' zero'}" data-arh="${esc(h)}"><span class="ar3-hn">${esc(label)}</span><b>${list.length}</b><span class="ar3-hm">${thisM?`이번 달 <em>+${thisM}</em>`:'이번 달 0'}${last?` · 최근 ${esc(arDay(last))}`:''}</span>${link?`<a class="ar3-hl" href="https://drive.google.com/drive/folders/${esc(link)}" target="_blank" rel="noopener" title="드라이브에서 열기">↗</a>`:''}</button>`; };
+      grid=`<div class="ar3-hgrid">${card('','전체 병원',byK,(AR.data.pf||{})[f.p])}${names.map(h=>card(h,h,byK.filter(x=>x.h===h),hid[h])).join('')}</div>`;
+    }
     const head=`<div class="ar3-top">
         <div class="ar3-who"><button class="ar3-p${!f.p?' on':''}" data-arp="">전체 <i>${all.length}</i></button>${ppl.map(p=>`<button class="ar3-p${f.p===p?' on':''}" data-arp="${esc(p)}">${esc(p)} <i>${all.filter(x=>x.p===p).length}</i></button>`).join('')}</div>
         <div class="ar3-meta"><span>갱신 ${esc(arAgo(AR.data.at))}</span><button class="btn-sm ghost" data-ar="refresh"${AR.loading?' disabled':''}>${AR.loading?'읽는 중…':'새로고침'}</button><a class="btn-sm ghost" href="${esc(AR.data.folder)}" target="_blank" rel="noopener">드라이브 열기 ↗</a></div>
       </div>
+      ${grid}
       <div class="filterbar ar3-fb">
         <div class="segs">${['resume','inbox','reject','black'].map(k=>`<button class="seg${f.k===k?' active':''}" data-ark="${k}">${AR_KIND[k]} <span class="ar3-n">${cnt(k)}</span></button>`).join('')}</div>
         <div class="fgroup">
-          ${showH?`<select class="filter-sel" data-arf="h">${arOpt(hs,f.h,'전체 병원')}</select>`:''}
+          ${showH&&!cards?`<select class="filter-sel" data-arf="h">${arOpt(hs,f.h,'전체 병원')}</select>`:''}
           ${f.k==='resume'?`<select class="filter-sel" data-arf="y">${arOpt(ys,f.y,'전체 연도')}</select><select class="filter-sel" data-arf="m">${arOpt(ms,f.m,'전체 월')}</select>`:''}
           <input class="ar3-q" data-arf="q" type="search" placeholder="이름·파일명 검색" value="${esc(f.q)}">
         </div>
@@ -4158,7 +4182,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
         <td class="ar3-sub">${esc(x.s||'')}</td>
         <td class="r">${esc(arDay(x.u))}</td>
         <td class="r"><button class="ar3-open" data-aro="${esc(x.i)}">열기 ↗</button></td></tr>`).join('')
-      : `<tr><td colspan="7" class="empty-row">${f.k==='inbox'?'_정리 폴더가 비어 있습니다. 모두 월별 폴더로 정리되었습니다.':'조건에 맞는 이력서가 없습니다.'}</td></tr>`;
+      : `<tr><td colspan="7" class="empty-row">${f.k==='inbox'?'_정리 폴더가 비어 있습니다. 모두 월별 폴더로 정리되었습니다.':(cards&&!byK.length?'아직 올라온 이력서가 없습니다. 담당자 폴더의 _정리에 넣으면 5분 안에 병원·월별로 자동 정리됩니다.':(cards&&f.h&&!q&&!f.y&&!f.m?esc(f.h)+'에 올라온 이력서가 없습니다.':'조건에 맞는 이력서가 없습니다.'))}</td></tr>`;
     const more=rows.length>500?`<div class="ar3-more">최근 500건만 표시했습니다 (전체 ${rows.length}건). 필터나 검색으로 좁혀 주세요.</div>`:'';
     el.innerHTML=head+`<div class="ar3-sum"><b>${rows.length}</b>건${AR.err?` · <span class="ar3-warn">${esc(AR.err)}</span>`:''}</div>
       <div class="tbl-scroll"><table class="htbl ar3-tbl"><thead><tr><th>파일</th><th>담당자</th>${showH?'<th>병원</th>':''}${f.k==='resume'?'<th>연·월</th>':''}<th>하위 폴더</th><th class="r">수정일</th><th class="r"></th></tr></thead><tbody>${body}</tbody></table></div>${more}`;
@@ -4170,6 +4194,8 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     el.addEventListener('click',e=>{
       const a=e.target.closest('[data-ar]'); if(a){ arLoad(true); return; }
       const p=e.target.closest('[data-arp]'); if(p){ AR.f.p=p.dataset.arp; AR.f.h=''; AR.f.y=''; AR.f.m=''; arSave(); arRender(); return; }
+      if(e.target.closest('.ar3-hl')) return;
+      const hc=e.target.closest('[data-arh]'); if(hc){ AR.f.h=(AR.f.h===hc.dataset.arh&&hc.dataset.arh)?'':hc.dataset.arh; AR.f.y=''; AR.f.m=''; arSave(); arRender(); return; }
       const k=e.target.closest('[data-ark]'); if(k){ AR.f.k=k.dataset.ark; AR.f.h=''; AR.f.y=''; AR.f.m=''; arSave(); arRender(); return; }
       const o=e.target.closest('[data-aro]'); if(o){ open(o.dataset.aro); return; }
       const r=e.target.closest('tr[data-ari]'); if(r && !e.target.closest('button,a')) open(r.dataset.ari);
