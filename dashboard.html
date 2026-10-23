@@ -648,6 +648,39 @@
   }
 
   #ev-mode .seg,#cand-mode .seg{white-space:nowrap}
+  /* AR3 · 공유자료실 */
+  .ar3-top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+  .ar3-who{display:flex;gap:6px;flex-wrap:wrap}
+  .ar3-p{font:500 13px var(--kr);color:var(--ink-2);background:var(--paper);border:1px solid var(--line);border-radius:100px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:6px;align-items:center;transition:border-color .15s,background .15s}
+  .ar3-p i{font:500 11px var(--gr);font-style:normal;color:var(--ink-3)}
+  .ar3-p:hover{border-color:var(--ink-3)}
+  .ar3-p.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .ar3-p.on i{color:var(--trace)}
+  .ar3-meta{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3)}
+  .ar3-meta a{text-decoration:none}
+  .ar3-n{font:500 11px var(--gr);color:var(--ink-3);margin-left:2px}
+  .ar3-q{font:400 13px var(--kr);border:1px solid var(--line);border-radius:var(--r);padding:8px 11px;min-width:190px;background:var(--paper);color:var(--ink)}
+  .ar3-q:focus{outline:none;border-color:var(--ink)}
+  .ar3-sum{font-size:12.5px;color:var(--ink-3);margin:-4px 0 8px}
+  .ar3-sum b{font:600 14px var(--gr);color:var(--ink)}
+  .ar3-warn{color:var(--danger)}
+  .ar3-tbl tbody tr{cursor:pointer}
+  .ar3-name{color:var(--ink)!important;font-weight:500;min-width:260px}
+  .ar3-name>div{display:flex;align-items:center;gap:10px}
+  .ar3-name span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:420px}
+  .ar3-ext{flex:none;font:600 9.5px var(--gr);letter-spacing:.06em;padding:3px 5px;border-radius:2px;background:var(--line-2);color:var(--ink-2)}
+  .ar3-e-pdf{background:#FDECEB;color:#B42318}.ar3-e-hwp{background:#E8F1FD;color:#175CD3}.ar3-e-doc{background:#EEF4FF;color:#3538CD}.ar3-e-xls{background:#E7F6EC;color:#067647}.ar3-e-img{background:var(--trace-wash);color:var(--trace-ink)}
+  .ar3-open{font:500 12.5px var(--kr);color:var(--ink);background:none;border:1px solid var(--line);border-radius:var(--r);padding:5px 10px;cursor:pointer;white-space:nowrap}
+  .ar3-open:hover{border-color:var(--ink)}
+  .ar3-tbl td{padding-top:10px;padding-bottom:10px}
+  .ar3-ym{font-family:var(--gr);white-space:nowrap}
+  .ar3-sub{font-size:12.5px;color:var(--ink-3)}
+  .ar3-more{font-size:12.5px;color:var(--ink-3);padding:12px 2px}
+  .ar3-msg{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:34px 4px;color:var(--ink-3);font-size:13.5px}
+  .ar3-msg.err b{color:var(--danger)}
+  .ar3-spin{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--ink);border-radius:50%;animation:ar3s .8s linear infinite}
+  @keyframes ar3s{to{transform:rotate(360deg)}}
+  @media (max-width:720px){.ar3-q{min-width:0;flex:1}.ar3-name span:last-child{max-width:200px}}
   @media (max-width:720px){ #view-evals .head .actions{flex-wrap:wrap;gap:8px} }
   /* 만족도 조사 — 병원별 링크 카드 */
   #sv-links{display:none !important}
@@ -1089,7 +1122,7 @@
         <div><div class="eyebrow">Recruitment</div><h1>이력서 관리</h1></div>
         <div class="actions">
           <input type="file" id="pdf-input" accept="application/pdf,.pdf,.docx" style="display:none">
-          <div class="segs" id="cand-mode" style="margin-right:6px"><button class="seg active" data-m="board">보드</button><button class="seg" data-m="list">목록</button></div>
+          <div class="segs" id="cand-mode" style="margin-right:6px"><button class="seg active" data-m="board">보드</button><button class="seg" data-m="list">목록</button><button class="seg" data-m="arch">공유자료실</button></div>
           <button class="btn-sm ghost" id="import-pdf">이력서 가져오기 (PDF·DOCX)</button>
           <button class="btn-sm" id="add-candidate">＋ 지원자 추가</button>
         </div>
@@ -1118,6 +1151,7 @@
         </table>
       </div>
       </div>
+      <div id="cand-archive" class="ar3" style="display:none"></div>
     </section>
 
     <!-- 면접 평가 -->
@@ -4064,16 +4098,100 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     }catch(_){ return ''; }
   }
   /* H3:END */
+  /* AR3:BEGIN ══════ 이력서 관리: 의료사업본부 공유자료실(구글 드라이브) 연동 ══════ */
+  const AR_KIND={resume:'이력서',reject:'불합격',black:'블랙리스트',inbox:'미분류'};
+  const AR={data:null,loading:false,f:{p:'',h:'',y:'',m:'',k:'resume',q:''},err:''};
+  try{ const sv=JSON.parse(localStorage.getItem('hr2_ar_f')||'null'); if(sv) Object.assign(AR.f,sv,{q:''}); }catch(_){ }
+  function arSave(){ try{ localStorage.setItem('hr2_ar_f', JSON.stringify(AR.f)); }catch(_){ } }
+  function arExt(n){ const m=/\.([a-z0-9]+)$/i.exec(n||''); return m?m[1].toLowerCase():''; }
+  function arTag(n){ const e=arExt(n); const t={pdf:'PDF',hwp:'HWP',hwpx:'HWP',docx:'DOC',doc:'DOC',odt:'DOC',xlsx:'XLS',xls:'XLS',jpg:'IMG',jpeg:'IMG',png:'IMG'}[e]||(e?e.toUpperCase().slice(0,4):'FILE'); return `<span class="ar3-ext ar3-e-${t.toLowerCase()}">${t}</span>`; }
+  function arAgo(t){ const d=Math.round((Date.now()-t)/60000); if(d<1) return '방금'; if(d<60) return d+'분 전'; if(d<1440) return Math.round(d/60)+'시간 전'; return Math.round(d/1440)+'일 전'; }
+  function arDay(t){ const d=new Date(t); return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0'); }
+  function arUniq(a){ return [...new Set(a.filter(Boolean))].sort((x,y)=>String(x).localeCompare(String(y),'ko')); }
+  function arOpt(list,v,all){ return `<option value="">${all}</option>`+list.map(x=>`<option value="${esc(x)}"${String(x)===String(v)?' selected':''}>${esc(x)}</option>`).join(''); }
+  async function arLoad(force){
+    const el=$('#cand-archive'); if(!el) return;
+    if(!TOKEN){ el.innerHTML='<div class="ar3-msg">로그인 후 표시됩니다.</div>'; return; }
+    if(AR.loading) return;
+    if(AR.data && !force && Date.now()-(AR._t||0)<300000){ arRender(); return; }
+    AR.loading=true; AR.err=''; arRender();
+    try{ AR.data=await call(force?'refreshArchive':'getArchive', TOKEN); AR._t=Date.now(); }
+    catch(e){ AR.err=String((e&&e.message)||e); if(/세션/.test(AR.err)) authFail(e); }
+    finally{ AR.loading=false; arRender(); if(force && !AR.err) toast('공유자료실 목록을 새로 읽었습니다.'); }
+  }
+  function arRender(){
+    const el=$('#cand-archive'); if(!el) return;
+    if(!AR.data){
+      el.innerHTML = AR.err ? `<div class="ar3-msg err"><b>공유자료실을 불러오지 못했습니다.</b><span>${esc(AR.err)}</span><button class="btn-sm ghost" data-ar="reload">다시 시도</button></div>`
+                            : '<div class="ar3-msg"><span class="ar3-spin"></span>공유자료실 목록을 불러오는 중… (처음 한 번은 30초 정도 걸릴 수 있습니다)</div>';
+      return;
+    }
+    const all=AR.data.items||[], f=AR.f;
+    const byP=all.filter(x=>!f.p||x.p===f.p);
+    const byK=byP.filter(x=>x.k===f.k);
+    const hs=arUniq(byK.map(x=>x.h)), ys=arUniq(byK.filter(x=>!f.h||x.h===f.h).map(x=>x.y)).reverse();
+    if(f.h && hs.indexOf(f.h)<0) f.h=''; if(f.y && ys.indexOf(f.y)<0) f.y='';
+    const ms=arUniq(byK.filter(x=>(!f.h||x.h===f.h)&&(!f.y||x.y===f.y)).map(x=>x.m));
+    if(f.m && ms.indexOf(f.m)<0) f.m='';
+    const q=f.q.replace(/\s/g,'').toLowerCase();
+    const rows=byK.filter(x=>(!f.h||x.h===f.h)&&(!f.y||x.y===f.y)&&(!f.m||x.m===f.m)&&(!q||(x.n+x.h+x.s).replace(/\s/g,'').toLowerCase().indexOf(q)>=0));
+    const cnt=k=>byP.filter(x=>x.k===k).length;
+    const ppl=arUniq(all.map(x=>x.p));
+    const showH=f.k!=='reject'&&f.k!=='black';
+    const head=`<div class="ar3-top">
+        <div class="ar3-who"><button class="ar3-p${!f.p?' on':''}" data-arp="">전체 <i>${all.length}</i></button>${ppl.map(p=>`<button class="ar3-p${f.p===p?' on':''}" data-arp="${esc(p)}">${esc(p)} <i>${all.filter(x=>x.p===p).length}</i></button>`).join('')}</div>
+        <div class="ar3-meta"><span>갱신 ${esc(arAgo(AR.data.at))}</span><button class="btn-sm ghost" data-ar="refresh"${AR.loading?' disabled':''}>${AR.loading?'읽는 중…':'새로고침'}</button><a class="btn-sm ghost" href="${esc(AR.data.folder)}" target="_blank" rel="noopener">드라이브 열기 ↗</a></div>
+      </div>
+      <div class="filterbar ar3-fb">
+        <div class="segs">${['resume','inbox','reject','black'].map(k=>`<button class="seg${f.k===k?' active':''}" data-ark="${k}">${AR_KIND[k]} <span class="ar3-n">${cnt(k)}</span></button>`).join('')}</div>
+        <div class="fgroup">
+          ${showH?`<select class="filter-sel" data-arf="h">${arOpt(hs,f.h,'전체 병원')}</select>`:''}
+          ${f.k==='resume'?`<select class="filter-sel" data-arf="y">${arOpt(ys,f.y,'전체 연도')}</select><select class="filter-sel" data-arf="m">${arOpt(ms,f.m,'전체 월')}</select>`:''}
+          <input class="ar3-q" data-arf="q" type="search" placeholder="이름·파일명 검색" value="${esc(f.q)}">
+        </div>
+      </div>`;
+    const body=rows.length ? rows.slice(0,500).map(x=>`<tr data-ari="${esc(x.i)}">
+        <td class="ar3-name"><div>${arTag(x.n)}<span>${esc(x.n.replace(/\.[^.]+$/,''))}</span></div></td>
+        <td>${esc(x.p)}</td>
+        ${showH?`<td>${esc(x.h||'–')}</td>`:''}
+        ${f.k==='resume'?`<td class="ar3-ym">${x.y?esc(x.y)+'.'+esc(x.m):'–'}</td>`:''}
+        <td class="ar3-sub">${esc(x.s||'')}</td>
+        <td class="r">${esc(arDay(x.u))}</td>
+        <td class="r"><button class="ar3-open" data-aro="${esc(x.i)}">열기 ↗</button></td></tr>`).join('')
+      : `<tr><td colspan="7" class="empty-row">${f.k==='inbox'?'_정리 폴더가 비어 있습니다. 모두 월별 폴더로 정리되었습니다.':'조건에 맞는 이력서가 없습니다.'}</td></tr>`;
+    const more=rows.length>500?`<div class="ar3-more">최근 500건만 표시했습니다 (전체 ${rows.length}건). 필터나 검색으로 좁혀 주세요.</div>`:'';
+    el.innerHTML=head+`<div class="ar3-sum"><b>${rows.length}</b>건${AR.err?` · <span class="ar3-warn">${esc(AR.err)}</span>`:''}</div>
+      <div class="tbl-scroll"><table class="htbl ar3-tbl"><thead><tr><th>파일</th><th>담당자</th>${showH?'<th>병원</th>':''}${f.k==='resume'?'<th>연·월</th>':''}<th>하위 폴더</th><th class="r">수정일</th><th class="r"></th></tr></thead><tbody>${body}</tbody></table></div>${more}`;
+    const qi=el.querySelector('.ar3-q'); if(qi && AR._qf){ qi.focus(); qi.setSelectionRange(qi.value.length,qi.value.length); }
+  }
+  (function(){
+    const el=$('#cand-archive'); if(!el) return;
+    const open=id=>window.open('https://drive.google.com/file/d/'+encodeURIComponent(id)+'/view','_blank','noopener');
+    el.addEventListener('click',e=>{
+      const a=e.target.closest('[data-ar]'); if(a){ arLoad(true); return; }
+      const p=e.target.closest('[data-arp]'); if(p){ AR.f.p=p.dataset.arp; AR.f.h=''; AR.f.y=''; AR.f.m=''; arSave(); arRender(); return; }
+      const k=e.target.closest('[data-ark]'); if(k){ AR.f.k=k.dataset.ark; AR.f.h=''; AR.f.y=''; AR.f.m=''; arSave(); arRender(); return; }
+      const o=e.target.closest('[data-aro]'); if(o){ open(o.dataset.aro); return; }
+      const r=e.target.closest('tr[data-ari]'); if(r && !e.target.closest('button,a')) open(r.dataset.ari);
+    });
+    el.addEventListener('change',e=>{ const s=e.target.closest('select[data-arf]'); if(!s) return; AR.f[s.dataset.arf]=s.value; if(s.dataset.arf==='h'){ AR.f.y=''; AR.f.m=''; } if(s.dataset.arf==='y') AR.f.m=''; arSave(); arRender(); });
+    let qt; el.addEventListener('input',e=>{ const q=e.target.closest('input[data-arf="q"]'); if(!q) return; AR.f.q=q.value; clearTimeout(qt); qt=setTimeout(()=>{ AR._qf=true; arRender(); AR._qf=false; },180); });
+    const nb=document.querySelector('.nav-item[data-view="candidates"]'); if(nb) nb.addEventListener('click',()=>{ if(k3Mode==='arch') setTimeout(()=>arLoad(false),0); });
+  })();
+  /* AR3:END */
   /* K3:BEGIN ══════ 이력서 관리: 칸반 보드 (끌어서 상태 변경) ══════ */
   const K3_COLS=[ ['서류','서류 검토','#F79009'], ['면접','면접','#1570EF'], ['보류','보류','#98A2B3'], ['배치','배치 완료','#079455'], ['탈락','탈락','#D0CCC3'] ];
-  let k3Mode='board'; try{ const m=localStorage.getItem('hr2_cand_mode'); if(m==='list'||m==='board') k3Mode=m; }catch(_){ }
+  let k3Mode='board'; try{ const m=localStorage.getItem('hr2_cand_mode'); if(m==='list'||m==='board'||m==='arch') k3Mode=m; }catch(_){ }
   function k3SetMode(m){
     k3Mode=m; try{ localStorage.setItem('hr2_cand_mode', m); }catch(_){ }
     $$('#cand-mode .seg').forEach(x=>x.classList.toggle('active', x.dataset.m===m));
     $('#cand-board').style.display = m==='board' ? '' : 'none';
     $('#cand-list').style.display = m==='list' ? '' : 'none';
+    $('#cand-archive').style.display = m==='arch' ? '' : 'none';
+    const fb=$('#view-candidates .filterbar'); if(fb) fb.style.display = m==='arch' ? 'none' : '';
     const sg=$('#view-candidates .filterbar .segs'); if(sg) sg.style.visibility = m==='board' ? 'hidden' : '';
     if(m==='board') k3Render();
+    if(m==='arch') arLoad(false);
   }
   function k3Render(){
     const el=$('#cand-board'); if(!el || k3Mode!=='board') return;
