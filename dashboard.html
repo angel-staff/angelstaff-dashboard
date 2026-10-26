@@ -973,6 +973,226 @@
   @media (max-width:880px){ .head .actions{display:flex;flex-wrap:wrap;gap:8px} }
   @media (max-width:880px){ .k3-board{grid-template-columns:repeat(5,82vw);scroll-snap-type:x mandatory} .k3-col{scroll-snap-align:start} }
 
+
+  /* ═══ v5 · 개인 계정 · 권한 · 팀 관제 ═══ */
+  .v5-off{display:none!important}
+  body.v5-staff #add-hospital,body.v5-staff [data-del],body.v5-staff #rk-propose,body.v5-staff [data-rkw],body.v5-staff #q-propose,body.v5-staff [data-qc],body.v5-staff #ln-addrule,body.v5-staff #ln-learn,body.v5-staff [data-rule],body.v5-staff [data-rdel]{display:none!important}
+
+  /* 로그인 */
+  #login .stage .v5-feat{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:12px;max-width:50ch}
+  #login .stage .v5-feat li{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;color:#D9D6CE;font-size:13.5px;line-height:1.55}
+  #login .stage .v5-feat li b{display:block;color:#fff;font-weight:600;font-size:14px}
+  #login .stage .v5-feat li i{font-style:normal;width:22px;height:22px;border-radius:7px;background:#2A2825;color:var(--trace);display:grid;place-items:center;font:700 11px var(--gr)}
+  #login .form .v5-step[hidden]{display:none}
+  #login .v5-pwwrap{position:relative}
+  #login .v5-pwwrap input{padding-right:64px}
+  #login .v5-eye{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--ink-3);font-size:12px;font-weight:600;padding:6px 8px;border-radius:6px}
+  #login .v5-eye:hover{color:var(--ink);background:var(--panel)}
+  #login .v5-rules{list-style:none;margin:-2px 0 16px;padding:0;display:grid;gap:5px;font-size:12.5px;color:var(--ink-3)}
+  #login .v5-rules li{display:flex;align-items:center;gap:8px}
+  #login .v5-rules li::before{content:"";width:14px;height:14px;border-radius:50%;border:1.5px solid #CFCAC0;flex:none;box-sizing:border-box}
+  #login .v5-rules li.ok{color:var(--h3-g)}
+  #login .v5-rules li.ok::before{border-color:var(--h3-g);background:var(--h3-g) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.2l2.6 2.5L12 5.3' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center/12px no-repeat}
+  #login .v5-meter{height:5px;border-radius:99px;background:var(--line-2);overflow:hidden;margin:-6px 0 12px}
+  #login .v5-meter i{display:block;height:100%;width:0;background:var(--h3-r);transition:width .2s,background .2s}
+  #login .v5-back{margin-top:12px;border:0;background:none;color:var(--ink-3);font-size:12.5px;padding:4px 0}
+  #login .v5-back:hover{color:var(--ink)}
+  #login .v5-hi{font-size:13.5px;color:var(--ink-2);margin:0 0 22px}
+  #login .v5-flash{margin:0 0 16px;padding:10px 12px;border-radius:8px;background:var(--trace-wash);color:var(--trace-ink);font-size:12.5px;font-weight:600}
+  #login .v5-flash[hidden]{display:none}
+
+  /* 사이드바 사용자 */
+  .side-foot{position:relative}
+  .v5-user{cursor:pointer;border-radius:10px;transition:background .15s}
+  .v5-user:hover{background:#fff}
+  .v5-user .who{min-width:0}
+  .v5-user .who b{display:block;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .v5-user .who span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .v5-user .av.adm{background:var(--trace);color:var(--ink)}
+  .v5-user .more{margin-left:auto;border:0;background:none;color:var(--ink-3);font-size:18px;line-height:1;padding:2px 6px;border-radius:6px}
+  .v5-upop{position:absolute;left:0;right:0;bottom:calc(100% + 6px);background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 40px -16px rgba(20,18,16,.28);padding:6px;z-index:40}
+  .v5-upop[hidden]{display:none}
+  .v5-upop .hd{padding:9px 10px 8px;border-bottom:1px solid var(--line-2);margin-bottom:4px}
+  .v5-upop .hd b{display:block;font-size:13.5px}.v5-upop .hd small{color:var(--ink-3);font-size:12px}
+  .v5-upop button{display:flex;align-items:center;gap:9px;width:100%;border:0;background:none;text-align:left;padding:9px 10px;border-radius:8px;font-size:13.5px;color:var(--ink);font-family:inherit}
+  .v5-upop button:hover{background:var(--panel)}
+  .v5-upop button.danger{color:var(--h3-r)}
+  .v5-upop button span{width:18px;text-align:center;color:var(--ink-3)}
+
+  /* 상단 범위 전환 */
+  .v5-scope{position:relative;flex:none;display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13.5px;font-weight:600;color:var(--ink);max-width:260px}
+  .v5-scope:hover{border-color:#CFCAC0}
+  .v5-scope i{width:8px;height:8px;border-radius:50%;background:var(--h3-g);flex:none}
+  .v5-scope.team i{background:var(--trace)}
+  .v5-scope.peer i{background:var(--h3-b)}
+  .v5-scope em{font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .v5-scope small{font:600 11px var(--gr);color:var(--ink-3)}
+  .v5-scope svg{flex:none;color:var(--ink-3)}
+  .v5-spop{position:absolute;top:calc(100% + 6px);right:0;min-width:250px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 40px -16px rgba(20,18,16,.28);padding:6px;z-index:45;text-align:left}
+  .v5-spop[hidden]{display:none}
+  .v5-spop .t{padding:8px 10px 6px;font-size:11.5px;font-weight:700;color:var(--ink-3);letter-spacing:.02em}
+  .v5-spop button{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;padding:9px 10px;border-radius:8px;font-size:13.5px;color:var(--ink);font-family:inherit;text-align:left}
+  .v5-spop button:hover{background:var(--panel)}
+  .v5-spop button.on{background:var(--trace-wash)}
+  .v5-spop button .av{width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700;flex:none}
+  .v5-spop button .av.t{background:var(--trace);color:var(--ink)}
+  .v5-spop button small{margin-left:auto;color:var(--ink-3);font-size:11.5px}
+  .v5-spop .hl{padding:8px 10px;font-size:12.5px;color:var(--ink-2);line-height:1.6}
+  .v5-spop .hl b{color:var(--ink)}
+  .v5-banner{display:flex;align-items:center;gap:10px;padding:9px var(--pad);background:#EFF8FF;color:#175CD3;font-size:13px;border-bottom:1px solid #D1E9FF}
+  .v5-banner[hidden]{display:none}
+  .v5-banner b{font-weight:700}
+  .v5-banner button{margin-left:auto;border:1px solid #B2DDFF;background:#fff;color:#175CD3;border-radius:8px;padding:5px 10px;font-size:12.5px;font-weight:600}
+  @media (max-width:880px){ .v5-scope{max-width:46vw;padding:0 10px} .v5-scope small{display:none} }
+
+  /* 오늘 브리핑: 내 범위 · 공유자료실 */
+  .v5-scopeline{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:12px 0 0;font-size:12.5px;color:var(--ink-3)}
+  .v5-scopeline b{color:var(--ink);font-weight:700}
+  .v5-scopeline .chip{display:inline-flex;align-items:center;padding:3px 10px;border-radius:99px;background:var(--panel);border:1px solid var(--line);color:var(--ink-2);font-weight:600;font-size:12px}
+  .v5-arch{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:16px;margin-bottom:22px}
+  .v5-arch .tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:16px}
+  .v5-arch .tile{border:1px solid var(--line-2);border-radius:12px;padding:12px 13px;background:var(--panel)}
+  .v5-arch .tile .l{font-size:12px;color:var(--ink-3);font-weight:600}
+  .v5-arch .tile .v{font:700 26px/1.15 var(--gr);letter-spacing:-.03em;margin-top:4px}
+  .v5-arch .tile .v small{font:600 12px var(--kr);color:var(--ink-3);margin-left:2px}
+  .v5-arch .tile.a{background:var(--h3-ab);border-color:#FEDF89}.v5-arch .tile.a .v{color:var(--h3-a)}
+  .v5-arch .bars{padding:0 16px 16px;display:grid;gap:7px}
+  .v5-arch .bars div{display:grid;grid-template-columns:118px 1fr 34px;gap:10px;align-items:center;font-size:12.5px;color:var(--ink-2)}
+  .v5-arch .bars span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .v5-arch .bars p{margin:0;height:8px;border-radius:99px;background:var(--line-2);overflow:hidden}
+  .v5-arch .bars p i{display:block;height:100%;background:var(--ink);border-radius:99px}
+  .v5-arch .bars b{text-align:right;font:700 12.5px var(--gr)}
+  .v5-arch .list{max-height:330px;overflow:auto}
+  .v5-arch .it{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 18px;border-bottom:1px solid var(--line-2);text-decoration:none;color:inherit}
+  .v5-arch .it:hover{background:var(--panel)}
+  .v5-arch .it .ic{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font:700 10px var(--gr);color:#fff;background:#667085}
+  .v5-arch .it .ic.docx,.v5-arch .it .ic.doc{background:#2E5AAC}.v5-arch .it .ic.hwp,.v5-arch .it .ic.hwpx{background:#1E8E9E}.v5-arch .it .ic.pdf{background:#C4320A}
+  .v5-arch .it b{display:block;font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .v5-arch .it small{font-size:12px;color:var(--ink-3)}
+  .v5-arch .it .d{font:600 12px var(--gr);color:var(--ink-3);white-space:nowrap}
+  .v5-arch .foot{display:flex;flex-wrap:wrap;gap:8px;padding:12px 16px;border-top:1px solid var(--line-2)}
+  .v5-arch .foot a.h3-btn{text-decoration:none}
+  @media (max-width:980px){ .v5-arch{grid-template-columns:1fr} }
+  @media (max-width:880px){ #v5-arch-meta{display:none} }
+
+  /* 관리 화면 공통 */
+  .v5-sub{margin:8px 0 0;color:var(--ink-2);font-size:14px}
+  .v5-act{display:flex;gap:8px;flex-wrap:wrap}
+  .v5-sec{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:30px 2px 12px}
+  .v5-sec h2{margin:0;font-size:18px;letter-spacing:-.02em}
+  .v5-sec span{font-size:12.5px;color:var(--ink-3)}
+  .v5-alert{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;border:1px solid #FEDF89;background:var(--h3-ab);color:#93370D;font-size:13px;margin-bottom:12px;line-height:1.55}
+  .v5-alert.r{border-color:#FECDCA;background:var(--h3-rb);color:#912018}
+  .v5-alert.g{border-color:#ABEFC6;background:var(--h3-gb);color:#085D3A}
+  .v5-sum{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:18px}
+  .v5-sum .s{border:1px solid var(--line);border-radius:14px;background:#fff;padding:14px 16px;box-shadow:var(--h3-card)}
+  .v5-sum .s .l{font-size:12.5px;color:var(--ink-3);font-weight:600}
+  .v5-sum .s .v{font:700 28px/1.15 var(--gr);letter-spacing:-.03em;margin-top:6px}
+  .v5-sum .s .v small{font:600 13px var(--kr);color:var(--ink-3);margin-left:2px}
+  @media (max-width:980px){ .v5-sum{grid-template-columns:repeat(2,minmax(0,1fr))} }
+
+  /* 팀 관제 */
+  .v5-team{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+  .v5-tc{border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:var(--h3-card);display:flex;flex-direction:column;overflow:hidden}
+  .v5-tc .h{display:flex;align-items:center;gap:12px;padding:16px 18px 12px}
+  .v5-tc .h .av{width:38px;height:38px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px;flex:none}
+  .v5-tc .h .av.adm{background:var(--trace);color:var(--ink)}
+  .v5-tc .h b{display:block;font-size:16px;letter-spacing:-.02em}
+  .v5-tc .h small{color:var(--ink-3);font-size:12.5px}
+  .v5-tc .h .r{margin-left:auto;display:flex;gap:6px}
+  .v5-tc .h .r button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font-size:12.5px;font-weight:600;color:var(--ink)}
+  .v5-tc .h .r button:hover{border-color:#CFCAC0;background:var(--panel)}
+  .v5-tc .hs{display:flex;flex-wrap:wrap;gap:5px;padding:0 18px 12px}
+  .v5-tc .hs span{font-size:11.5px;font-weight:600;color:var(--ink-2);background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:2px 9px}
+  .v5-tc .hs span.w{border-color:#FEDF89;background:var(--h3-ab);color:#93370D}
+  .v5-tc .k{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line-2)}
+  .v5-tc .k div{padding:11px 10px 10px 14px;border-right:1px solid var(--line-2);border-bottom:1px solid var(--line-2)}
+  .v5-tc .k div:nth-child(4n){border-right:0}
+  .v5-tc .k span{display:block;font-size:11.5px;color:var(--ink-3);font-weight:600;white-space:nowrap}
+  .v5-tc .k b{font:700 20px/1.2 var(--gr);letter-spacing:-.02em}
+  .v5-tc .k b.r{color:var(--h3-r)}.v5-tc .k b.a{color:var(--h3-a)}.v5-tc .k b.z{color:#C9C4BA}
+  .v5-tc .f{margin-top:auto;padding:11px 18px;font-size:12px;color:var(--ink-3);display:flex;flex-wrap:wrap;gap:4px 12px}
+  .v5-tc .f b{color:var(--ink-2);font-weight:600}
+
+  /* 계정·권한 */
+  .v5-ul{border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:var(--h3-card);overflow:hidden}
+  .v5-ur{display:grid;grid-template-columns:minmax(180px,1.2fr) minmax(0,2fr) 150px auto;gap:14px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line-2)}
+  .v5-ur:last-child{border-bottom:0}
+  .v5-ur.off{opacity:.55}
+  .v5-ur .p{display:flex;align-items:center;gap:11px;min-width:0}
+  .v5-ur .p .av{width:34px;height:34px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
+  .v5-ur .p .av.adm{background:var(--trace);color:var(--ink)}
+  .v5-ur .p b{display:block;font-size:14.5px}
+  .v5-ur .p small{font-size:12px;color:var(--ink-3)}
+  .v5-ur .tags{display:flex;flex-wrap:wrap;gap:4px}
+  .v5-ur .tags span{font-size:11.5px;font-weight:600;color:var(--ink-2);background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:2px 8px}
+  .v5-ur .tags span.x{border-style:dashed}
+  .v5-ur .m{font-size:12px;color:var(--ink-3);line-height:1.5}
+  .v5-ur .m b{color:var(--ink-2);font-weight:600}
+  .v5-ur .b{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+  .v5-ur .b button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font-size:12.5px;font-weight:600;color:var(--ink);white-space:nowrap}
+  .v5-ur .b button:hover{background:var(--panel)}
+  .v5-badge{display:inline-flex;align-items:center;gap:4px;font:700 10.5px/1.6 var(--gr);letter-spacing:.02em;padding:1px 7px;border-radius:99px;background:var(--panel);color:var(--ink-2);margin-left:6px;vertical-align:1px}
+  .v5-badge.adm{background:var(--trace-wash);color:var(--trace-ink)}
+  .v5-badge.r{background:var(--h3-rb);color:var(--h3-r)}
+  .v5-badge.a{background:var(--h3-ab);color:var(--h3-a)}
+  @media (max-width:980px){ .v5-ur{grid-template-columns:1fr} .v5-ur .b{justify-content:flex-start} }
+  .v5-form .v5-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+  .v5-form label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-2);margin:0 0 6px}
+  .v5-form input,.v5-form select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px;font-family:inherit;background:#fff;color:var(--ink);outline:none}
+  .v5-form input:focus,.v5-form select:focus{border-color:var(--ink);box-shadow:0 0 0 3px var(--trace-wash)}
+  .v5-form .f{margin-bottom:14px}
+  .v5-form .hint{font-size:12px;color:var(--ink-3);margin-top:5px;line-height:1.5}
+  .v5-form .sec{font-size:12.5px;font-weight:700;color:var(--ink);margin:18px 0 8px;display:flex;justify-content:space-between;align-items:center}
+  .v5-form .sec button{border:0;background:none;color:var(--ink-3);font-size:12px;font-weight:600}
+  .v5-checks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 10px}
+  .v5-checks label{display:flex;align-items:center;gap:8px;font-weight:500;font-size:13px;color:var(--ink);margin:0;padding:7px 9px;border:1px solid var(--line-2);border-radius:8px;cursor:pointer}
+  .v5-checks label:hover{background:var(--panel)}
+  .v5-checks input{width:auto;margin:0}
+  .v5-checks .g{grid-column:1/-1;font-size:11.5px;font-weight:700;color:var(--ink-3);margin-top:6px}
+  .v5-checks.dis label{opacity:.55;cursor:default}
+  @media (max-width:640px){ .v5-checks{grid-template-columns:repeat(2,minmax(0,1fr))} .v5-form .v5-row{grid-template-columns:1fr} }
+  .v5-temp{border:1px dashed var(--ink);border-radius:12px;padding:16px;text-align:center;margin:4px 0 14px;background:var(--panel)}
+  .v5-temp .pw{font:700 30px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;margin:6px 0}
+  .v5-temp small{color:var(--ink-3);font-size:12px}
+  .v5-msg{white-space:pre-wrap;font-size:13px;line-height:1.6;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--ink-2)}
+  .v5-card{border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:var(--h3-card);padding:18px}
+  .v5-pol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 22px;font-size:13px;color:var(--ink-2);line-height:1.6}
+  .v5-pol b{display:block;color:var(--ink);font-size:13.5px}
+  @media (max-width:760px){ .v5-pol{grid-template-columns:1fr} }
+
+  /* 활동 기록 */
+  .v5-filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+  .v5-filters select,.v5-filters input{height:38px;border:1px solid var(--line);border-radius:10px;padding:0 12px;font-size:13.5px;font-family:inherit;background:#fff;color:var(--ink);outline:none}
+  .v5-filters input{min-width:240px;flex:1;max-width:420px}
+  .v5-filters .chips{display:flex;gap:4px;flex-wrap:wrap}
+  .v5-filters .chips button{height:34px;border:1px solid var(--line);background:#fff;border-radius:99px;padding:0 12px;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+  .v5-filters .chips button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .v5-log{border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:var(--h3-card);overflow:hidden}
+  .v5-lr{display:grid;grid-template-columns:118px 92px 170px minmax(0,1fr);gap:12px;align-items:start;padding:11px 18px;border-bottom:1px solid var(--line-2);font-size:13px}
+  .v5-lr:last-child{border-bottom:0}
+  .v5-lr .t{font:500 12.5px var(--gr);color:var(--ink-3);white-space:nowrap}
+  .v5-lr .w{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .v5-lr .a span{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--panel);color:var(--ink-2)}
+  .v5-lr .a span.in{background:var(--h3-gb);color:var(--h3-g)}
+  .v5-lr .a span.bad{background:var(--h3-rb);color:var(--h3-r)}
+  .v5-lr .a span.acc{background:var(--trace-wash);color:var(--trace-ink)}
+  .v5-lr .a span.del{background:#FEF3F2;color:#B42318}
+  .v5-lr .x{min-width:0;color:var(--ink-2)}
+  .v5-lr .x b{color:var(--ink);font-weight:600}
+  .v5-lr .x small{display:block;color:var(--ink-3);font-size:11.5px;margin-top:2px;word-break:break-all}
+  .v5-lr.h{font-weight:700;font-size:11.5px;color:var(--ink-3);background:var(--panel)}
+  @media (max-width:880px){ .v5-lr{grid-template-columns:1fr 1fr} .v5-lr .x{grid-column:1/-1} .v5-lr.h{display:none} }
+  .v5-more{display:block;width:100%;border:0;border-top:1px solid var(--line-2);background:#fff;padding:12px;font-size:13px;font-weight:600;color:var(--ink-2)}
+  .v5-more:hover{background:var(--panel)}
+  .v5-welcome{display:grid;gap:12px;margin:6px 0 4px}
+  .v5-welcome>div{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start;padding:12px 14px;border:1px solid var(--line-2);border-radius:12px}
+  .v5-welcome>div>i{font-style:normal;width:34px;height:34px;border-radius:10px;background:var(--trace-wash);display:grid;place-items:center;font-size:16px}
+  .v5-welcome>div>div>b{display:block;font-size:14px;margin-bottom:3px}
+  .v5-welcome>div>div span{display:block;font-size:13px;color:var(--ink-2);line-height:1.6}
+
+  #ue-del{margin-right:auto;color:var(--h3-r,#c0392b)}
+
 </style>
 </head>
 <body>
@@ -980,25 +1200,53 @@
 <!-- 로그인 -->
 <div id="login">
   <div class="stage">
-    <div class="mark">엔젤스태프<b>.</b></div>
+    <div class="mark"><span id="v5-co">엔젤스태프</span><b>.</b></div>
     <div>
-      <div class="big">병원 인사 운영을 <i>한 화면</i>에서.</div>
-      <div class="sub">채용 공고부터 면접 평가, 파견 계약, 만족도까지 — 흩어진 업무를 하나의 흐름으로.</div>
+      <div class="big">내 병원, 내 업무만 <i>한 화면</i>에.</div>
+      <div class="sub">담당자마다 자기 계정으로 로그인해 담당 병원의 지원자·근무자·이력서만 다룹니다.</div>
+      <ul class="v5-feat">
+        <li><i>01</i><div><b>개인 계정</b>첫 로그인 때 비밀번호를 직접 정하고, 5번 틀리면 15분간 잠깁니다.</div></li>
+        <li><i>02</i><div><b>담당 병원만 보이는 화면</b>공유자료실 담당자 폴더 기준 — 병원 폴더를 옮기면 권한도 따라갑니다.</div></li>
+        <li><i>03</i><div><b>모든 변경 기록</b>누가 언제 무엇을 바꿨는지 관리자가 확인합니다.</div></li>
+      </ul>
     </div>
-    <div class="mark" style="color:var(--ink-3);font-weight:500;font-size:11px;letter-spacing:.04em">통합 HR PLATFORM · v1</div>
+    <div class="mark" style="color:var(--ink-3);font-weight:500;font-size:11px;letter-spacing:.04em">통합 HR PLATFORM · v5 개인 계정</div>
     <div class="trace-line"></div>
   </div>
   <div class="form">
-    <div class="eyebrow" style="margin-bottom:14px">HR Platform</div>
-    <h2>로그인</h2>
-    <p>담당자 비밀번호를 입력하세요.</p>
-    <div class="field">
-      <label for="pw">비밀번호</label>
-      <input id="pw" type="password" placeholder="••••••••" autocomplete="current-password">
-      <div class="err-msg" id="login-err"></div>
+    <div class="v5-step" id="lg-main">
+      <div class="eyebrow" style="margin-bottom:14px">HR Platform</div>
+      <h2>로그인</h2>
+      <p>이름(또는 아이디)과 비밀번호를 입력하세요.</p>
+      <div class="v5-flash" id="lg-flash" hidden></div>
+      <div class="field">
+        <label for="uid">이름 또는 아이디</label>
+        <input id="uid" type="text" placeholder="예: 이선영 또는 lsy" autocomplete="username" autocapitalize="off" spellcheck="false">
+      </div>
+      <div class="field">
+        <label for="pw">비밀번호</label>
+        <div class="v5-pwwrap"><input id="pw" type="password" placeholder="••••••••" autocomplete="current-password"><button class="v5-eye" type="button" data-eye="pw">보기</button></div>
+        <div class="err-msg" id="login-err"></div>
+      </div>
+      <button class="btn" id="enter">로그인</button>
+      <div class="note">처음이면 관리자에게 받은 <b>임시 비밀번호</b>로 로그인한 뒤 새 비밀번호를 정합니다. 같은 계정으로 5번 틀리면 15분간 잠깁니다.</div>
     </div>
-    <button class="btn" id="enter">입장</button>
-    <div class="note">세션은 6시간 유지됩니다. 모든 데이터는 로그인 후에만 불러옵니다.</div>
+    <div class="v5-step" id="lg-pw" hidden>
+      <div class="eyebrow" style="margin-bottom:14px">Security</div>
+      <h2>새 비밀번호 정하기</h2>
+      <p class="v5-hi" id="lg-hi">처음 로그인하셨습니다. 앞으로 쓸 비밀번호를 정해 주세요.</p>
+      <div class="field" id="lg-oldf" hidden><label for="opw">지금 비밀번호 (임시 비밀번호)</label><input id="opw" type="password" autocomplete="current-password"></div>
+      <div class="field">
+        <label for="npw1">새 비밀번호</label>
+        <div class="v5-pwwrap"><input id="npw1" type="password" autocomplete="new-password" placeholder="8자 이상"><button class="v5-eye" type="button" data-eye="npw1">보기</button></div>
+      </div>
+      <div class="v5-meter"><i id="lg-meter"></i></div>
+      <div class="field"><label for="npw2">새 비밀번호 확인</label><input id="npw2" type="password" autocomplete="new-password"></div>
+      <ul class="v5-rules" id="lg-rules"><li data-r="len">8자 이상</li><li data-r="mix">영문·숫자·기호 중 2가지 이상</li><li data-r="same">두 번 똑같이 입력</li></ul>
+      <div class="err-msg" id="lg-pwerr"></div>
+      <button class="btn" id="lg-pwsave">저장하고 시작하기</button>
+      <button class="v5-back" id="lg-back" type="button">← 다른 계정으로 로그인</button>
+    </div>
   </div>
 </div>
 
@@ -1030,16 +1278,27 @@
     <button class="nav-item" data-view="audit" data-title="AI 결정 기록"><i class="dot"></i>AI 결정 기록<span class="x-new">NEW</span></button>
     <div class="nav-sec"><div class="eyebrow">설정</div></div>
     <button class="nav-item" data-view="hospitals" data-title="병원 마스터"><i class="dot"></i>병원 마스터</button>
+    <div class="nav-sec v5-adm v5-off"><div class="eyebrow">관리</div></div>
+    <button class="nav-item v5-adm v5-off" data-view="team" data-title="팀 관제"><i class="dot"></i>팀 관제</button>
+    <button class="nav-item v5-adm v5-off" data-view="users" data-title="계정·권한"><i class="dot"></i>계정·권한</button>
+    <button class="nav-item v5-adm v5-off" data-view="activity" data-title="활동 기록"><i class="dot"></i>활동 기록</button>
     <div class="side-foot">
-      <div class="user">
-        <div class="av">고</div>
-        <div class="who">고재윤 <span>차장 · 운영팀</span></div>
-        <button class="logout" id="logout">로그아웃</button>
+      <div class="v5-upop" id="v5-upop" hidden>
+        <div class="hd"><b id="v5-up-n">—</b><small id="v5-up-s"></small></div>
+        <button type="button" id="v5-mypw"><span>🔑</span>비밀번호 변경</button>
+        <button type="button" id="v5-myhosp"><span>🏥</span>내 담당 병원</button>
+        <button type="button" class="danger" id="logout"><span>⎋</span>로그아웃</button>
+      </div>
+      <div class="user v5-user" id="v5-user" role="button" tabindex="0" aria-label="내 계정 메뉴">
+        <div class="av" id="v5-av">·</div>
+        <div class="who"><b id="v5-nm">—</b><span id="v5-rl"></span></div>
+        <span class="more" aria-hidden="true">⋯</span>
       </div>
     </div>
   </aside>
 
   <main class="content">
+    <div class="v5-banner" id="v5-banner" hidden><span id="v5-banner-t"></span><button type="button" id="v5-banner-x">내 화면으로 돌아가기</button></div>
     <div class="topbar">
       <button class="menu-btn" id="menu" aria-label="메뉴"><span></span></button>
       <span class="logo">엔젤스태프<b>.</b></span>
@@ -1047,6 +1306,7 @@
     <div class="cmd3">
       <button class="cmd3-search" id="cmd3-search" type="button" aria-label="검색 열기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>사람·메뉴 검색, 바로 실행</span><span class="kbd">Ctrl K</span></button>
       <div class="cmd3-sp"></div>
+      <div style="position:relative;flex:none"><button class="v5-scope" id="v5-scope" type="button" aria-haspopup="true" title="보고 있는 범위"><i></i><em id="v5-scope-t">내 담당</em><small id="v5-scope-n"></small><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></button><div class="v5-spop" id="v5-spop" hidden></div></div>
       <div class="cmd3-sync" id="cmd3-sync"></div>
       <button class="cmd3-ib" id="cmd3-refresh" type="button" title="새로 고침 (R)" aria-label="새로 고침"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></button>
       <button class="cmd3-ib" id="cmd3-bell" type="button" title="알림 (N)" aria-label="알림"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="bd" hidden>0</span></button>
@@ -1055,7 +1315,7 @@
     <!-- 현황 -->
     <section class="page" id="view-dash">
       <div class="head h3-hello">
-        <div><div class="eyebrow" id="h3-date">Today</div><h1 id="h3-title">오늘 브리핑</h1><p class="h3-brief" id="h3-brief">데이터를 불러오는 중입니다…</p></div>
+        <div><div class="eyebrow" id="h3-date">Today</div><h1 id="h3-title">오늘 브리핑</h1><p class="h3-brief" id="h3-brief">데이터를 불러오는 중입니다…</p><div class="v5-scopeline" id="v5-scopeline"></div></div>
         <div class="h3-hd-act"><button class="h3-btn" id="h3-print" type="button">🖨 인쇄·PDF</button><button class="h3-btn dark" id="h3-pal" type="button">검색·바로 실행 <span class="kbd" style="background:#2B2925;color:#fff;border-color:#55524C">Ctrl K</span></button></div>
       </div>
       <div class="h3-new" id="h3-new" hidden><div><b>새로 바뀐 점</b><span><span class="kbd">Ctrl K</span> 로 사람·메뉴를 바로 찾고 실행 · 오늘 할 일은 ✓로 확인 처리 · 이력서 관리는 <b>보드</b>에서 끌어서 상태 변경 · 근무자를 열면 근속·계약 타임라인 · <span class="kbd">?</span> 단축키</span></div><button id="h3-new-x" type="button">확인</button></div>
@@ -1065,6 +1325,8 @@
           <div class="h3-card"><div class="h3-ch"><h3>오늘 할 일 <span class="c" id="h3-todo-c">0</span></h3><span class="m">위험도 순 · 누르면 바로 처리 화면으로</span></div><div class="h3-todo" id="h3-todo"></div></div>
           <div class="h3-card"><div class="h3-ch"><h3>다가오는 2주</h3><div class="tabs" id="h3-agtabs"><button data-t="all" class="on">전체</button><button data-t="exp">만료</button><button data-t="iv">면접</button><button data-t="bd">생일</button></div></div><div class="h3-ag" id="h3-ag"></div></div>
         </div>
+        <div class="h3-sec"><h2>공유자료실 이력서</h2><span id="v5-arch-meta">바탕화면 '이력서 정리'에 넣으면 병원·월별로 자동 정리</span></div>
+        <div class="v5-arch" id="v5-arch"><div class="h3-card"><div class="h3-empty">공유자료실을 불러오는 중…</div></div><div class="h3-card"><div class="h3-empty">&nbsp;</div></div></div>
         <div class="h3-sec"><h2>병원별 현황</h2><span>카드를 누르면 그 병원 근무자만 봅니다</span></div>
         <div class="h3-hosp" id="h3-hosp"></div>
         <div class="h3-sec"><h2>추이와 분포</h2><span>휴먼관리시스템 재직자·이력서 관리 기준</span></div>
@@ -1113,6 +1375,40 @@
         </div>
       </div>
       </div>
+    </section>
+
+    <!-- v5: 팀 관제 -->
+    <section class="page" id="view-team" style="display:none">
+      <div class="head"><div><div class="eyebrow">Team</div><h1>팀 관제</h1><p class="v5-sub">담당자별 업무량과 상태 — 공유자료실 · 근무자 · 지원자 · 만족도 기준</p></div>
+        <div class="v5-act"><button class="btn-sm ghost" id="tm-sync" type="button">담당 병원 동기화</button><button class="btn-sm" id="tm-refresh" type="button">새로 고침</button></div></div>
+      <div class="v5-sum" id="tm-sum"></div>
+      <div id="tm-alerts"></div>
+      <div class="v5-team" id="tm-grid"></div>
+    </section>
+    <!-- v5: 계정·권한 -->
+    <section class="page" id="view-users" style="display:none">
+      <div class="head"><div><div class="eyebrow">Accounts</div><h1>계정·권한</h1><p class="v5-sub">사람마다 계정 · 역할 · 메뉴 권한 · 담당 병원 (공유자료실 폴더 기준)</p></div>
+        <div class="v5-act"><button class="btn-sm" id="us-add" type="button">＋ 계정 추가</button></div></div>
+      <div id="us-list"><div class="loading">불러오는 중…</div></div>
+      <div class="v5-sec"><h2>회사 설정</h2><span>다른 회사에서 쓸 때 이름만 바꾸면 됩니다</span></div>
+      <div id="us-company"></div>
+      <div class="v5-sec"><h2>보안 정책</h2><span>서버에서 강제됩니다</span></div>
+      <div class="v5-card v5-pol">
+        <div><b>비밀번호</b>8자 이상 · 영문·숫자·기호 중 2가지 이상 · 아이디·쉬운 문자열 금지. 해시(SHA-256, 솔트, 반복)로만 저장하며 관리자도 볼 수 없습니다.</div>
+        <div><b>첫 로그인 · 초기화</b>임시 비밀번호로 들어오면 새 비밀번호를 정하기 전에는 아무 화면도 열리지 않습니다.</div>
+        <div><b>잠금</b>같은 계정 5번 실패 시 15분 잠금 · 전체 40번 실패 시 15분 전체 잠금. 관리자가 바로 풀 수 있습니다.</div>
+        <div><b>세션</b>쓰는 동안 6시간씩 연장, 최대 12시간. 계정을 중지하면 즉시 로그아웃됩니다.</div>
+        <div><b>데이터 범위</b>담당자는 담당 병원의 행만 서버에서 받습니다. 범위 밖 자료는 수정·삭제 요청도 서버가 거부합니다.</div>
+        <div><b>활동 기록</b>로그인·실패·계정 변경·데이터 변경을 사람별로 남깁니다 (최근 6,000건 보관).</div>
+      </div>
+    </section>
+    <!-- v5: 활동 기록 -->
+    <section class="page" id="view-activity" style="display:none">
+      <div class="head"><div><div class="eyebrow">Activity</div><h1>활동 기록</h1><p class="v5-sub">누가 · 언제 · 무엇을 바꿨는지 <span id="ac-meta"></span></p></div>
+        <div class="v5-act"><button class="btn-sm ghost" id="ac-csv" type="button">CSV 내려받기</button><button class="btn-sm" id="ac-refresh" type="button">새로 고침</button></div></div>
+      <div class="v5-filters"><select id="ac-user" aria-label="사람"></select><input id="ac-q" placeholder="검색: 이름, 행동, 대상, 내용" aria-label="검색">
+        <div class="chips" id="ac-kind"><button type="button" data-k="all" class="on">전체</button><button type="button" data-k="data">데이터 변경</button><button type="button" data-k="login">로그인</button><button type="button" data-k="account">계정·보안</button></div></div>
+      <div id="ac-list"></div>
     </section>
 
     <!-- 병원 마스터 -->
@@ -1267,7 +1563,7 @@
 직접적인 간병·신체 부축
 개인 심부름 및 사적 지시</textarea></div>
           <h4>지원 / 연락처</h4>
-          <div class="field"><label for="po-mgr">담당자</label><input id="po-mgr" value="의료사업본부 고재윤"></div>
+          <div class="field"><label for="po-mgr">담당자</label><input id="po-mgr" value="의료사업본부"></div>
           <div class="field"><label for="po-tel">전화</label><input id="po-tel" value="010-8488-1678"></div>
           <div class="field"><label for="po-email">이메일</label><input id="po-email" value="gjy@angelstaff.co.kr"></div>
         </div>
@@ -1770,7 +2066,7 @@
 
   /* ═══ SWR 캐시: 캐시가 있으면 즉시 렌더 → 백그라운드 갱신 (체감속도 대폭 개선) ═══ */
   /* 제외 병원: 강동경희대 (2026-10-23 요청) — 화면 전체에서 숨김 */
-  function xHospOut(n){ return /강동경희/.test(String(n||'')); }
+  function xHospOut(n){ return false; }   /* v5: 병원 숨김은 서버의 담당 범위로 대체 (강동경희대는 이강현 담당) */
   function xExcl(k,v){
     try{
       if(!v || typeof v!=='object') return v;
@@ -1806,7 +2102,7 @@
   }
   function hasCache(key){ return !!DATA[key]; }
   /* 재방문 즉시 표시: 모든 메뉴 데이터를 이 브라우저에 보관 (로그아웃 시 삭제) */
-  const PERSIST_KEY='hr2_cache_v2', PERSIST_MAX_AGE=7*24*3600*1000;
+  let PERSIST_KEY='hr5_cache_anon'; const PERSIST_MAX_AGE=7*24*3600*1000;   /* v5: 사람·범위별로 따로 보관 */
   let __psT=null;
   function persistSave(){
     clearTimeout(__psT);
@@ -1858,22 +2154,12 @@
   function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('on'),2400); }
   function authFail(e){
     const m=String((e&&e.message)||e);
-    if(/세션/.test(m)){ logout(); toast('세션이 만료되었습니다. 다시 로그인하세요.'); }   // '권한'은 드라이브 승인 오류일 수 있어 로그아웃하지 않음
+    if(/세션/.test(m)){ v5Flash('세션이 만료되었습니다. 다시 로그인하세요.'); logout(); }   // '권한'은 드라이브 승인 오류일 수 있어 로그아웃하지 않음
     else toast('오류: '+m);
   }
 
   /* 로그인 */
-  function setLoginErr(msg){ const i=$('#pw'), e=$('#login-err'); if(msg){ i.classList.add('err'); e.textContent=msg; e.classList.add('on'); } else { i.classList.remove('err'); e.classList.remove('on'); } }
-  async function doLogin(){
-    const pw=$('#pw').value; setLoginErr('');
-    $('#enter').disabled=true; $('#enter').textContent='확인 중…';
-    try{
-      const r=await call('login', pw);
-      if(!r||!r.ok){ setLoginErr('비밀번호가 올바르지 않습니다.'); return; }
-      TOKEN=r.token; try{ localStorage.setItem('hr2_token', TOKEN); }catch(_){ } enterApp();
-    }catch(e){ setLoginErr(String((e&&e.message)||e)); }
-    finally{ $('#enter').disabled=false; $('#enter').textContent='입장'; }
-  }
+  /* v5: 로그인(setLoginErr · doLogin)은 V5 블록에서 정의 */
   function enterApp(){
     $('#login').style.display='none'; app.classList.add('on');
     $('#today').textContent = new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'}).replace(/\.$/,'').replace(/\.\s/g,'.');
@@ -1938,6 +2224,7 @@
         }
       }, renderDashboard);
       prefetchAfterDash();
+      v5DashExtras();
     }
     catch(e){ authFail(e); }
   }
@@ -3009,7 +3296,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   function renderSvLinks(){
     const el=$('#sv-links'); if(!el || el.dataset.ready) return;
     const base=location.href.replace(/[#?].*$/,'').replace(/[^\/]*$/,'')+'survey.html?h=';
-    el.innerHTML='<span class="lab">설문 링크</span>'+Object.keys(SURVEY_CODES).map(h=>`<button data-svlink="${base+SURVEY_CODES[h]}" title="${base+SURVEY_CODES[h]}">${esc(h)} 복사</button>`).join('');
+    el.innerHTML='<span class="lab">설문 링크</span>'+Object.keys(SURVEY_CODES).filter(v5HospOk).map(h=>`<button data-svlink="${base+SURVEY_CODES[h]}" title="${base+SURVEY_CODES[h]}">${esc(h)} 복사</button>`).join('');
     el.addEventListener('click', async e=>{
       const b=e.target.closest('[data-svlink]'); if(!b) return;
       try{ await navigator.clipboard.writeText(b.dataset.svlink); b.classList.add('ok'); setTimeout(()=>b.classList.remove('ok'),1400); toast('설문 링크를 복사했습니다.'); }
@@ -3186,6 +3473,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   /* 네비게이션 */
   const views={ dash:$('#view-dash'), hospitals:$('#view-hospitals'), candidates:$('#view-candidates'), evals:$('#view-evals'), contracts:$('#view-contracts'), postings:$('#view-postings'), surveys:$('#view-surveys'), empty:$('#view-empty') };
   $$('.nav-item').forEach(btn=>btn.addEventListener('click',()=>{
+    if(!v5Allowed(btn.dataset.view)){ toast('이 메뉴를 쓸 권한이 없습니다. 관리자에게 요청하세요.'); return; }
     $$('.nav-item').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
     const v=btn.dataset.view, t=btn.dataset.title;
     if(location.hash!=='#'+v){ try{ history.pushState(null,'','#'+v); }catch(_){ location.hash=v; } }   // 뒤로가기·북마크·링크 공유
@@ -3207,7 +3495,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
 
   /* 해시 라우팅: #candidates 처럼 주소로 화면을 연다 */
   function routeFromHash(){
-    const v=(location.hash||'').slice(1)||'dash';
+    let v=(location.hash||'').slice(1)||'dash'; if(!v5Allowed(v)) v='dash';
     const btn=document.querySelector('.nav-item[data-view="'+v+'"]');
     if(btn && !btn.classList.contains('active')) btn.click();
     else if(btn && v==='dash' && !DATA['dash']) loadDashboard();
@@ -3249,7 +3537,13 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   $('#menu').addEventListener('click', ()=>app.classList.toggle('menu'));
   $('#scrim').addEventListener('click', ()=>app.classList.remove('menu'));
   $('#logout').addEventListener('click', logout);
-  function logout(){ try{ sessionStorage.removeItem('hr2_exp_seen'); }catch(_){ } try{ v3PopDone=false; }catch(_){ } app.classList.remove('on','ready','menu'); $('#login').style.display=''; $('#pw').value=''; setLoginErr(''); TOKEN=null; invalidateAll(); hospitalCache=null; persistClear(); __prefetched=false; __pfAt=0; try{ localStorage.removeItem('hr2_token'); }catch(_){ } }
+  function logout(){   /* v5: 서버 세션 종료 + 이 브라우저에 남은 자료 모두 삭제 → 로그인 화면 */
+    const t=TOKEN;
+    if(t){ try{ fetch(GAS_URL, { method:'POST', headers:{ 'Content-Type':'text/plain;charset=utf-8' }, body:JSON.stringify({ api:'logout', args:[t] }), keepalive:true }).catch(()=>{}); }catch(_){ } }
+    try{ Object.keys(localStorage).forEach(k=>{ if(/^hr5_cache_|^hr2_cache|^hr5_todo_hide_/.test(k)) localStorage.removeItem(k); }); ['hr5_token','hr5_me','hr2_token'].forEach(k=>localStorage.removeItem(k)); sessionStorage.removeItem('hr2_exp_seen'); sessionStorage.removeItem('hr5_reloads'); }catch(_){ }
+    TOKEN=null; ME=null; try{ app.classList.remove('on','ready','menu'); }catch(_){ }
+    setTimeout(()=>location.replace(location.pathname), t?150:0);
+  }
 
 
   /* HR2:BEGIN ═══ 통합 HR 2.0 — 학습형 기능 (HR2.gs 와 짝) ═══ */
@@ -3429,7 +3723,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   function v3Key(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
   function v3Dot(s){ const d=v3Date(s); return d ? d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0') : ''; }
   function v3Today(){ const t=new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
-  const V3_EXCL=/강동경희/;
+  const V3_EXCL=/$^/;   /* v5: 강동경희대 숨김 해제 — 보이는 범위는 서버가 사람별로 정한다 (고재윤 '내 담당'에는 원래대로 안 보임, 이강현에게는 보임) */
   function v3Two(j){ return new Date(j.getFullYear()+2, j.getMonth(), j.getDate()-1); }
   function v3Norm(v){
     if(!v || !Array.isArray(v.list) || v._n===2) return v;
@@ -3571,7 +3865,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     });
     const buf=await wb.xlsx.writeBuffer();
     const blob=new Blob([buf], { type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`${y}년 ${nm}월 생일쿠폰 지급 대상자 명단_의료사업부 고재윤.xlsx`;
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`${y}년 ${nm}월 생일쿠폰 지급 대상자 명단_의료사업부 ${(ME&&ME.user&&ME.user.name)||''}.xlsx`;
     document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 1500);
     toast(nm+'월 생일쿠폰 대상자 '+L.birth.length+'명 명단을 받았습니다.');
   }
@@ -3588,7 +3882,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     if(v3PopDone || !TOKEN) return;
     v3NormAll();
     const c=DATA['v2wk']; if(!c || !c.v || !Array.isArray(c.v.list)) return;
-    try{ if(Date.now() < Number(localStorage.getItem('hr2_exp_snooze')||0)) { v3PopDone=true; return; } }catch(_){ }
+    try{ if(Date.now() < Number(localStorage.getItem(v5Key('exp_snooze'))||0)) { v3PopDone=true; return; } }catch(_){ }
     try{ if(sessionStorage.getItem('hr2_exp_seen')) { v3PopDone=true; return; } }catch(_){ }
     v3PopDone=true;
     const act=c.v.list.filter(w=>w.status==='재직' && v3Dday(w)!=null);
@@ -3601,7 +3895,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
       title:'파견 만료 임박 '+up.length+'명'+(over.length?' · 2년 경과 '+over.length+'명':''), sub:'파견 최대 2년(입사일 기준)까지 '+V3_EXP_POP+'일 이내인 재직자입니다. 1년 단위 계약 갱신은 포함하지 않습니다.',
       body:`<div class="v3-pop">${up.length?'':'<div class="sec">30일 안에 파견 2년이 되는 재직자는 없습니다.</div>'}${up.map(w=>`<div class="it">${v3DdPill(v3Dday(w))}<div class="w"><b>${esc(w.name)}</b><small>${esc(w.hospital||'')}${w.dept?' · '+esc(w.dept):''} · ${esc(w.emp||'')}</small></div><div class="d">${esc(v3Dot(w.expiry))}</div></div>`).join('')}${over.length?`<div class="sec">파견 2년 경과 · 재직 중 ${over.length}명 — 파견 기간 초과 여부 확인 필요</div>`+over.map(w=>`<div class="it">${v3DdPill(v3Dday(w))}<div class="w"><b>${esc(w.name)}</b><small>${esc(w.hospital||'')}${w.dept?' · '+esc(w.dept):''} · ${esc(w.emp||'')}</small></div><div class="d">${esc(v3Dot(w.expiry))}</div></div>`).join(''):''}</div>`,
       foot:[
-        { label:'7일간 표시하지 않기', ghost:true, onClick:()=>{ try{ localStorage.setItem('hr2_exp_snooze', String(Date.now()+7*86400000)); }catch(_){ } toast('7일 동안 이 알림을 띄우지 않습니다.'); } },
+        { label:'7일간 표시하지 않기', ghost:true, onClick:()=>{ try{ localStorage.setItem(v5Key('exp_snooze'), String(Date.now()+7*86400000)); }catch(_){ } toast('7일 동안 이 알림을 띄우지 않습니다.'); } },
         { label:'닫기', ghost:true },
         { label:'근무자 마스터에서 보기', onClick:()=>{ wkFilter.seg='재직'; wkFilter.hosp=''; setTimeout(()=>gotoView('workers'),0); } }
       ]
@@ -3745,7 +4039,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   function renderSurveys(all0){
     const all=Array.isArray(all0)?all0:[];
     const sel=svFilter.hospital;
-    const cards=SV3_LINKS.map(([h,code])=>{
+    const cards=SV3_LINKS.filter(x=>v5HospOk(x[0])).map(([h,code])=>{
       const arr=all.filter(s=>String(s.hospital||'').replace(/\s/g,'')===h.replace(/\s/g,''));
       const ov=arr.map(s=>Number(s.overall)).filter(v=>v>0), avg=ov.length?(ov.reduce((a,b)=>a+b,0)/ov.length).toFixed(2):'–';
       const url=SV3_BASE+code;
@@ -3755,7 +4049,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     }).join('');
     const scope=sel?all.filter(s=>s.hospital===sel):all;
     const cnt=t=>scope.filter(s=>sv3TypeOf(s)===t).length;
-    $('#sv3-cards').innerHTML=cards;
+    $('#sv3-cards').innerHTML=cards||'<div class="v5-card" style="grid-column:1/-1;color:var(--ink-3)">담당 병원에 연결된 만족도 설문 링크가 아직 없습니다. 새 병원 설문이 필요하면 관리자에게 요청하세요.</div>';
     $('#sv3-types').innerHTML=[['','전체',scope.length],['resident','재직자 조사',cnt('resident')],['exit','퇴직자 인터뷰',cnt('exit')],['pulse','월 1문항',cnt('pulse')]]
       .map(([k,l,n])=>`<button class="${sv3Type===k?'on':''}" data-sv3t="${k}">${l}<small>${n}</small></button>`).join('');
     renderSurveysBase(sv3Type ? all.filter(s=>sv3TypeOf(s)===sv3Type) : all);
@@ -3844,8 +4138,8 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     if(!M.sv30.length || lastN>14) t.push({ k:'sv', lv:'n', ic:'💬', n:M.sv30.length, title:'최근 30일 만족도 응답', sub:(lastN==null?'아직 응답이 없습니다':'마지막 응답 '+lastN+'일 전')+' · 병원별 설문 링크를 다시 보내 보세요', go:'링크 복사', fn:()=>gotoView('surveys') });
     return t;
   }
-  function h3HideGet(){ try{ const o=JSON.parse(localStorage.getItem('hr2_todo_hide')||'{}'); return o.d===v3Key(v3Today())?(o.k||[]):[]; }catch(_){ return []; } }
-  function h3HideSet(k){ try{ localStorage.setItem('hr2_todo_hide', JSON.stringify({ d:v3Key(v3Today()), k })); }catch(_){ } }
+  function h3HideGet(){ try{ const o=JSON.parse(localStorage.getItem(v5Key('todo_hide'))||'{}'); return o.d===v3Key(v3Today())?(o.k||[]):[]; }catch(_){ return []; } }
+  function h3HideSet(k){ try{ localStorage.setItem(v5Key('todo_hide'), JSON.stringify({ d:v3Key(v3Today()), k })); }catch(_){ } }
   function h3TwoList(M){
     const rows=M.twoOver.concat(M.two90).map(w=>({ w, d:M.two(w), n:h3Diff(M.two(w)) })).sort((a,b)=>a.n-b.n);
     xOpen({ title:'파견 2년 도래·경과 '+rows.length+'명', sub:'입사일 기준으로 계산한 2년 시점입니다. 실제 파견 기간 산정(공백·재입사 등)은 계약서로 확인하세요.', wide:true,
@@ -3875,7 +4169,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     /* 헤더 */
     const T=M.T;
     $('#h3-date').textContent=T.getFullYear()+'년 '+(T.getMonth()+1)+'월 '+T.getDate()+'일 '+H3_WD[T.getDay()]+'요일';
-    $('#h3-title').textContent=h3Greeting()+', 고재윤 님';
+    $('#h3-title').textContent=h3Greeting()+', '+((ME&&ME.user&&ME.user.name)||'')+' 님';
     const parts=[];
     if(urgent.length){ parts.push(`오늘 먼저 볼 일은 <b class="r">${urgent.length}가지</b>입니다.`); parts.push(urgent.slice(0,2).map(x=>`<b>${esc(x.title)}${/제출/.test(x.title)?'':' '+x.n+(x.u||'명')}</b>`).join(', ')+(urgent.length>2?' 등':'')+'부터 처리하세요.'); }
     else parts.push('급한 일은 없습니다. 아래 일정만 확인하시면 됩니다.');
@@ -3998,7 +4292,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   $('#h3-new-x').addEventListener('click', ()=>{ $('#h3-new').hidden=true; try{ localStorage.setItem('hr2_new_v4','1'); }catch(_){ } });
 
   /* ── 명령 팔레트 ── */
-  const PAL3_NAV=[ ['dash','현황 · 오늘 브리핑','🏠'], ['candidates','이력서 관리','📄'], ['evals','면접 평가 · 캘린더','🗓'], ['workers','근무자 마스터','👥'], ['surveys','만족도 조사','💬'], ['postings','직무공고','📢'], ['hospitals','병원 마스터','🏥'], ['interview','AI 1차 인터뷰','🤖'], ['risk','퇴사 위험','⚠'], ['forecast','결원 예측·인재풀','📈'], ['flow','학습 흐름','🧭'], ['quality','채용 결과 학습','🎯'], ['learn','담당자 수정 학습','✎'], ['knowledge','병원별 운영 지식','📚'], ['audit','AI 결정 기록','🧾'] ];
+  const PAL3_NAV=[ ['dash','현황 · 오늘 브리핑','🏠'], ['candidates','이력서 관리','📄'], ['evals','면접 평가 · 캘린더','🗓'], ['workers','근무자 마스터','👥'], ['surveys','만족도 조사','💬'], ['postings','직무공고','📢'], ['hospitals','병원 마스터','🏥'], ['interview','AI 1차 인터뷰','🤖'], ['risk','퇴사 위험','⚠'], ['forecast','결원 예측·인재풀','📈'], ['flow','학습 흐름','🧭'], ['quality','채용 결과 학습','🎯'], ['learn','담당자 수정 학습','✎'], ['knowledge','병원별 운영 지식','📚'], ['audit','AI 결정 기록','🧾'], ['team','팀 관제','📊'], ['users','계정·권한','🔐'], ['activity','활동 기록','🗂'] ];
   const PAL3_ACT=[
     ['면접 일정 등록','달력에 면접 추가', '＋', ()=>{ gotoView('evals'); setTimeout(()=>v3IvRegister(''),200); }],
     ['다음 달 생일쿠폰 명단 받기','경영지원부 제출 양식(xlsx)', '🎂', ()=>{ if(DATA['v2wk']) wkOutput('birth'); else toast('명단을 불러오는 중입니다.'); }],
@@ -4023,8 +4317,8 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     v3NormAll();
     const q=q0.trim(), nq=pal3Norm(q), out=[];
     const hit=(...xs)=>!nq || xs.some(x=>pal3Norm(x).indexOf(nq)>=0);
-    PAL3_NAV.filter(n=>hit(n[1],n[0])).slice(0,q?6:5).forEach(n=>out.push({ g:'메뉴', ic:n[2], t:n[1], s:'이동', fn:()=>gotoView(n[0]) }));
-    PAL3_ACT.filter(a=>hit(a[0],a[1])).slice(0,q?8:5).forEach(a=>out.push({ g:'바로 실행', ic:a[2], t:a[0], s:a[1], fn:a[3] }));
+    PAL3_NAV.filter(n=>v5Allowed(n[0]) && hit(n[1],n[0])).slice(0,q?6:5).forEach(n=>out.push({ g:'메뉴', ic:n[2], t:n[1], s:'이동', fn:()=>gotoView(n[0]) }));
+    PAL3_ACT.filter(a=>v5ActOk(a) && hit(a[0],a[1])).slice(0,q?8:5).forEach(a=>out.push({ g:'바로 실행', ic:a[2], t:a[0], s:a[1], fn:a[3] }));
     if(q){
       const ws=((DATA['v2wk']&&DATA['v2wk'].v.list)||[]).filter(w=>hit(w.name,w.dept,w.hospital,w.tel)).slice(0,8);
       ws.forEach(w=>out.push({ g:'근무자', ic:w.status==='재직'?'👤':'·', t:w.name, s:[w.hospital,w.dept,w.emp,w.status!=='재직'?'퇴사':'', w.expiry?'만료 '+v3Dot(w.expiry):''].filter(Boolean).join(' · '), fn:()=>wkEdit(w) }));
@@ -4768,9 +5062,475 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   if($('#svd-rows')) $('#svd-rows').addEventListener('click', e=>{ const tr=e.target.closest('[data-svd]'); if(!tr) return; const s=svdList.find(x=>String(x.id)===tr.dataset.svd); if(s) svDetailOpen(s, (DATA['sv']&&DATA['sv'].v)||svdList); });
   /* HR2:END */
 
-  /* 세션 유지: 새로고침(F5·브라우저 버튼)해도 로그인 화면으로 튕기지 않음.
-     토큰이 만료됐으면 첫 호출이 실패하면서 자동 로그아웃된다. */
-  try{ const t=localStorage.getItem('hr2_token'); if(t){ TOKEN=t; enterApp(); } }catch(_){ }
+
+  /* V5:BEGIN ═══ 개인 계정 · 권한 · 팀 관제 · 활동 기록 (Auth.gs 와 짝) ═══ */
+  let ME=null, v5PendingPw='';
+  ['team','users','activity'].forEach(v=>{ views[v]=$('#view-'+v); });
+  function v5Allowed(v){ if(!ME || !ME.menus) return true; if(!v || v==='empty' || v==='contracts') return true; return ME.menus.indexOf(v)>=0; }
+  function v5Uid(){ return ME && ME.user ? ME.user.id : 'anon'; }
+  function v5ScopeKey(){ return ME && ME.scope && !ME.scope.all ? (ME.scope.uid||'x') : 'all'; }
+  function v5Key(k){ return 'hr5_'+k+'_'+v5Uid(); }
+  function v5IsAdmin(){ return !!(ME && ME.user && ME.user.role==='관리자'); }
+  function v5Save(){ try{ if(TOKEN) localStorage.setItem('hr5_token', TOKEN); if(ME) localStorage.setItem('hr5_me', JSON.stringify(ME)); }catch(_){ } }
+  function v5Flash(msg){ try{ sessionStorage.setItem('hr5_flash', msg); }catch(_){ } }
+  function v5Ini(n){ return String(n||'·').trim().charAt(0)||'·'; }
+  function v5Sig(m){ if(!m) return ''; return [m.user&&m.user.id, m.user&&m.user.role, (m.menus||[]).join(','), m.scope&&(m.scope.all?'all':m.scope.uid), ((m.scope&&m.scope.hospitals)||[]).map(h=>h.id).join(',')].join('|'); }
+  function v5HospShort(n){ return String(n||'').replace(/(병원|의원)$/,''); }
+  /* 병원 이름 비교 (서버 sameHosp_ 와 같은 규칙: 괄호·공백 무시, 병원/의원 떼고, 3자 이상이면 포함 관계도 같은 병원) */
+  function v5NormH(n){ return String(n==null?'':n).replace(/\(.*?\)/g,'').replace(/\s/g,'').replace(/(병원|의원)$/,''); }
+  function v5SameH(a,b){ const x=v5NormH(a), y=v5NormH(b); if(!x||!y) return false; if(x===y) return true; return (x.length>=3 && y.indexOf(x)>=0) || (y.length>=3 && x.indexOf(y)>=0); }
+  function v5HospOk(name){ if(!ME || !ME.scope || ME.scope.all) return true; return (ME.scope.hospitals||[]).some(h=>v5SameH(h.name, name)); }
+
+  /* ── 로그인 화면 ── */
+  function setLoginErr(msg, sel){
+    const ids=['#uid','#pw']; ids.forEach(s=>{ const i=$(s); if(i) i.classList.remove('err'); });
+    const e=$('#login-err');
+    if(msg){ const i=$(sel||'#pw'); if(i) i.classList.add('err'); e.textContent=msg; e.classList.add('on'); }
+    else e.classList.remove('on');
+  }
+  async function doLogin(){
+    const uid=$('#uid').value.trim(), pw=$('#pw').value; setLoginErr('');
+    if(!uid){ setLoginErr('이름 또는 아이디를 입력하세요.', '#uid'); $('#uid').focus(); return; }
+    if(!pw){ setLoginErr('비밀번호를 입력하세요.', '#pw'); $('#pw').focus(); return; }
+    const b=$('#enter'); b.disabled=true; b.textContent='확인 중…';
+    try{
+      const r=await call('login', uid, pw);
+      if(!r || !r.ok){ setLoginErr((r && r.error) || '이름 또는 비밀번호가 올바르지 않습니다.', '#pw'); $('#pw').select(); return; }
+      TOKEN=r.token; ME=r.me; v5Save(); try{ localStorage.setItem('hr5_last_uid', uid); }catch(_){ }
+      if(ME.user.mustChange){ v5PendingPw=pw; v5ShowPwStep(); return; }
+      v5Enter();
+    }catch(e){ setLoginErr(String((e&&e.message)||e), '#pw'); }
+    finally{ b.disabled=false; b.textContent='로그인'; }
+  }
+  function v5ShowPwStep(){
+    $('#login').style.display=''; app.classList.remove('on','ready');
+    $('#lg-main').hidden=true; $('#lg-pw').hidden=false;
+    $('#lg-hi').innerHTML=`<b>${esc(ME.user.name)}</b>님, ${v5PendingPw?'처음 로그인하셨습니다':'비밀번호를 새로 정해야 합니다'}. 앞으로 쓸 비밀번호를 정해 주세요.`;
+    $('#lg-oldf').hidden=!!v5PendingPw;
+    ['#opw','#npw1','#npw2'].forEach(s=>{ $(s).value=''; });
+    v5PwCheck(); $('#lg-pwerr').classList.remove('on');
+    setTimeout(()=>($('#lg-oldf').hidden?$('#npw1'):$('#opw')).focus(), 30);
+  }
+  function v5PwRules(p, q){
+    const kinds=(/[A-Za-z]/.test(p)?1:0)+(/[0-9]/.test(p)?1:0)+(/[^A-Za-z0-9]/.test(p)?1:0);
+    return { len:p.length>=8, mix:kinds>=2, same:!!p && p===q, kinds };
+  }
+  function v5PwCheck(){
+    const p=$('#npw1').value, q=$('#npw2').value, r=v5PwRules(p,q);
+    $$('#lg-rules li').forEach(li=>li.classList.toggle('ok', !!r[li.dataset.r]));
+    const score=!p?0:(p.length>=12?2:p.length>=8?1:0)+r.kinds;   // 0~5
+    const m=$('#lg-meter'); m.style.width=Math.min(100,score*20)+'%'; m.style.background=score>=4?'var(--h3-g)':(score>=3?'var(--h3-a)':'var(--h3-r)');
+    return r;
+  }
+  async function v5SavePw(){
+    const err=$('#lg-pwerr'), set=t=>{ err.textContent=t; err.classList.add('on'); };
+    err.classList.remove('on');
+    const old=v5PendingPw || $('#opw').value, p=$('#npw1').value, r=v5PwCheck();
+    if(!old){ set('지금 비밀번호(임시 비밀번호)를 입력하세요.'); $('#opw').focus(); return; }
+    if(!r.len){ set('비밀번호는 8자 이상으로 정해 주세요.'); $('#npw1').focus(); return; }
+    if(!r.mix){ set('영문·숫자·기호 중 두 가지 이상을 섞어 주세요.'); $('#npw1').focus(); return; }
+    if(!r.same){ set('확인 칸에 같은 비밀번호를 입력하세요.'); $('#npw2').focus(); return; }
+    const b=$('#lg-pwsave'); b.disabled=true; b.textContent='저장 중…';
+    try{
+      const res=await call('changePassword', TOKEN, old, p);
+      ME=res.me; v5Save(); v5PendingPw='';
+      $('#lg-pw').hidden=true; $('#lg-main').hidden=false; $('#pw').value='';
+      v5Enter(true);
+    }catch(e){ const m=String((e&&e.message)||e); if(/세션/.test(m)){ v5Flash('세션이 만료되었습니다. 다시 로그인하세요.'); logout(); return; } set(m); }
+    finally{ b.disabled=false; b.textContent='저장하고 시작하기'; }
+  }
+  function v5Enter(welcome){
+    v5ApplyMe();
+    enterApp();
+    v5Banner();
+    if(welcome) setTimeout(v5Welcome, 400);
+  }
+  function v5Welcome(){
+    const hs=(ME.scope && ME.scope.hospitals)||[], all=ME.scope && ME.scope.all;
+    xOpen({ title:ME.user.name+'님, 환영합니다', sub:'새 비밀번호가 저장되었습니다. 이제부터 이 계정으로 로그인합니다.',
+      body:`<div class="v5-welcome">
+        <div><i>🏥</i><div><b>${all?'팀 전체 데이터':'담당 병원 '+hs.length+'곳의 자료만'} 보입니다</b><span>${esc(hs.map(h=>h.name).join(' · ')||(all?'':'아직 담당 병원이 없습니다 — 관리자에게 공유자료실 폴더 배정을 요청하세요.'))}${v5IsAdmin()?'<br>관리자 계정입니다. 위쪽 <b>내 담당</b> 버튼으로 <b>팀 전체</b>나 담당자별 화면으로 바꿔 볼 수 있고, 팀 관제·계정·활동 기록 메뉴가 열립니다.':''}</span></div></div>
+        <div><i>📂</i><div><b>이력서는 바탕화면 '이력서 정리'에 넣기만 하세요</b><span>병원·월별 폴더로 자동 정리되고, 오늘 브리핑의 <b>공유자료실 이력서</b>에 바로 올라옵니다.</span></div></div>
+        <div><i>🧾</i><div><b>모든 변경은 기록됩니다</b><span>누가 언제 무엇을 바꿨는지 남기 때문에 실수해도 되돌리기 쉽습니다.</span></div></div>
+      </div>`, foot:[{ label:'시작하기' }] });
+  }
+  $('#uid').addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); $('#pw').focus(); } });
+  $$('[data-eye]').forEach(b=>b.addEventListener('click', ()=>{ const i=$('#'+b.dataset.eye); const show=i.type==='password'; i.type=show?'text':'password'; b.textContent=show?'숨기기':'보기'; i.focus(); }));
+  ['#npw1','#npw2'].forEach(s=>$(s).addEventListener('input', v5PwCheck));
+  $('#npw2').addEventListener('keydown', e=>{ if(e.key==='Enter') v5SavePw(); });
+  $('#opw').addEventListener('keydown', e=>{ if(e.key==='Enter') $('#npw1').focus(); });
+  $('#lg-pwsave').addEventListener('click', v5SavePw);
+  $('#lg-back').addEventListener('click', ()=>logout());
+
+  /* ── 로그인한 사람에 맞게 화면 구성 ── */
+  function v5ApplyMe(){
+    if(!ME || !ME.user) return;
+    document.body.classList.toggle('v5-staff', ME.user.role!=='관리자');
+    PERSIST_KEY='hr5_cache_'+v5Uid()+'_'+v5ScopeKey();
+    const u=ME.user, adm=v5IsAdmin(), co=ME.company||{};
+    $('#v5-av').textContent=v5Ini(u.name); $('#v5-av').classList.toggle('adm', adm);
+    $('#v5-nm').textContent=u.name;
+    const myN=(ME.myHospitals||[]).length;
+    $('#v5-rl').textContent=u.role+(myN?' · 담당 '+myN+'곳':'');
+    $('#v5-up-n').textContent=u.name+(u.login?' ('+u.login+')':'');
+    $('#v5-up-s').textContent=u.role+' · '+(co.name||'')+(co.division?' '+co.division:'');
+    if(co.name){ const l=$('#brand-logo .logo'); if(l) l.textContent=co.name; }
+    const h3t=$('#h3-title'); if(h3t && !/님$/.test(h3t.textContent.trim())){ try{ h3t.textContent=h3Greeting()+', '+u.name+' 님'; }catch(_){ } }
+    const pm=$('#po-mgr'); if(pm && (!pm.value || pm.value==='의료사업본부' || pm.dataset.v5auto)){ pm.value=(co.division||'의료사업본부')+' '+u.name; pm.dataset.v5auto='1'; }
+    /* 메뉴 권한 */
+    $$('#sidebar .nav-item').forEach(b=>b.classList.toggle('v5-off', !v5Allowed(b.dataset.view)));
+    $$('#sidebar .v5-adm').forEach(b=>b.classList.toggle('v5-off', !adm));
+    const grp=$('#sidebar .nav-grp'), fold=$('#sidebar .nav-fold');
+    if(grp && fold){
+      const vis=[...fold.querySelectorAll('.nav-item')].filter(b=>!b.classList.contains('v5-off')).length;
+      grp.classList.toggle('v5-off', !vis); const lb=grp.querySelector('b'); if(lb) lb.textContent='AI · 학습 도구 ('+vis+')';
+    }
+    $$('#sidebar .nav-sec').forEach(sec=>{
+      let n=sec.nextElementSibling, any=false;
+      while(n && !n.classList.contains('nav-sec') && !n.classList.contains('side-foot')){ if((n.classList.contains('nav-item')||n.classList.contains('nav-grp')) && !n.classList.contains('v5-off')) any=true; n=n.nextElementSibling; }
+      if(!sec.classList.contains('v5-adm')) sec.classList.toggle('v5-off', !any);
+    });
+    /* 범위 전환 버튼 */
+    const sb=$('#v5-scope'), sc=ME.scope||{}, hs=sc.hospitals||[];
+    sb.classList.toggle('team', !!sc.all); sb.classList.toggle('peer', !sc.all && adm && sc.uid!==u.id);
+    $('#v5-scope-t').textContent=sc.all?'팀 전체':(sc.uid===u.id?'내 담당':sc.label);
+    $('#v5-scope-n').textContent=sc.all?'':hs.length+'곳';
+    const act=document.querySelector('#sidebar .nav-item.active');
+    if(act && act.classList.contains('v5-off')) setTimeout(()=>gotoView('dash'),0);
+  }
+  function v5Banner(){
+    const b=$('#v5-banner'); if(!b) return;
+    const sc=ME && ME.scope;
+    const on=v5IsAdmin() && sc && !sc.all && sc.uid!==ME.user.id;
+    b.hidden=!on;
+    if(on) $('#v5-banner-t').innerHTML=`지금 <b>${esc(sc.label)}</b> 화면(병원 ${(sc.hospitals||[]).length}곳)으로 보고 있습니다. 이 상태에서 바꾼 내용도 활동 기록에는 <b>${esc(ME.user.name)}</b>(으)로 남습니다.`;
+  }
+  async function v5RefreshMe(){
+    if(!TOKEN) return;
+    try{
+      const m=await call('me', TOKEN);
+      const changed=v5Sig(m)!==v5Sig(ME);
+      ME=m; v5Save();
+      if(m.user.mustChange){ v5ShowPwStep(); return; }
+      if(changed){
+        let n=0; try{ n=Number(sessionStorage.getItem('hr5_reloads')||0); }catch(_){ }
+        if(n<2){ try{ sessionStorage.setItem('hr5_reloads', String(n+1)); }catch(_){ } location.reload(); return; }
+      } else { try{ sessionStorage.removeItem('hr5_reloads'); }catch(_){ } }
+      v5ApplyMe(); v5Banner();
+    }catch(e){ if(/세션/.test(String(e&&e.message))) authFail(e); }
+  }
+  /* 사용자 메뉴 */
+  function v5UserMenu(open){ const p=$('#v5-upop'); p.hidden=(open===undefined)?!p.hidden:!open; }
+  $('#v5-user').addEventListener('click', e=>{ e.stopPropagation(); v5UserMenu(); });
+  $('#v5-user').addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); v5UserMenu(); } });
+  $('#v5-upop').addEventListener('click', e=>e.stopPropagation());
+  document.addEventListener('click', ()=>{ v5UserMenu(false); const s=$('#v5-spop'); if(s) s.hidden=true; });
+  $('#v5-mypw').addEventListener('click', ()=>{ v5UserMenu(false); v5PwModal(); });
+  $('#v5-myhosp').addEventListener('click', ()=>{ v5UserMenu(false); v5MyHosp(); });
+  function v5MyHosp(){
+    const my=ME.myHospitals||[];
+    xOpen({ title:'내 담당 병원 '+my.length+'곳', sub:'공유자료실 드라이브의 '+(ME.user.folder||ME.user.name)+' 폴더 기준 · 폴더를 옮기면 자동으로 바뀝니다',
+      body: my.length?`<div class="x-chips">${my.map(h=>`<span class="x-chip">${esc(h.name)}</span>`).join('')}</div>`:'<div class="empty-row">아직 담당 병원이 없습니다. 관리자에게 공유자료실 폴더 배정을 요청하세요.</div>' });
+  }
+  function v5PwModal(){
+    xOpen({ title:'비밀번호 변경', sub:'8자 이상 · 영문·숫자·기호 중 2가지 이상',
+      body:`<div class="v5-form"><div class="f"><label>지금 비밀번호</label><input type="password" id="mp-o" autocomplete="current-password"></div>
+        <div class="f"><label>새 비밀번호</label><input type="password" id="mp-1" autocomplete="new-password"></div>
+        <div class="f"><label>새 비밀번호 확인</label><input type="password" id="mp-2" autocomplete="new-password"></div></div>`,
+      foot:[{ label:'취소', ghost:true }, { label:'변경', onClick: async (btn)=>{
+        const o=$('#mp-o').value, a=$('#mp-1').value, b2=$('#mp-2').value, r=v5PwRules(a,b2);
+        if(!o){ toast('지금 비밀번호를 입력하세요.'); return true; }
+        if(!r.len||!r.mix){ toast('8자 이상, 영문·숫자·기호 중 2가지 이상으로 정해 주세요.'); return true; }
+        if(!r.same){ toast('새 비밀번호 확인이 다릅니다.'); return true; }
+        btn.disabled=true; btn.textContent='변경 중…';
+        try{ const res=await call('changePassword', TOKEN, o, a); ME=res.me; v5Save(); toast('비밀번호를 변경했습니다.'); }
+        catch(e){ btn.disabled=false; btn.textContent='변경'; xFail(e); return true; }
+      } }],
+      onOpen:()=>setTimeout(()=>$('#mp-o').focus(),30) });
+  }
+
+  /* ── 보기 전환 (관리자) / 내 범위 보기 (담당자) ── */
+  $('#v5-scope').addEventListener('click', e=>{
+    e.stopPropagation();
+    const p=$('#v5-spop'); if(!p.hidden){ p.hidden=true; return; }
+    const sc=ME.scope||{}, u=ME.user;
+    if(!v5IsAdmin()){
+      const hs=sc.hospitals||[];
+      p.innerHTML=`<div class="t">내 담당 범위</div><div class="hl"><b>${esc(u.name)}</b>님은 담당 병원 <b>${hs.length}곳</b>의 자료만 보고 바꿀 수 있습니다.</div>`+
+        (hs.length?hs.map(h=>`<button type="button" data-sh="${esc(h.name)}"><span class="av t">${esc(v5Ini(v5HospShort(h.name)))}</span>${esc(h.name)}<small>근무자 보기</small></button>`).join(''):'<div class="hl">아직 담당 병원이 없습니다. 관리자에게 공유자료실 폴더 배정을 요청하세요.</div>');
+    } else {
+      const team=(ME.team||[]).filter(t=>t.id!==u.id);
+      const cur=sc.all?'*':sc.uid;
+      p.innerHTML=`<div class="t">보기 전환 · 관리자</div>`+
+        `<button type="button" data-va="*" class="${cur==='*'?'on':''}"><span class="av t">팀</span>팀 전체<small>모든 병원</small></button>`+
+        `<button type="button" data-va="me" class="${cur===u.id?'on':''}"><span class="av">${esc(v5Ini(u.name))}</span>내 담당<small>${(ME.myHospitals||[]).length}곳</small></button>`+
+        (team.length?'<div class="t">담당자 화면으로 보기</div>'+team.map(t=>`<button type="button" data-va="${esc(t.id)}" class="${cur===t.id?'on':''}"><span class="av">${esc(v5Ini(t.name))}</span>${esc(t.name)}<small>${esc(t.role)}</small></button>`).join(''):'');
+    }
+    p.hidden=false;
+  });
+  $('#v5-spop').addEventListener('click', async e=>{
+    e.stopPropagation();
+    const h=e.target.closest('[data-sh]');
+    if(h){ $('#v5-spop').hidden=true; wkFilter.hosp=h.dataset.sh; wkFilter.seg='재직'; gotoView('workers'); return; }
+    const b=e.target.closest('[data-va]'); if(!b) return;
+    await v5ViewAs(b.dataset.va);
+  });
+  async function v5ViewAs(v){
+    $('#v5-spop').hidden=true;
+    const cur=ME.scope.all?'*':(ME.scope.uid===ME.user.id?'me':ME.scope.uid);
+    if(v===cur || (v===ME.user.id && cur==='me')) return;
+    toast('화면을 바꾸는 중…');
+    try{ ME=await call('setViewAs', TOKEN, v); v5Save(); try{ sessionStorage.setItem('hr5_reloads','0'); }catch(_){ } location.reload(); }
+    catch(e){ xFail(e); }
+  }
+  $('#v5-banner-x').addEventListener('click', ()=>v5ViewAs('me'));
+
+  /* ── 오늘 브리핑: 내 범위 + 공유자료실 이력서 ── */
+  function v5DashExtras(){
+    const el=$('#v5-scopeline');
+    if(el && ME){
+      const sc=ME.scope||{}, hs=sc.hospitals||[];
+      el.innerHTML = sc.all
+        ? `<b>팀 전체</b> 기준 · 병원 ${((hospitalCache||[]).length)||'–'}곳 · 담당자 ${(ME.team||[]).length}명`+(v5IsAdmin()?' · 위쪽 <b>보기 전환</b>으로 담당자별 화면':'')
+        : `<b>${esc(sc.label)}</b> · 병원 ${hs.length}곳 `+hs.map(h=>`<span class="chip">${esc(v5HospShort(h.name))}</span>`).join('')+(v5IsAdmin()&&sc.uid===ME.user.id?' · 위쪽 <b>내 담당</b>을 눌러 팀 전체 보기':'');
+    }
+    loadDesk(false);
+  }
+  async function loadDesk(force){
+    if(!TOKEN || !$('#v5-arch')) return;
+    const c=DATA['v5desk'];
+    if(c) renderDesk(c.v);
+    if(c && !force && Date.now()-c.t<SWR_TTL) return;
+    try{ const v=await call('getDesk', TOKEN); DATA['v5desk']={ t:Date.now(), v:v }; renderDesk(v); }
+    catch(e){ if(/세션/.test(String(e&&e.message))) authFail(e); else if(!c) $('#v5-arch').innerHTML='<div class="h3-card"><div class="h3-empty">공유자료실 정보를 불러오지 못했습니다.</div></div>'; }
+  }
+  function v5Ago(ms){ if(!ms) return ''; const d=Math.round((Date.now()-ms)/86400000); return d<=0?'오늘':(d===1?'어제':(d<7?d+'일 전':new Date(ms).toLocaleDateString('ko-KR',{month:'numeric',day:'numeric'}))); }
+  function v5Ext(n){ const m=/\.([a-z0-9]+)$/i.exec(String(n||'')); return m?m[1].toLowerCase():''; }
+  function renderDesk(d){
+    const box=$('#v5-arch'); if(!box || !d || !d.archive) return;
+    const a=d.archive, sc=d.scope||{};
+    const hs=Object.keys(a.byHosp||{}).sort((x,y)=>(a.byHosp[y].month-a.byHosp[x].month)||(a.byHosp[y].n-a.byHosp[x].n));
+    const mx=Math.max(1,...hs.map(k=>a.byHosp[k].month));
+    $('#v5-arch-meta').textContent=(a.at?'드라이브 색인 '+new Date(a.at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})+' · ':'')+'바탕화면 \'이력서 정리\'에 넣으면 병원·월별로 자동 정리';
+    const tiles=`<div class="tiles">
+      <div class="tile"><div class="l">이번 달 이력서</div><div class="v">${a.month}<small>건</small></div></div>
+      <div class="tile"><div class="l">최근 7일</div><div class="v">${a.week}<small>건</small></div></div>
+      <div class="tile ${a.inbox?'a':''}"><div class="l">분류 대기</div><div class="v">${a.inbox}<small>건</small></div></div>
+      <div class="tile"><div class="l">누적 이력서</div><div class="v">${a.total}<small>건</small></div></div>
+      <div class="tile"><div class="l">불합격 보관</div><div class="v">${a.reject}<small>건</small></div></div>
+      <div class="tile"><div class="l">블랙리스트</div><div class="v">${a.black}<small>건</small></div></div></div>`;
+    const bars=hs.length?`<div class="bars">${hs.slice(0,8).map(k=>`<div><span title="${esc(k)}">${esc(k)}</span><p><i style="width:${a.byHosp[k].month/mx*100}%"></i></p><b>${a.byHosp[k].month}</b></div>`).join('')}</div>`:'';
+    const left=`<div class="h3-card"><div class="h3-ch"><h3>${sc.all?'팀 공유자료실':'내 공유자료실'}</h3><span class="m">이번 달 병원별</span></div>${tiles}${bars}
+      <div class="foot">${a.myFolder?`<a class="h3-btn" href="${esc(a.myFolder)}" target="_blank" rel="noopener">📂 내 폴더 열기</a>`:(a.folder?`<a class="h3-btn" href="${esc(a.folder)}" target="_blank" rel="noopener">📂 공유자료실 열기</a>`:'')}<button class="h3-btn" type="button" id="v5-arch-go">이력서 관리에서 보기</button></div></div>`;
+    const list=(a.latest||[]).map(x=>`<a class="it" href="https://drive.google.com/file/d/${esc(x.i)}/view" target="_blank" rel="noopener"><span class="ic ${esc(v5Ext(x.n))}">${esc((v5Ext(x.n)||'파일').slice(0,4).toUpperCase())}</span><div><b>${esc(x.n)}</b><small>${esc(x.h||'')}${x.m?' · '+(x.y?x.y+'년 ':'')+Number(x.m)+'월 폴더':''}${sc.all&&x.p?' · '+esc(x.p):''}</small></div><span class="d">${esc(v5Ago(x.u))}</span></a>`).join('');
+    const un=(a.unsorted||[]).map(x=>`<a class="it" href="https://drive.google.com/file/d/${esc(x.i)}/view" target="_blank" rel="noopener"><span class="ic">?</span><div><b>${esc(x.n)}</b><small>분류 대기 · 병원 폴더 위에 끌어다 놓으면 월별로 이동${sc.all&&x.p?' · '+esc(x.p):''}</small></div><span class="d">${esc(v5Ago(x.u))}</span></a>`).join('');
+    const right=`<div class="h3-card"><div class="h3-ch"><h3>새로 들어온 이력서 <span class="c">${(a.latest||[]).length}</span></h3><span class="m">누르면 드라이브에서 열림</span></div><div class="list">${un}${list||'<div class="h3-empty">아직 정리된 이력서가 없습니다. 바탕화면 \'이력서 정리\' 폴더에 이력서를 넣어 보세요.</div>'}</div></div>`;
+    box.innerHTML=left+right;
+    const go=$('#v5-arch-go'); if(go) go.onclick=()=>{ gotoView('candidates'); setTimeout(()=>{ const t=document.querySelector('#cand-mode [data-m="arch"], [data-k3m="arch"]'); if(t) t.click(); }, 250); };
+  }
+
+  /* ── 팀 관제 ── */
+  V2_LOAD.team = async function(force){
+    const g=$('#tm-grid'); if(!g) return;
+    const c=DATA['v5team']; if(c) renderTeam(c.v); else g.innerHTML='<div class="loading">팀 현황을 모으는 중… (공유자료실·근무자·지원자)</div>';
+    if(c && !force && Date.now()-c.t<SWR_TTL) return;
+    try{ const v=await call('getTeam', TOKEN); DATA['v5team']={ t:Date.now(), v:v }; renderTeam(v); }
+    catch(e){ xFail(e); if(!c) g.innerHTML='<div class="empty-row">불러오지 못했습니다.</div>'; }
+  };
+  function renderTeam(d){
+    const team=d.team||[], T=k=>team.reduce((s,t)=>s+(Number(t[k])||0),0);
+    $('#tm-sum').innerHTML=[['담당자',team.length,'명'],['재직 인원',T('workers'),'명'],['진행 중 지원자',T('candidates'),'명'],['이번 달 이력서',T('resumesMonth'),'건'],['만료 30일 이내',T('exp30'),'명']]
+      .map(x=>`<div class="s"><div class="l">${x[0]}</div><div class="v">${x[1]}<small>${x[2]}</small></div></div>`).join('');
+    const al=[];
+    if((d.orphan||[]).length) al.push(`<div class="v5-alert"><b>담당자 없는 병원 ${d.orphan.length}곳</b>&nbsp;— ${esc(d.orphan.join(', '))}. 이 병원 자료는 관리자만 봅니다. 공유자료실에서 담당자 폴더 안으로 병원 폴더를 옮기거나, 계정·권한에서 <b>추가 병원</b>으로 지정하세요.</div>`);
+    if((d.shared||[]).length) al.push(`<div class="v5-alert g"><b>함께 맡는 병원</b>&nbsp;— ${d.shared.map(s=>esc(s.name)+'('+esc(s.who.join('·'))+')').join(', ')}</div>`);
+    const unsorted=team.filter(t=>t.unsorted>0);
+    if(unsorted.length) al.push(`<div class="v5-alert"><b>분류 대기 이력서</b>&nbsp;— ${unsorted.map(t=>esc(t.name)+' '+t.unsorted+'건').join(', ')}. 파일 이름에 병원명이 없어 자동 분류되지 못했습니다.</div>`);
+    $('#tm-alerts').innerHTML=al.join('');
+    const z=(v,cls)=>`<b class="${v?(cls||''):'z'}">${v}</b>`;
+    $('#tm-grid').innerHTML=team.map(t=>{
+      const drive=t.driveHospitals||[];
+      const extra=t.hospitals.filter(h=>!drive.some(x=>x===h || h.replace(/(병원|의원)$/,'').indexOf(x.replace(/(병원|의원)$/,''))>=0));
+      return `<div class="v5-tc"><div class="h"><div class="av ${t.role==='관리자'?'adm':''}">${esc(v5Ini(t.name))}</div><div><b>${esc(t.name)}</b><small>${esc(t.role)} · 병원 ${t.hospitals.length}곳</small></div>
+        <div class="r">${t.id!==ME.user.id?`<button type="button" data-tmv="${esc(t.id)}">화면 보기</button>`:`<button type="button" data-tmv="me">내 담당 보기</button>`}<button type="button" data-tml="${esc(t.id)}">기록</button></div></div>
+        <div class="hs">${t.hospitals.map(h=>`<span class="${extra.indexOf(h)>=0?'w':''}" title="${extra.indexOf(h)>=0?'관리자가 추가로 지정한 병원':'공유자료실 폴더 기준'}">${esc(v5HospShort(h))}</span>`).join('')||'<span class="w">담당 병원 없음</span>'}</div>
+        <div class="k"><div><span>재직</span>${z(t.workers)}</div><div><span>만료 30일</span>${z(t.exp30,'r')}</div><div><span>진행 지원자</span>${z(t.candidates)}</div><div><span>서류 대기</span>${z(t.docs,'a')}</div>
+          <div><span>이번 주 면접</span>${z(t.ivWeek)}</div><div><span>입사 예정 2주</span>${z(t.joinSoon)}</div><div><span>이번 달 이력서</span>${z(t.resumesMonth)}</div><div><span>분류 대기</span>${z(t.unsorted,'a')}</div></div>
+        <div class="f"><span>만족도 <b>${t.sat==null?'–':t.sat}</b>${t.satN?' ('+t.satN+'건)':''}</span><span>최근 7일 이력서 <b>${t.resumesWeek}</b></span><span>마지막 로그인 <b>${esc(t.lastLogin||'없음')}</b></span>${t.lastActive?`<span>최근 활동 <b>${esc(t.lastActive)}</b></span>`:''}</div></div>`;
+    }).join('') || '<div class="empty-row">활성 계정이 없습니다.</div>';
+  }
+  $('#tm-grid').addEventListener('click', e=>{
+    const v=e.target.closest('[data-tmv]'); if(v){ v5ViewAs(v.dataset.tmv); return; }
+    const l=e.target.closest('[data-tml]'); if(l){ acState.uid=l.dataset.tml; gotoView('activity'); }
+  });
+  $('#tm-refresh').addEventListener('click', ()=>V2_LOAD.team(true));
+  $('#tm-sync').addEventListener('click', async e=>{
+    await xRun(e.currentTarget, '동기화 중…', async ()=>{
+      try{ const r=await call('syncHospitals', TOKEN); toast(r.added && r.added.length ? '병원 마스터에 추가: '+r.added.join(', ') : '공유자료실과 병원 마스터가 이미 일치합니다.'); hospitalCache=null; invalidate('hosp'); V2_LOAD.team(true); }
+      catch(err){ xFail(err); }
+    });
+  });
+
+  /* ── 계정·권한 ── */
+  let usData=null;
+  V2_LOAD.users = async function(force){
+    const L=$('#us-list'); if(!L) return;
+    if(usData && !force) renderUsers(); else L.innerHTML='<div class="loading">불러오는 중…</div>';
+    try{ usData=await call('listUsers', TOKEN); renderUsers(); }
+    catch(e){ xFail(e); if(!usData) L.innerHTML='<div class="empty-row">불러오지 못했습니다.</div>'; }
+  };
+  function renderUsers(){
+    const d=usData; if(!d) return;
+    $('#us-list').innerHTML=`<div class="v5-ul">${d.list.map(u=>{
+      const adm=u.role==='관리자';
+      const tags=adm?'<span>모든 메뉴</span>':u.menus.map(m=>{ const v=d.views.find(x=>x.id===m); return v?`<span>${esc(v.t)}</span>`:''; }).join('');
+      return `<div class="v5-ur ${u.active?'':'off'}"><div class="p"><div class="av ${adm?'adm':''}">${esc(v5Ini(u.name))}</div><div><b>${esc(u.name)}<span class="v5-badge ${adm?'adm':''}">${esc(u.role)}</span>${u.active?'':'<span class="v5-badge r">중지</span>'}${u.locked?'<span class="v5-badge r">잠김</span>':''}${u.mustChange&&u.active?'<span class="v5-badge a">첫 로그인 전</span>':''}</b><small>${esc(u.login?'아이디 '+u.login:'아이디 없음 — 이름으로 로그인')} · 폴더 ${esc(u.folder||'-')}</small></div></div>
+        <div><div class="tags" style="margin-bottom:6px">${u.hospitals.length?u.hospitals.map(h=>`<span class="${(u.extra||[]).some(x=>h.indexOf(x)>=0||x===h)?'x':''}">${esc(v5HospShort(h))}</span>`).join(''):'<span class="x">담당 병원 없음</span>'}</div><div class="tags">${tags}</div></div>
+        <div class="m">마지막 로그인<br><b>${esc(u.lastLogin||'없음')}</b>${u.lastActive?'<br>최근 활동 <b>'+esc(u.lastActive)+'</b>':''}</div>
+        <div class="b"><button type="button" data-ue="${esc(u.id)}">수정</button><button type="button" data-ur="${esc(u.id)}">비밀번호 초기화</button>${u.locked?`<button type="button" data-uu="${esc(u.id)}">잠금 해제</button>`:''}</div></div>`;
+    }).join('')}</div>`;
+    const co=d.company||{};
+    $('#us-company').innerHTML=`<div class="v5-card v5-form"><div class="v5-row"><div class="f"><label>회사 이름</label><input id="co-name" value="${esc(co.name||'')}" maxlength="30"></div><div class="f"><label>제품 이름</label><input id="co-prod" value="${esc(co.product||'')}" maxlength="30"></div></div>
+      <div class="v5-row"><div class="f"><label>부서</label><input id="co-div" value="${esc(co.division||'')}" maxlength="30"></div><div class="f" style="display:flex;align-items:flex-end"><button class="btn-sm" type="button" id="co-save">회사 설정 저장</button></div></div>
+      <div class="hint">사이드바 로고와 계정 메뉴에 표시됩니다. 다른 회사에 같은 시스템을 쓸 때 이름만 바꾸면 됩니다.</div></div>`;
+    $('#co-save').onclick=async (e)=>{ await xRun(e.currentTarget,'저장 중…', async ()=>{ try{ const r=await call('saveCompany', TOKEN, { name:$('#co-name').value, product:$('#co-prod').value, division:$('#co-div').value }); ME.company=r.company; v5Save(); v5ApplyMe(); toast('회사 설정을 저장했습니다.'); }catch(err){ xFail(err); } }); };
+  }
+  $('#us-list').addEventListener('click', e=>{
+    const ed=e.target.closest('[data-ue]'); if(ed){ usEdit(usData.list.find(u=>u.id===ed.dataset.ue)); return; }
+    const rs=e.target.closest('[data-ur]'); if(rs){ usReset(usData.list.find(u=>u.id===rs.dataset.ur)); return; }
+    const uu=e.target.closest('[data-uu]'); if(uu){ (async ()=>{ try{ await call('unlockUser', TOKEN, uu.dataset.uu); toast('잠금을 풀었습니다.'); V2_LOAD.users(true); }catch(err){ xFail(err); } })(); }
+  });
+  $('#us-add').addEventListener('click', ()=>usEdit(null));
+  function usMenusHtml(d, sel, dis){
+    let g='', out='';
+    d.views.filter(v=>!v.admin).forEach(v=>{ if(v.g!==g){ g=v.g; out+=`<div class="g">${esc(g)}</div>`; } out+=`<label><input type="checkbox" data-mn="${esc(v.id)}" ${sel.indexOf(v.id)>=0?'checked':''} ${dis?'disabled':''}>${esc(v.t)}</label>`; });
+    return `<div class="v5-checks ${dis?'dis':''}" id="ue-menus">${out}</div>`;
+  }
+  function usEdit(u){
+    const d=usData, isNew=!u;
+    u=u||{ name:'', login:'', role:'담당자', active:true, folder:'', extra:[], menus:d.staffDefault.slice(), email:'' };
+    const folders=d.folders.slice(); if(u.folder && folders.indexOf(u.folder)<0) folders.push(u.folder);
+    const hospOpts=d.hospitals.map(h=>`<label><input type="checkbox" data-hx="${esc(h.name)}" ${(u.extra||[]).some(x=>x===h.name||x===h.id)?'checked':''}>${esc(v5HospShort(h.name))}</label>`).join('');
+    xOpen({ title:isNew?'계정 추가':u.name+' 계정 수정', sub:isNew?'저장하면 임시 비밀번호가 만들어집니다. 처음 로그인할 때 본인이 새 비밀번호를 정합니다.':'담당 병원은 공유자료실 폴더 기준이며, 아래에서 추가 병원을 더할 수 있습니다.', wide:true,
+      body:`<div class="v5-form">
+        <div class="v5-row"><div class="f"><label>이름</label><input id="ue-name" value="${esc(u.name)}" maxlength="20" placeholder="예: 홍길동"></div>
+          <div class="f"><label>아이디 (선택)</label><input id="ue-login" value="${esc(u.login||'')}" maxlength="30" placeholder="영문·숫자 (예: hgd)" autocapitalize="off"><div class="hint">이름 또는 아이디로 로그인합니다.</div></div></div>
+        <div class="v5-row"><div class="f"><label>역할</label><select id="ue-role"><option value="담당자" ${u.role!=='관리자'?'selected':''}>담당자 — 담당 병원 자료만</option><option value="관리자" ${u.role==='관리자'?'selected':''}>관리자 — 팀 전체 + 계정 관리</option></select></div>
+          <div class="f"><label>공유자료실 담당자 폴더</label><select id="ue-folder"><option value="">이름과 같은 폴더</option>${folders.map(f=>`<option value="${esc(f)}" ${f===u.folder?'selected':''}>${esc(f)}</option>`).join('')}</select><div class="hint">이 폴더 안의 병원 폴더가 곧 담당 병원입니다.</div></div></div>
+        ${isNew?'':`<div class="f"><label><input type="checkbox" id="ue-active" ${u.active?'checked':''} style="width:auto;margin-right:6px">계정 사용 (끄면 바로 로그아웃되고 로그인할 수 없습니다)</label></div>`}
+        <div class="sec">추가 병원 <span style="font-weight:500;color:var(--ink-3)">폴더 밖 병원을 함께 맡길 때</span></div>
+        <div class="v5-checks">${hospOpts}</div>
+        <div class="sec">메뉴 권한 <button type="button" id="ue-def">기본값으로</button></div>
+        <div id="ue-mwrap">${usMenusHtml(d, u.role==='관리자'?d.views.map(v=>v.id):u.menus, u.role==='관리자')}</div>
+        <div class="hint">관리자는 모든 메뉴와 계정·권한·팀 관제·활동 기록을 씁니다. 메뉴를 숨겨도 데이터 범위(담당 병원)는 서버가 따로 지킵니다.</div></div>`,
+      foot:(isNew||u.id===ME.user.id?[]:[{ label:'계정 삭제', ghost:true, id:'ue-del', onClick:()=>{ setTimeout(()=>usDelete(u),30); } }]).concat([{ label:'취소', ghost:true }, { label:isNew?'계정 만들기':'저장', onClick: async (btn)=>{
+        const role=$('#ue-role').value;
+        const menus=[...document.querySelectorAll('#ue-menus [data-mn]')].filter(x=>x.checked).map(x=>x.dataset.mn);
+        const extra=[...document.querySelectorAll('[data-hx]')].filter(x=>x.checked).map(x=>x.dataset.hx);
+        const body={ id:isNew?'':u.id, name:$('#ue-name').value.trim(), login:$('#ue-login').value.trim(), role, folder:$('#ue-folder').value || $('#ue-name').value.trim(),
+          extra, menus: role==='관리자'?[]:menus, active: isNew?true:$('#ue-active').checked };
+        if(!body.name){ toast('이름을 입력하세요.'); return true; }
+        if(role!=='관리자' && !menus.length){ toast('메뉴를 하나 이상 고르세요.'); return true; }
+        btn.disabled=true; btn.textContent='저장 중…';
+        try{
+          const r=await call('saveUser', TOKEN, body);
+          await V2_LOAD.users(true);
+          if(r.tempPassword) setTimeout(()=>usShowTemp(body.name, body.login, r.tempPassword, true), 50); else toast('저장했습니다.');
+        }catch(e){ btn.disabled=false; btn.textContent=isNew?'계정 만들기':'저장'; xFail(e); return true; }
+      } }]),
+      onOpen:()=>{
+        $('#ue-role').onchange=()=>{ const adm=$('#ue-role').value==='관리자'; $('#ue-mwrap').innerHTML=usMenusHtml(d, adm?d.views.map(v=>v.id):d.staffDefault, adm); };
+        $('#ue-def').onclick=()=>{ const adm=$('#ue-role').value==='관리자'; $('#ue-mwrap').innerHTML=usMenusHtml(d, adm?d.views.map(v=>v.id):d.staffDefault, adm); };
+        setTimeout(()=>$('#ue-name').focus(),30);
+      } });
+  }
+  function usDelete(u){
+    if(!u) return;
+    xOpen({ title:u.name+' 계정 삭제', sub:'삭제하면 되돌릴 수 없습니다. 잠시 쉬는 경우에는 [수정 → 계정 사용 끄기]로 중지하는 것을 권장합니다.',
+      body:`<div class="v5-alert" style="margin:0">삭제해도 <b>지원자·근무자 자료와 공유자료실 폴더는 그대로</b> 남고, 활동 기록도 지워지지 않습니다. 그 사람의 로그인만 사라집니다.</div>`,
+      foot:[{ label:'취소', ghost:true }, { label:'삭제', danger:true, onClick: async (btn)=>{
+        btn.disabled=true; btn.textContent='삭제 중…';
+        try{ await call('deleteUser', TOKEN, u.id); await V2_LOAD.users(true); toast(u.name+' 계정을 삭제했습니다.'); }
+        catch(e){ btn.disabled=false; btn.textContent='삭제'; xFail(e); return true; }
+      } }] });
+  }
+  function usReset(u){
+    if(!u) return;
+    xOpen({ title:u.name+' 비밀번호 초기화', sub:'지금 비밀번호는 바로 쓸 수 없게 되고, 임시 비밀번호가 만들어집니다. 잠금도 함께 풀립니다.',
+      body:'<div class="empty-row" style="padding:6px 0">초기화할까요?</div>',
+      foot:[{ label:'취소', ghost:true }, { label:'초기화', danger:true, onClick: async (btn)=>{
+        btn.disabled=true;
+        try{ const r=await call('resetPassword', TOKEN, u.id); await V2_LOAD.users(true); setTimeout(()=>usShowTemp(u.name, u.login, r.tempPassword, false), 50); }
+        catch(e){ btn.disabled=false; xFail(e); return true; }
+      } }] });
+  }
+  function usShowTemp(name, login, pw, created){
+    const url=location.origin+location.pathname;
+    const msg=`[${(ME.company&&ME.company.name)||'엔젤스태프'} ${(ME.company&&ME.company.product)||'통합 HR'}] ${name}님 계정${created?'이 만들어졌습니다':' 비밀번호가 초기화되었습니다'}.\n주소: ${url}\n로그인: ${login||name}\n임시 비밀번호: ${pw}\n처음 로그인하면 새 비밀번호를 직접 정합니다.`;
+    xOpen({ title:created?'계정을 만들었습니다':'비밀번호를 초기화했습니다', sub:'이 화면을 닫으면 임시 비밀번호를 다시 볼 수 없습니다. 본인에게만 전달하세요.',
+      body:`<div class="v5-temp"><small>${esc(name)} · 임시 비밀번호</small><div class="pw">${esc(pw)}</div><small>첫 로그인 때 본인이 새 비밀번호로 바꿉니다</small></div><div class="v5-msg" id="ut-msg">${esc(msg)}</div>`,
+      foot:[{ label:'안내 문구 복사', onClick: async ()=>{ const ok=await xCopy(msg); toast(ok?'안내 문구를 복사했습니다.':'복사하지 못했습니다. 직접 선택해 복사하세요.'); return true; } }, { label:'닫기', ghost:true }] });
+  }
+
+  /* ── 활동 기록 ── */
+  const acState={ uid:'', q:'', kind:'all', limit:120, data:null };
+  const AC_KIND={ login:/로그인|로그아웃/, account:/계정|비밀번호|보기 전환|회사 설정|잠금/, data:/^(?!.*(로그인|로그아웃|계정|비밀번호|보기 전환|회사 설정|잠금)).*/ };
+  V2_LOAD.activity = async function(force){
+    const L=$('#ac-list'); if(!L) return;
+    if(!acState.data || force) L.innerHTML='<div class="loading">불러오는 중…</div>';
+    try{ const r=await call('getAudit', TOKEN, { limit:2000 }); acState.data=r; acRender(); }
+    catch(e){ xFail(e); L.innerHTML='<div class="empty-row">불러오지 못했습니다.</div>'; }
+  };
+  function acFiltered(){
+    const d=acState.data; if(!d) return [];
+    const q=acState.q.trim();
+    return d.list.filter(x=>(!acState.uid || x.uid===acState.uid) && (acState.kind==='all' || AC_KIND[acState.kind].test(x.action)) && (!q || (x.name+' '+x.action+' '+x.target+' '+x.detail).indexOf(q)>=0));
+  }
+  function acCls(a){ return /실패|삭제/.test(a)?(/실패/.test(a)?'bad':'del'):(/^로그인$|로그아웃/.test(a)?'in':(/계정|비밀번호|보기 전환|회사|잠금/.test(a)?'acc':'')); }
+  function acRender(){
+    const d=acState.data; if(!d) return;
+    const sel=$('#ac-user'), team=(usData&&usData.list)||(ME.team||[]);
+    const names={}; d.list.forEach(x=>{ if(x.uid) names[x.uid]=x.name; }); team.forEach(t=>{ names[t.id]=t.name; });
+    sel.innerHTML='<option value="">모든 사람</option>'+Object.keys(names).map(id=>`<option value="${esc(id)}" ${id===acState.uid?'selected':''}>${esc(names[id])}</option>`).join('');
+    $$('#ac-kind button').forEach(b=>b.classList.toggle('on', b.dataset.k===acState.kind));
+    const rows=acFiltered(), show=rows.slice(0, acState.limit);
+    $('#ac-meta').textContent='전체 '+d.total.toLocaleString()+'건 중 '+rows.length.toLocaleString()+'건';
+    $('#ac-list').innerHTML=`<div class="v5-log"><div class="v5-lr h"><div>일시</div><div>사람</div><div>행동</div><div>대상 · 내용</div></div>${show.map(x=>`<div class="v5-lr"><div class="t">${esc(x.at)}</div><div class="w">${esc(x.name||'시스템')}</div><div class="a"><span class="${acCls(x.action)}">${esc(x.action)}</span></div><div class="x">${x.target?'<b>'+esc(x.target)+'</b>':''}${x.detail&&x.detail!=='[]'?'<small>'+esc(x.detail)+'</small>':''}</div></div>`).join('')||'<div class="empty-row">조건에 맞는 기록이 없습니다.</div>'}${rows.length>show.length?`<button class="v5-more" type="button" id="ac-more">더 보기 (${(rows.length-show.length).toLocaleString()}건 남음)</button>`:''}</div>`;
+    const m=$('#ac-more'); if(m) m.onclick=()=>{ acState.limit+=200; acRender(); };
+  }
+  $('#ac-user').addEventListener('change', e=>{ acState.uid=e.target.value; acState.limit=120; acRender(); });
+  $('#ac-q').addEventListener('input', e=>{ acState.q=e.target.value; acState.limit=120; acRender(); });
+  $('#ac-kind').addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; acState.kind=b.dataset.k; acState.limit=120; acRender(); });
+  $('#ac-refresh').addEventListener('click', ()=>V2_LOAD.activity(true));
+  $('#ac-csv').addEventListener('click', ()=>{
+    const rows=acFiltered(); if(!rows.length){ toast('내보낼 기록이 없습니다.'); return; }
+    const q=s=>'"'+String(s==null?'':s).replace(/"/g,'""')+'"';
+    const csv='﻿'+['일시,사람,행동,대상,내용'].concat(rows.map(x=>[x.at,x.name,x.action,x.target,x.detail].map(q).join(','))).join('\r\n');
+    const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+    a.download='활동기록_'+new Date().toISOString().slice(0,10)+'.csv'; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  });
+  /* V5:END */
+
+  function v5ActOk(a){
+    const m=/^설문 링크 복사 · (.+)$/.exec(a[0]||''); if(!m || !ME || !ME.scope || ME.scope.all) return true;
+    return (ME.scope.hospitals||[]).some(h=>h.name===m[1]);
+  }
+  (function v5Boot(){
+    try{ ['hr2_token','hr2_cache_v2','hr2_todo_hide'].forEach(k=>localStorage.removeItem(k)); }catch(_){ }   /* 공용 비밀번호 시절 흔적 정리 */
+    let t=null, m=null; try{ t=localStorage.getItem('hr5_token'); m=JSON.parse(localStorage.getItem('hr5_me')||'null'); }catch(_){ }
+    let last=''; try{ last=localStorage.getItem('hr5_last_uid')||''; }catch(_){ }
+    let flash=''; try{ flash=sessionStorage.getItem('hr5_flash')||''; sessionStorage.removeItem('hr5_flash'); }catch(_){ }
+    if(flash){ const f=$('#lg-flash'); f.textContent=flash; f.hidden=false; }
+    if(last) $('#uid').value=last;
+    if(t && m && m.user){
+      TOKEN=t; ME=m;
+      document.body.classList.toggle('v5-staff', ME.user.role!=='관리자');
+      if(ME.user.mustChange){ v5PendingPw=''; v5ShowPwStep(); }
+      else v5Enter();
+      v5RefreshMe();
+    } else setTimeout(()=>{ try{ ($('#uid').value?$('#pw'):$('#uid')).focus(); }catch(_){ } }, 60);
+  })();
+
 </script>
 </body>
 </html>
