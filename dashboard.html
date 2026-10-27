@@ -5540,7 +5540,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
         <div class="v5-row"><div class="f"><label>역할</label><select id="ue-role"><option value="담당자" ${u.role!=='관리자'?'selected':''}>담당자 — 담당 병원 자료만</option><option value="관리자-사업장" ${u.role==='관리자' && isLim?'selected':''}>관리자 (사업장 전용) — 팀 전체 사업장 · 계정·권한 제외</option><option value="관리자" ${u.role==='관리자' && !isLim?'selected':''}>관리자 — 팀 전체 + 계정 관리</option></select></div>
           <div class="f"><label>공유자료실 담당자 폴더</label><select id="ue-folder"><option value="">이름과 같은 폴더</option>${folders.map(f=>`<option value="${esc(f)}" ${f===u.folder?'selected':''}>${esc(f)}</option>`).join('')}</select><div class="hint">이 폴더 안의 병원 폴더가 곧 담당 병원입니다.</div></div></div>
         ${isNew?'':`<div class="f"><label><input type="checkbox" id="ue-active" ${u.active?'checked':''} style="width:auto;margin-right:6px">계정 사용 (끄면 바로 로그아웃되고 로그인할 수 없습니다)</label></div>`}
-        <div class="sec">추가 병원 <span style="font-weight:500;color:var(--ink-3)">폴더 밖 병원을 함께 맡길 때</span></div>
+        <div class="sec">추가 병원 <span style="font-weight:500;color:var(--ink-3)">폴더 밖 병원을 함께 맡길 때</span> <button type="button" id="ue-hall">전체 선택</button></div>
         <div class="v5-checks">${hospOpts}</div>
         <div class="sec">메뉴 권한 <button type="button" id="ue-def">기본값으로</button></div>
         <div id="ue-mwrap">${usMenusHtml(d, u.role==='관리자'?d.views.map(v=>v.id):u.menus, u.role==='관리자')}</div>
@@ -5566,6 +5566,8 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
       } }]),
       onOpen:()=>{
         $('#ue-role').onchange=()=>{ const adm=$('#ue-role').value!=='담당자'; $('#ue-mwrap').innerHTML=usMenusHtml(d, adm?d.views.map(v=>v.id):d.staffDefault, adm); };
+        $('#ue-hall').onclick=()=>{ const bx=[...document.querySelectorAll('[data-hx]')], all=bx.length && bx.every(x=>x.checked); bx.forEach(x=>{ x.checked=!all; }); $('#ue-hall').textContent=all?'전체 선택':'전체 해제'; };
+        document.addEventListener('change', function hxSync(e){ const h=$('#ue-hall'); if(!h){ document.removeEventListener('change', hxSync); return; } if(e.target && e.target.dataset && e.target.dataset.hx!==undefined){ const bx=[...document.querySelectorAll('[data-hx]')]; h.textContent=(bx.length && bx.every(x=>x.checked))?'전체 해제':'전체 선택'; } });
         $('#ue-def').onclick=()=>{ const adm=$('#ue-role').value!=='담당자'; $('#ue-mwrap').innerHTML=usMenusHtml(d, adm?d.views.map(v=>v.id):d.staffDefault, adm); };
         setTimeout(()=>$('#ue-name').focus(),30);
       } });
