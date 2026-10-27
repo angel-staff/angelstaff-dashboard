@@ -4612,7 +4612,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   /* 사이드바 배지 + 알림 */
   function h3Badges(M, todos){
     const set=(v,n,cls)=>{ const b=document.querySelector(`.nav-item[data-view="${v}"]`); if(!b) return; let s=b.querySelector('.nb'); if(!n){ if(s) s.remove(); return; } if(!s){ s=document.createElement('span'); b.appendChild(s); } s.className='nb '+(cls||''); s.textContent=n; };
-    set('candidates', M.docs.length, 'a');
+    set('candidates', 0);   // 이력서 관리는 공유자료실만 (미분류는 자동 정리기가 폴더로 옮김) → 배지 없음
     set('workers', M.exp30.length, 'r');
     set('evals', M.ivWeek.length+M.ivNoEval.length, '');
     const urgent=todos.filter(x=>x.lv==='r'||x.lv==='a').length;
