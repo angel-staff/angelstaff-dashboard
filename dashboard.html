@@ -348,6 +348,15 @@
   .x-chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
   .x-link{border:0;background:none;padding:0;color:var(--ink);font-weight:600;font-size:12.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-family:inherit}
   .x-link.mut{color:var(--ink-3);font-weight:500}
+  .wk-ck{width:36px;padding-left:14px!important;padding-right:0!important}
+  .wk-ck input{width:16px;height:16px;accent-color:var(--ink,#111);cursor:pointer;vertical-align:middle}
+  .wk-ck input:disabled{cursor:not-allowed;opacity:.35}
+  tr.wk-sel{background:rgba(23,92,211,.06)}
+  .wk-bar{display:flex;align-items:center;gap:10px;margin:0 0 10px;padding:10px 14px;border:1px solid var(--ink,#111);border-radius:var(--r,8px);background:#fff;font-size:13.5px;position:sticky;top:8px;z-index:5}
+  .wk-bar[hidden]{display:none}
+  .wk-bar .sp{flex:1}
+  .wk-bar .wk-del{background:#B42318;border-color:#B42318;color:#fff}
+  #wk-emp{margin-right:10px;padding-right:10px;border-right:1px solid var(--line)}
   .x-btn{border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:600;font-size:12px;padding:6px 11px;border-radius:var(--r);white-space:nowrap;font-family:inherit;cursor:pointer}
   .x-btn:hover{border-color:var(--ink)}
   .x-btn.dark{background:var(--ink);border-color:var(--ink);color:#fff}
@@ -1655,13 +1664,19 @@
       <div class="w3-exp" id="wk-expire"></div>
       <div class="w3-tools" id="wk-outs"></div>
       <div class="filterbar">
-        <div class="segs" id="wk-seg"><button class="seg active" data-f="재직">재직</button><button class="seg" data-f="퇴사">퇴사</button><button class="seg" data-f="전체">전체</button><button class="seg" data-f="미입력">생년월일 미입력</button></div>
+        <div class="segs" id="wk-emp" role="group" aria-label="고용형태"></div><div class="segs" id="wk-seg"><button class="seg active" data-f="재직">재직</button><button class="seg" data-f="퇴사">퇴사</button><button class="seg" data-f="전체">전체</button><button class="seg" data-f="미입력">생년월일 미입력</button></div>
         <div class="x-filter"><span class="muted" id="wk-count" style="font-size:13px;margin-right:6px"></span><select id="wk-hosp" class="filter-sel" hidden><option value="">전체 병원</option></select><input id="wk-q" class="x-search" placeholder="이름·부서·연락처 검색" aria-label="이름·부서·연락처 검색"></div>
+      </div>
+      <div class="wk-bar" id="wk-bar" hidden>
+        <b id="wk-bar-n">0명 선택됨</b><span class="muted" id="wk-bar-sub"></span>
+        <span class="sp"></span>
+        <button class="x-btn" id="wk-bar-clear">선택 해제</button>
+        <button class="x-btn wk-del" id="wk-bar-del">선택 삭제</button>
       </div>
       <div class="tbl-scroll">
         <table class="htbl x-tbl" style="min-width:900px">
-          <thead><tr><th>근무자</th><th>고용형태</th><th>입사일</th><th class="r">파견 만료 (2년)</th><th>생년월일</th><th>연락처</th><th class="r">검진월</th><th class="r">관리</th></tr></thead>
-          <tbody id="wk-rows"><tr><td colspan="8" class="loading">불러오는 중…</td></tr></tbody>
+          <thead><tr><th class="wk-ck"><input type="checkbox" id="wk-all" aria-label="화면에 보이는 근무자 전체 선택" title="화면에 보이는 근무자 전체 선택"></th><th>근무자</th><th>고용형태</th><th>입사일</th><th class="r">파견 만료 (2년)</th><th>생년월일</th><th>연락처</th><th class="r">검진월</th><th class="r">관리</th></tr></thead>
+          <tbody id="wk-rows"><tr><td colspan="9" class="loading">불러오는 중…</td></tr></tbody>
         </table>
       </div>
       <p class="muted" style="font-size:12.5px;margin-top:10px">만료 기준: 파견은 입사일 + 2년(파견 최대 기간). 1년 단위 계약 갱신은 만료로 보지 않습니다 · 도급·위탁은 만료 표시 없음 · 근무자 [수정]에서 만료일을 직접 지정할 수 있습니다(<span class="v3-man">직접</span> 표시).<br>정렬: 파견 만료 60일 이내 재직자가 맨 위(만료 가까운 순), 그다음 2년이 지난 재직자, 나머지는 입사일 순으로 최근 입사자가 맨 아래에 옵니다.</p>
@@ -3640,7 +3655,8 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   $('#view-flow').addEventListener('click', e=>{ const g=e.target.closest('[data-go]'); if(g) gotoView(g.dataset.go); });
 
   /* ═══════ 근무자 마스터 ═══════ */
-  let wkFilter={ seg:'재직', hosp:'', q:'' };
+  let wkFilter={ seg:'재직', hosp:'', q:'', emp:'' };
+  const wkSel=new Set();
   V2_LOAD.workers=async(force)=>{
     if(force) invalidate('v2wk');
     ensureHospitals().then(xHospSelects).catch(()=>{});
@@ -3794,31 +3810,77 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
       return ja.localeCompare(jb) || String(a.name).localeCompare(String(b.name));
     });
   }
+  const WK_EMPS=['파견','도급','일용'];
+  let wkShown=[];
+  function wkBar(){
+    const ids=[...wkSel], n=ids.length, bar=$('#wk-bar');
+    bar.hidden = !n;
+    $('#wk-bar-n').textContent = n+'명 선택됨';
+    const hidden = ids.filter(i=>!wkShown.some(w=>String(w.id)===i)).length;
+    $('#wk-bar-sub').textContent = hidden? '· 현재 화면 밖 '+hidden+'명 포함' : '';
+    const pick=wkShown.filter(w=>!w.contractId), on=pick.filter(w=>wkSel.has(String(w.id))).length, all=$('#wk-all');
+    all.disabled = !pick.length; all.checked = !!pick.length && on===pick.length; all.indeterminate = on>0 && on<pick.length;
+  }
   function renderWorkerRows(){
     const c=DATA['v2wk']; if(!c) return;
     v3Norm(c.v);
     const d=c.v, q=wkFilter.q.replace(/\s/g,'');
+    { const have=new Set(d.list.map(w=>String(w.id))); [...wkSel].forEach(i=>{ if(!have.has(i)) wkSel.delete(i); }); }
     let list=d.list;
     if(wkFilter.seg==='재직') list=list.filter(w=>w.status==='재직');
     else if(wkFilter.seg==='퇴사') list=list.filter(w=>w.status!=='재직');
     else if(wkFilter.seg==='미입력') list=list.filter(w=>w.status==='재직' && !w.birth);
     if(wkFilter.hosp) list=list.filter(w=>w.hospital===wkFilter.hosp);
     if(q) list=list.filter(w=>(String(w.name)+String(w.dept)+String(w.tel||'')).replace(/[\s-]/g,'').indexOf(q.replace(/-/g,''))>=0);
+    /* 고용형태 구분 — 다른 조건을 건 상태의 인원수를 보여 준다 */
+    const cnt={}; list.forEach(w=>{ const k=w.emp||'기타'; cnt[k]=(cnt[k]||0)+1; });
+    const kinds=[...WK_EMPS, ...Object.keys(cnt).filter(k=>!WK_EMPS.includes(k))].filter(k=>cnt[k]||k===wkFilter.emp);
+    $('#wk-emp').innerHTML=[['', '전체 '+list.length], ...kinds.map(k=>[k, k+' '+(cnt[k]||0)])].map(([k,t])=>`<button class="seg${wkFilter.emp===k?' active':''}" data-e="${esc(k)}">${esc(t)}</button>`).join('');
+    if(wkFilter.emp) list=list.filter(w=>(w.emp||'기타')===wkFilter.emp);
     list=v3SortWorkers(list);
+    wkShown=list;
     const tb=$('#wk-rows');
     $('#wk-count').textContent = list.length+'명';
-    if(!list.length){ tb.innerHTML=`<tr><td colspan="8" class="empty-row">${d.list.length?'조건에 맞는 근무자가 없습니다.':'아직 근무자가 없습니다. 매일 아침 휴먼관리시스템 재직자 명단이 자동으로 들어옵니다.'}</td></tr>`; return; }
+    if(!list.length){ tb.innerHTML=`<tr><td colspan="9" class="empty-row">${d.list.length?'조건에 맞는 근무자가 없습니다.':'아직 근무자가 없습니다. 매일 아침 휴먼관리시스템 재직자 명단이 자동으로 들어옵니다.'}</td></tr>`; wkBar(); return; }
     tb.innerHTML=list.map(w=>{
-      const n=v3Dday(w), on=w.status==='재직';
-      const cls = on && n!=null && n<=V3_EXP_POP ? 'v3-row-r' : (on && n!=null && n<=V3_EXP_TOP ? 'v3-row-a' : '');
-      return `<tr class="${cls}"><td><div class="x-who"><b>${esc(w.name)}</b><small>${esc(w.hospital||'병원 미지정')}${w.dept?' · '+esc(w.dept):''}${!on?' · 퇴사 '+esc(w.left||''):''}</small></div></td>`+
+      const n=v3Dday(w), on=w.status==='재직', id=String(w.id), sel=wkSel.has(id);
+      const cls = (on && n!=null && n<=V3_EXP_POP ? 'v3-row-r' : (on && n!=null && n<=V3_EXP_TOP ? 'v3-row-a' : ''))+(sel?' wk-sel':'');
+      return `<tr class="${cls}"><td class="wk-ck"><input type="checkbox" data-wkchk="${esc(id)}" ${sel?'checked':''} ${w.contractId?'disabled title="계약에서 온 근무자는 여기서 삭제할 수 없습니다"':''} aria-label="${esc(w.name)} 선택"></td><td><div class="x-who"><b>${esc(w.name)}</b><small>${esc(w.hospital||'병원 미지정')}${w.dept?' · '+esc(w.dept):''}${!on?' · 퇴사 '+esc(w.left||''):''}</small></div></td>`+
         `<td>${esc(w.emp||'')}</td><td class="x-num">${esc(v3Dot(w.join)||'–')}</td>`+
         `<td class="r x-num">${w.expiryManual?'<span class="v3-man" title="담당자가 직접 지정한 만료일">직접</span>':''}${w.expiry?esc(v3Dot(w.expiry)):'<span class="muted">–</span>'} ${on?v3DdPill(n):''}</td>`+
         `<td class="x-num">${w.birth?esc(w.birth.replace(/-/g,'.')):'<span class="x-pill warn">미입력</span>'}</td>`+
         `<td class="x-num">${w.tel?esc(w.tel):'<span class="muted">–</span>'}</td><td class="r">${w.checkup?w.checkup+'월':'–'}</td>`+
         `<td class="r"><button class="x-btn" data-wkedit="${esc(w.id)}">수정</button></td></tr>`;
     }).join('');
+    wkBar();
   }
+  /* 고용형태 탭 · 체크박스 선택 · 선택 삭제 */
+  $('#wk-emp').addEventListener('click', e=>{ const b=e.target.closest('[data-e]'); if(!b) return; wkFilter.emp=b.dataset.e; renderWorkerRows(); });
+  $('#view-workers').addEventListener('change', e=>{
+    const t=e.target;
+    if(t.id==='wk-all'){ wkShown.filter(w=>!w.contractId).forEach(w=>{ t.checked ? wkSel.add(String(w.id)) : wkSel.delete(String(w.id)); }); renderWorkerRows(); return; }
+    const id=t.dataset && t.dataset.wkchk; if(!id) return;
+    t.checked ? wkSel.add(id) : wkSel.delete(id);
+    const tr=t.closest('tr'); if(tr) tr.classList.toggle('wk-sel', t.checked);
+    wkBar();
+  });
+  $('#wk-bar-clear').addEventListener('click', ()=>{ wkSel.clear(); renderWorkerRows(); });
+  $('#wk-bar-del').addEventListener('click', async e=>{
+    const btn=e.currentTarget, ids=[...wkSel], c=DATA['v2wk']; if(!ids.length || !c) return;
+    const byId=new Map(c.v.list.map(w=>[String(w.id), w])), picked=ids.map(i=>byId.get(i)).filter(Boolean);
+    const act=picked.filter(w=>w.status==='재직').length;
+    const names=picked.slice(0,5).map(w=>w.name).join(', ')+(picked.length>5?' 외 '+(picked.length-5)+'명':'');
+    const msg=`${names} — 총 ${picked.length}명을 근무자 마스터에서 삭제합니다. 되돌릴 수 없습니다.`+(act?` 재직자 ${act}명이 포함되어 있습니다. 휴먼관리시스템에 아직 재직 중이면 다음 자동 동기화 때 다시 들어옵니다. (퇴사·불필요 자료 정리용)`:'');
+    if(!await confirmAction(`${picked.length}명을 삭제할까요?`, msg)) return;
+    try{
+      await xRun(btn,'삭제 중…', async ()=>{
+        let del=0, skip=0;
+        for(let i=0;i<ids.length;i+=500){ const r=await call('deleteWorkers', TOKEN, ids.slice(i,i+500)); del+=(r&&r.deleted)||0; skip+=(r&&r.skipped)||0; }
+        wkSel.clear(); invalidate('v2wk','v2rk','v2fc'); await V2_LOAD.workers(true);
+        toast(del+'명을 삭제했습니다.'+(skip?` (권한 밖·이미 삭제 ${skip}명 제외)`:''));
+      });
+    }catch(err){ xFail(err); }
+  });
   document.addEventListener('click', e=>{ if(e.target && e.target.id==='wf-exp-x'){ const i=$('#wf-exp'); if(i) i.value=''; toast('저장하면 입사일 + 2년 자동 계산으로 돌아갑니다.'); } });
   $('#wk-hcards').addEventListener('click', e=>{ const b=e.target.closest('[data-wkh]'); if(!b) return; wkFilter.hosp=b.dataset.wkh; const c=DATA['v2wk']; if(c) renderWorkers(c.v); });
 
