@@ -706,6 +706,40 @@
   @media (max-width:720px){ #view-evals .head .actions{flex-wrap:wrap;gap:8px} }
   /* 만족도 조사 — 병원별 링크 카드 */
   #sv-links{display:none !important}
+  .kp-form{border:1px solid var(--line);border-radius:14px;background:#fff;padding:18px 20px;margin-top:6px}
+  .kp-ft{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}.kp-ft b{font-size:15px}
+  .kp-pill{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--line-2);color:var(--ink-3)}
+  .kp-pill.edit{background:var(--trace-wash);color:var(--trace-ink)}
+  .kp-fr{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:14px}
+  .kp-fr label,.kp-n label{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--ink-3);font-weight:600;flex:1 1 170px;min-width:150px}
+  .kp-fr label[hidden]{display:none}
+  .kp-fr .x-search,.kp-fr .filter-sel{width:100%;box-sizing:border-box}
+  .kp-nd{display:flex;gap:6px}.kp-nd input{flex:1;min-width:0}
+  .kp-nums{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+  .kp-n{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--panel)}
+  .kp-n label{font-size:13px;color:var(--ink);flex:none;min-width:0}.kp-n label small{font-weight:500;color:var(--ink-3);font-size:11.5px}
+  .kp-n .st{display:flex;align-items:center;gap:6px;margin-top:10px}
+  .kp-n .st input{width:100%;min-width:0;text-align:center;font:700 24px var(--gr);border:0;background:transparent;color:var(--ink);padding:2px 0;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+  .kp-n .st input::-webkit-outer-spin-button,.kp-n .st input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .kp-n .st button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:17px;line-height:1;cursor:pointer;color:var(--ink)}
+  .kp-n .st button:hover{border-color:var(--ink)}
+  .kp-fa{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .kp-nav{display:inline-flex;align-items:center;gap:6px;margin-right:6px}.kp-nav b{min-width:150px;text-align:center;font-size:14px}
+  .kp-cards{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink);border-bottom:1px solid var(--line);margin:16px 0 8px}
+  .kp-c{padding:18px 20px;border-left:1px solid var(--line-2)}.kp-c:first-child{border-left:0}
+  .kp-c .l{font-size:12.5px;color:var(--ink-3);font-weight:600}
+  .kp-c .v{font:700 clamp(28px,3vw,40px) var(--gr);letter-spacing:-.02em;line-height:1.1;margin:6px 0 6px;font-variant-numeric:tabular-nums}
+  .kp-c .d{font-size:12px;color:var(--ink-3)}.kp-c .d b.up{color:#0B7A43}.kp-c .d b.dn{color:#B42318}
+  .kp-c .cv{font-size:12px;color:var(--ink-2);margin-top:6px}
+  .kp-t{width:100%;border-collapse:collapse;font-size:13.5px;margin:6px 0 22px}
+  .kp-t th{font-size:11.5px;color:var(--ink-3);font-weight:600;text-align:right;padding:8px 10px;border-bottom:1px solid var(--ink)}
+  .kp-t th:first-child,.kp-t td:first-child{text-align:left}
+  .kp-t td{padding:9px 10px;border-bottom:1px solid var(--line-2);text-align:right;font-variant-numeric:tabular-nums}
+  .kp-t td.h{font-weight:700}.kp-t tr.tot td{font-weight:700;border-top:1px solid var(--ink);border-bottom:0;background:var(--panel)}
+  .kp-t td small{display:block;color:var(--ink-3);font-weight:500;font-size:11.5px}
+  .kp-h3{display:flex;justify-content:space-between;align-items:baseline;margin:20px 0 4px}.kp-h3 h3{margin:0;font-size:15px}.kp-h3 span{font-size:12px;color:var(--ink-3)}
+  .kp-x{border:0;background:transparent;color:var(--ink-3);font-size:12px;cursor:pointer;padding:2px 6px}.kp-x:hover{color:var(--ink)}
+  @media(max-width:900px){.kp-nums,.kp-cards{grid-template-columns:repeat(2,1fr)}.kp-c:nth-child(3){border-left:0}}
   .sv-gen{border:1px solid var(--line);border-radius:14px;background:#fff;padding:16px 18px;margin:6px 0 18px}
   .sv-gen .g-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin-bottom:12px}
   .sv-gen .g-h b{font-size:15px}.sv-gen .g-h span{font-size:12.5px;color:var(--ink-3)}
@@ -1288,6 +1322,7 @@
     <div class="nav-sec"><div class="eyebrow">운영</div></div>
     <button class="nav-item" data-view="workers" data-title="근무자 마스터"><i class="dot"></i>근무자 마스터</button>
     <button class="nav-item" data-view="surveys" data-title="만족도 조사"><i class="dot"></i>만족도 조사</button>
+    <button class="nav-item" data-view="kpi" data-title="KPI"><i class="dot"></i>KPI<span class="x-new">NEW</span></button>
     <button class="nav-item" data-view="risk" data-title="퇴사 위험"><i class="dot"></i>퇴사 위험<span class="x-new">NEW</span></button>
     <button class="nav-item" data-view="forecast" data-title="결원 예측·인재풀"><i class="dot"></i>결원 예측·인재풀<span class="x-new">NEW</span></button>
     <div class="nav-sec"><div class="eyebrow">학습</div></div>
@@ -1702,6 +1737,38 @@
     </section>
 
     <!-- ═══ HR 2.0 ═══ 퇴사 위험 -->
+    <section class="page" id="view-kpi" style="display:none">
+      <div class="head">
+        <div><div class="eyebrow">Daily · Weekly · Monthly KPI</div><h1>채용 KPI</h1></div>
+        <div class="actions"><span class="muted" id="kp-who" style="font-size:13px"></span></div>
+      </div>
+      <div class="kp-form" id="kp-form">
+        <div class="kp-ft"><b>데일리 KPI 입력</b><span id="kp-state" class="kp-pill">새로 입력</span></div>
+        <div class="kp-fr">
+          <label>날짜<input type="date" id="kpf-date" class="x-search"></label>
+          <label>병원<select id="kpf-h" class="filter-sel"></select></label>
+          <label>부서<select id="kpf-d" class="filter-sel"></select></label>
+          <label id="kpf-nd-w" hidden>새 부서 이름<span class="kp-nd"><input id="kpf-nd" class="x-search" maxlength="30" placeholder="예: 병동, 린넨실"><button type="button" class="x-btn" id="kpf-nd-add">추가</button></span></label>
+        </div>
+        <div class="kp-nums">
+          <div class="kp-n" data-k="search"><label for="kpf-search">인재 서치<small>오늘 검색·접촉한 인원</small></label><div class="st"><button type="button" data-st="-1" aria-label="줄이기">−</button><input id="kpf-search" type="number" min="0" step="1" inputmode="numeric" value="0"><button type="button" data-st="1" aria-label="늘리기">＋</button></div></div>
+          <div class="kp-n" data-k="resume"><label for="kpf-resume">이력서 취합<small>받은 이력서 건수</small></label><div class="st"><button type="button" data-st="-1" aria-label="줄이기">−</button><input id="kpf-resume" type="number" min="0" step="1" inputmode="numeric" value="0"><button type="button" data-st="1" aria-label="늘리기">＋</button></div></div>
+          <div class="kp-n" data-k="interview"><label for="kpf-interview">면접 진행<small>실제 면접이 진행된 건</small></label><div class="st"><button type="button" data-st="-1" aria-label="줄이기">−</button><input id="kpf-interview" type="number" min="0" step="1" inputmode="numeric" value="0"><button type="button" data-st="1" aria-label="늘리기">＋</button></div></div>
+          <div class="kp-n" data-k="pass"><label for="kpf-pass">합격<small>합격 확정 인원</small></label><div class="st"><button type="button" data-st="-1" aria-label="줄이기">−</button><input id="kpf-pass" type="number" min="0" step="1" inputmode="numeric" value="0"><button type="button" data-st="1" aria-label="늘리기">＋</button></div></div>
+        </div>
+        <div class="kp-fr"><label style="flex:1 1 100%">메모 (선택)<input id="kpf-memo" class="x-search" maxlength="200" placeholder="특이사항이 있으면 적어 주세요"></label></div>
+        <div class="kp-fa"><span class="muted" id="kp-hint" style="font-size:12.5px">같은 날짜·병원·부서로 다시 저장하면 그 줄을 덮어씁니다.</span><button class="btn-sm" id="kpf-save">저장</button></div>
+      </div>
+      <div class="filterbar" style="margin-top:22px">
+        <div class="segs" id="kp-mode"><button class="seg active" data-m="daily">데일리</button><button class="seg" data-m="weekly">위클리</button><button class="seg" data-m="monthly">먼슬리</button></div>
+        <div class="x-filter">
+          <span class="kp-nav"><button type="button" class="x-btn" id="kp-prev" aria-label="이전">‹</button><b id="kp-label"></b><button type="button" class="x-btn" id="kp-next" aria-label="다음">›</button><button type="button" class="x-btn" id="kp-today">오늘</button></span>
+          <select id="kp-fh" class="filter-sel"><option value="">전체 병원</option></select>
+          <select id="kp-fu" class="filter-sel" hidden><option value="">전체 담당자</option></select>
+        </div>
+      </div>
+      <div id="kp-out"><div class="loading">불러오는 중…</div></div>
+    </section>
     <section class="page" id="view-risk" style="display:none">
       <div class="head">
         <div><div class="eyebrow">Retention</div><h1>퇴사 위험</h1></div>
@@ -4413,7 +4480,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   $('#h3-new-x').addEventListener('click', ()=>{ $('#h3-new').hidden=true; try{ localStorage.setItem('hr2_new_v4','1'); }catch(_){ } });
 
   /* ── 명령 팔레트 ── */
-  const PAL3_NAV=[ ['dash','현황 · 오늘 브리핑','🏠'], ['candidates','이력서 관리','📄'], ['evals','면접 평가 · 캘린더','🗓'], ['workers','근무자 마스터','👥'], ['surveys','만족도 조사','💬'], ['postings','직무공고','📢'], ['hospitals','병원 마스터','🏥'], ['interview','AI 1차 인터뷰','🤖'], ['risk','퇴사 위험','⚠'], ['forecast','결원 예측·인재풀','📈'], ['flow','학습 흐름','🧭'], ['quality','채용 결과 학습','🎯'], ['learn','담당자 수정 학습','✎'], ['knowledge','병원별 운영 지식','📚'], ['audit','AI 결정 기록','🧾'], ['team','팀 관제','📊'], ['users','계정·권한','🔐'], ['activity','활동 기록','🗂'] ];
+  const PAL3_NAV=[ ['dash','현황 · 오늘 브리핑','🏠'], ['candidates','이력서 관리','📄'], ['evals','면접 평가 · 캘린더','🗓'], ['workers','근무자 마스터','👥'], ['surveys','만족도 조사','💬'], ['kpi','KPI · 데일리 입력','📈'], ['postings','직무공고','📢'], ['hospitals','병원 마스터','🏥'], ['interview','AI 1차 인터뷰','🤖'], ['risk','퇴사 위험','⚠'], ['forecast','결원 예측·인재풀','📈'], ['flow','학습 흐름','🧭'], ['quality','채용 결과 학습','🎯'], ['learn','담당자 수정 학습','✎'], ['knowledge','병원별 운영 지식','📚'], ['audit','AI 결정 기록','🧾'], ['team','팀 관제','📊'], ['users','계정·권한','🔐'], ['activity','활동 기록','🗂'] ];
   const PAL3_ACT=[
     ['면접 일정 등록','달력에 면접 추가', '＋', ()=>{ gotoView('evals'); setTimeout(()=>v3IvRegister(''),200); }],
     ['다음 달 생일쿠폰 명단 받기','경영지원부 제출 양식(xlsx)', '🎂', ()=>{ if(DATA['v2wk']) wkOutput('birth'); else toast('명단을 불러오는 중입니다.'); }],
@@ -5187,7 +5254,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   /* V5:BEGIN ═══ 개인 계정 · 권한 · 팀 관제 · 활동 기록 (Auth.gs 와 짝) ═══ */
   let ME=null, v5PendingPw='';
   ['team','users','activity'].forEach(v=>{ views[v]=$('#view-'+v); });
-  function v5Allowed(v){ if(!ME || !ME.menus) return true; if(!v || v==='empty' || v==='contracts') return true; return ME.menus.indexOf(v)>=0; }
+  function v5Allowed(v){ if(!ME || !ME.menus) return true; if(!v || v==='empty' || v==='contracts' || v==='kpi') return true; return ME.menus.indexOf(v)>=0; }
   function v5Uid(){ return ME && ME.user ? ME.user.id : 'anon'; }
   function v5ScopeKey(){ return ME && ME.scope && !ME.scope.all ? (ME.scope.uid||'x') : 'all'; }
   function v5Key(k){ return 'hr5_'+k+'_'+v5Uid(); }
@@ -5672,6 +5739,152 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     });
   }
   (function(){ const b=$('#wk-pkg'); if(b) b.addEventListener('click', e=>pkgDownload(e.currentTarget)); })();
+
+  /* KPI:BEGIN ═══ 데일리 · 위클리 · 먼슬리 KPI (Sync2.gs 의 saveKpi / listKpi 와 짝) ═══ */
+  views.kpi=$('#view-kpi');
+  const KP={ info:null, rows:[], mode:'daily', anchor:'', hosp:'', uid:'', mine:null, cache:{} };
+  const KP_M=[['search','인재 서치'],['resume','이력서 취합'],['interview','면접 진행'],['pass','합격']];
+  const kpPad=n=>String(n).padStart(2,'0');
+  const kpStr=d=>d.getFullYear()+'-'+kpPad(d.getMonth()+1)+'-'+kpPad(d.getDate());
+  const kpDate=s=>{ const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); };
+  const kpAdd=(s,n)=>{ const d=kpDate(s); d.setDate(d.getDate()+n); return kpStr(d); };
+  const kpMon=s=>{ const d=kpDate(s), w=(d.getDay()+6)%7; d.setDate(d.getDate()-w); return kpStr(d); };
+  const kpTodayS=()=>kpStr(new Date());
+  const kpFmt=s=>{ const d=kpDate(s); return (d.getMonth()+1)+'.'+d.getDate()+'('+'일월화수목금토'[d.getDay()]+')'; };
+  const kpN=v=>Number(v||0).toLocaleString('ko-KR');
+  const kpPct=(a,b)=>b>0?Math.round(a/b*1000)/10+'%':'–';
+  function kpRange(){
+    const a=KP.anchor||kpTodayS();
+    if(KP.mode==='daily') return { from:a, to:a, pf:kpAdd(a,-1), pt:kpAdd(a,-1), label:kpFmt(a), prevLab:'전일' };
+    if(KP.mode==='weekly'){ const f=kpMon(a), t=kpAdd(f,6); return { from:f, to:t, pf:kpAdd(f,-7), pt:kpAdd(f,-1), label:kpFmt(f)+' ~ '+kpFmt(t), prevLab:'전주' }; }
+    const d=kpDate(a), f=kpStr(new Date(d.getFullYear(),d.getMonth(),1)), t=kpStr(new Date(d.getFullYear(),d.getMonth()+1,0)), pf=kpStr(new Date(d.getFullYear(),d.getMonth()-1,1)), pt=kpStr(new Date(d.getFullYear(),d.getMonth(),0));
+    return { from:f, to:t, pf, pt, label:d.getFullYear()+'년 '+(d.getMonth()+1)+'월', prevLab:'전월' };
+  }
+  const kpSum=rs=>rs.reduce((o,r)=>{ KP_M.forEach(([k])=>o[k]+=r[k]); return o; },{search:0,resume:0,interview:0,pass:0});
+  function kpFiltered(rs){ return rs.filter(r=>(!KP.hosp||r.hid===KP.hosp) && (!KP.uid||r.uid===KP.uid)); }
+  async function kpFetch(from,to,force){
+    const key=from+'|'+to; if(!force && KP.cache[key]) return KP.cache[key];
+    const rs=await call('listKpi', TOKEN, from, to); KP.cache[key]=Array.isArray(rs)?rs:[]; return KP.cache[key];
+  }
+  async function kpInfo(force){
+    if(KP.info && !force) return KP.info;
+    KP.info=await call('kpiInfo', TOKEN); return KP.info;
+  }
+  /* ── 입력 폼 ── */
+  function kpFillHosp(){
+    const hs=(KP.info.hospitals||[]).filter(h=>!xHospOut(h.name)), sel=$('#kpf-h'), cur=sel.value;
+    sel.innerHTML=hs.length?hs.map(h=>`<option value="${esc(h.id)}">${esc(h.name)}</option>`).join(''):'<option value="">담당 병원이 없습니다</option>';
+    if(cur && hs.some(h=>h.id===cur)) sel.value=cur;
+    $('#kp-fh').innerHTML='<option value="">전체 병원</option>'+hs.map(h=>`<option value="${esc(h.id)}">${esc(h.name)}</option>`).join('');
+    $('#kp-fh').value=KP.hosp;
+  }
+  function kpFillDept(pick){
+    const hid=$('#kpf-h').value, list=(KP.info.depts||{})[hid]||[], sel=$('#kpf-d'), cur=pick!==undefined?pick:sel.value;
+    sel.innerHTML='<option value="">부서 구분 없음</option>'+list.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join('')+'<option value="__new">＋ 부서 추가…</option>';
+    sel.value=(cur==='__new'||list.indexOf(cur)>=0||cur==='')?cur:''; $('#kpf-nd-w').hidden=sel.value!=='__new';
+  }
+  async function kpPrefill(){
+    const date=$('#kpf-date').value, hid=$('#kpf-h').value, dept=$('#kpf-d').value==='__new'?'':$('#kpf-d').value;
+    const set=(r)=>{ KP_M.forEach(([k])=>{ $('#kpf-'+k).value=r?r[k]:0; }); $('#kpf-memo').value=r?r.memo:''; $('#kp-state').textContent=r?'입력됨 · 수정 중':'새로 입력'; $('#kp-state').classList.toggle('edit',!!r); };
+    if(!date||!hid){ set(null); return; }
+    try{
+      const rs=await kpFetch(date,date,true), r=rs.find(x=>x.uid===KP.info.me.id && x.hid===hid && x.dept===dept);
+      if($('#kpf-date').value===date && $('#kpf-h').value===hid) set(r||null);
+    }catch(_){ }
+  }
+  /* ── 집계 화면 ── */
+  const kpHeat=(v,mx)=>v&&mx?` style="background:rgba(242,194,14,${(0.08+0.30*v/mx).toFixed(2)})"`:'';
+  function kpTable(title, sub, rows, first, opts){
+    opts=opts||{};
+    if(!rows.length) return '';
+    const mx={}; KP_M.forEach(([k])=>mx[k]=Math.max(0,...rows.map(r=>r[k])));
+    const tot=kpSum(rows);
+    return `<div class="kp-h3"><h3>${esc(title)}</h3><span>${esc(sub||'')}</span></div><div class="tbl-scroll"><table class="kp-t"><thead><tr><th>${esc(first)}</th>${KP_M.map(([,l])=>`<th>${l}</th>`).join('')}<th>면접→합격</th>${opts.act?'<th></th>':''}</tr></thead><tbody>`+
+      rows.map(r=>`<tr><td>${r.label}${r.sub?`<small>${esc(r.sub)}</small>`:''}</td>${KP_M.map(([k])=>`<td class="h"${kpHeat(r[k],mx[k])}>${kpN(r[k])}</td>`).join('')}<td>${kpPct(r.pass,r.interview)}</td>${opts.act?`<td>${r.act||''}</td>`:''}</tr>`).join('')+
+      (rows.length>1?`<tr class="tot"><td>합계</td>${KP_M.map(([k])=>`<td>${kpN(tot[k])}</td>`).join('')}<td>${kpPct(tot.pass,tot.interview)}</td>${opts.act?'<td></td>':''}</tr>`:'')+
+      '</tbody></table></div>';
+  }
+  function kpGroup(rs, keyFn, labFn, subFn){
+    const m={}; rs.forEach(r=>{ const k=keyFn(r); const o=m[k]||(m[k]={ label:esc(labFn(r)), sub:subFn?subFn(r):'', search:0,resume:0,interview:0,pass:0 }); KP_M.forEach(([x])=>o[x]+=r[x]); });
+    return Object.values(m).sort((a,b)=>b.pass-a.pass||b.interview-a.interview||b.resume-a.resume||b.search-a.search);
+  }
+  async function kpRender(force){
+    const out=$('#kp-out'), R=kpRange(); $('#kp-label').textContent=R.label;
+    $$('#kp-mode .seg').forEach(b=>b.classList.toggle('active', b.dataset.m===KP.mode));
+    let all;
+    try{ all=await kpFetch(R.pf, R.to, force); }catch(e){ out.innerHTML='<div class="empty-row">불러오지 못했습니다.</div>'; xFail(e); return; }
+    const adm=KP.info.me.admin;
+    const names=[...new Map(all.map(r=>[r.uid,r.uname])).entries()];
+    const fu=$('#kp-fu'); fu.hidden=!adm; if(adm){ const cur=KP.uid; fu.innerHTML='<option value="">전체 담당자</option>'+names.map(([i,n])=>`<option value="${esc(i)}">${esc(n)}</option>`).join(''); fu.value=cur; }
+    const cur=kpFiltered(all.filter(r=>r.date>=R.from&&r.date<=R.to)), prev=kpFiltered(all.filter(r=>r.date>=R.pf&&r.date<=R.pt));
+    const S=kpSum(cur), P=kpSum(prev);
+    const delta=(k)=>{ const d=S[k]-P[k]; if(!prev.length && !cur.length) return ''; return `${R.prevLab} ${kpN(P[k])} · <b class="${d>0?'up':d<0?'dn':''}">${d>0?'▲ ':d<0?'▼ ':''}${d===0?'변동 없음':kpN(Math.abs(d))}</b>`; };
+    const conv=['', '서치 → 이력서 '+kpPct(S.resume,S.search), '이력서 → 면접 '+kpPct(S.interview,S.resume), '면접 → 합격 '+kpPct(S.pass,S.interview)];
+    let h=`<div class="kp-cards">${KP_M.map(([k,l],i)=>`<div class="kp-c"><div class="l">${l}</div><div class="v">${kpN(S[k])}</div><div class="d">${delta(k)}</div><div class="cv">${conv[i]||'&nbsp;'}</div></div>`).join('')}</div>`;
+    if(!cur.length){ h+=`<div class="empty-row" style="padding:26px 2px">${esc(R.label)}에 입력된 KPI가 없습니다.${KP.mode==='daily'?' 위 입력 칸에서 오늘 실적을 저장해 주세요.':''}</div>`; out.innerHTML=h; return; }
+    const multiU=adm || new Set(cur.map(r=>r.uid)).size>1;
+    if(KP.mode==='daily'){
+      const rows=cur.slice().sort((a,b)=>a.hosp.localeCompare(b.hosp,'ko')||a.dept.localeCompare(b.dept,'ko')).map(r=>({ ...r, label:esc(r.hosp)+(r.dept?' · '+esc(r.dept):''), sub:(multiU?r.uname:'')+(r.memo?(multiU?' · ':'')+r.memo:''),
+        act:(r.uid===KP.info.me.id?`<button type="button" class="kp-x" data-kedit="${esc(r.id)}">수정</button>`:'')+((adm||r.uid===KP.info.me.id)?`<button type="button" class="kp-x" data-kdel="${esc(r.id)}">삭제</button>`:'') }));
+      h+=kpTable('입력 내역', R.label, rows, '병원 · 부서', { act:true });
+    } else {
+      let rows=[], first='';
+      if(KP.mode==='weekly'){ for(let i=0;i<7;i++){ const d=kpAdd(R.from,i), rs=cur.filter(r=>r.date===d); rows.push({ label:kpFmt(d), ...kpSum(rs) }); } first='일자'; }
+      else { let f=R.from; while(f<=R.to){ const e=kpAdd(kpMon(f),6)<R.to?kpAdd(kpMon(f),6):R.to, rs=cur.filter(r=>r.date>=f&&r.date<=e); rows.push({ label:kpFmt(f)+' ~ '+kpFmt(e), ...kpSum(rs) }); f=kpAdd(e,1); } first='주차'; }
+      h+=kpTable(KP.mode==='weekly'?'일별':'주차별', R.label, rows, first);
+      if(multiU) h+=kpTable('담당자별', '', kpGroup(cur, r=>r.uid, r=>r.uname), '담당자');
+      h+=kpTable('병원 · 부서별', '', kpGroup(cur, r=>r.hid+'|'+r.dept, r=>r.hosp+(r.dept?' · '+r.dept:'')), '병원 · 부서');
+    }
+    out.innerHTML=h;
+  }
+  V2_LOAD.kpi=async(force)=>{
+    try{
+      await kpInfo(force);
+      if(!KP.anchor) KP.anchor=kpTodayS();
+      $('#kp-who').textContent=KP.info.me.name+' 님 · '+(KP.info.me.admin?'전체 담당자 KPI를 봅니다':'내 KPI');
+      if(!$('#kpf-date').value) $('#kpf-date').value=kpTodayS();
+      $('#kpf-date').max=kpTodayS();
+      kpFillHosp(); kpFillDept(); await kpPrefill(); await kpRender(force);
+    }catch(e){ xFail(e); $('#kp-out').innerHTML='<div class="empty-row">불러오지 못했습니다.</div>'; }
+  };
+  $('#kpf-h').addEventListener('change', ()=>{ kpFillDept(''); kpPrefill(); });
+  $('#kpf-d').addEventListener('change', ()=>{ $('#kpf-nd-w').hidden=$('#kpf-d').value!=='__new'; if($('#kpf-d').value==='__new') setTimeout(()=>$('#kpf-nd').focus(),30); else kpPrefill(); });
+  $('#kpf-date').addEventListener('change', kpPrefill);
+  $('#kpf-nd-add').addEventListener('click', async e=>{
+    const hid=$('#kpf-h').value, name=$('#kpf-nd').value.trim(); if(!hid||!name){ toast('병원과 부서 이름을 입력하세요.'); return; }
+    try{ const r=await xRun(e.currentTarget,'…',()=>call('addKpiDept', TOKEN, hid, name)); KP.info.depts[hid]=r.depts||[]; $('#kpf-nd').value=''; kpFillDept(name); await kpPrefill(); toast('부서를 추가했습니다.'); }
+    catch(err){ xFail(err); }
+  });
+  $('#kp-form').addEventListener('click', e=>{
+    const b=e.target.closest('[data-st]'); if(!b) return; const inp=b.parentElement.querySelector('input'); inp.value=Math.max(0,Number(inp.value||0)+Number(b.dataset.st)); inp.dispatchEvent(new Event('input'));
+  });
+  $('#kpf-save').addEventListener('click', async e=>{
+    const body={ date:$('#kpf-date').value, hospitalId:$('#kpf-h').value, dept:$('#kpf-d').value==='__new'?'':$('#kpf-d').value, memo:$('#kpf-memo').value.trim() };
+    KP_M.forEach(([k])=>{ body[k]=$('#kpf-'+k).value; });
+    if(!body.date){ toast('날짜를 선택하세요.'); return; }
+    if(!body.hospitalId){ toast('병원을 선택하세요.'); return; }
+    try{
+      const r=await xRun(e.currentTarget,'저장 중…',()=>call('saveKpi', TOKEN, body));
+      KP.cache={}; toast(r.updated?'수정했습니다.':'저장했습니다.');
+      if(KP.mode==='daily') KP.anchor=body.date;
+      await kpPrefill(); await kpRender(true);
+    }catch(err){ xFail(err); }
+  });
+  $('#kp-mode').addEventListener('click', e=>{ const b=e.target.closest('[data-m]'); if(!b) return; KP.mode=b.dataset.m; kpRender(); });
+  $('#kp-fh').addEventListener('change', e=>{ KP.hosp=e.target.value; kpRender(); });
+  $('#kp-fu').addEventListener('change', e=>{ KP.uid=e.target.value; kpRender(); });
+  const kpStep=n=>{ const a=KP.anchor||kpTodayS(); if(KP.mode==='daily') KP.anchor=kpAdd(a,n); else if(KP.mode==='weekly') KP.anchor=kpAdd(a,7*n); else { const d=kpDate(a); d.setDate(1); d.setMonth(d.getMonth()+n); KP.anchor=kpStr(d); } kpRender(); };
+  $('#kp-prev').addEventListener('click', ()=>kpStep(-1));
+  $('#kp-next').addEventListener('click', ()=>kpStep(1));
+  $('#kp-today').addEventListener('click', ()=>{ KP.anchor=kpTodayS(); kpRender(); });
+  $('#kp-out').addEventListener('click', async e=>{
+    const ed=e.target.closest('[data-kedit]'), dl=e.target.closest('[data-kdel]');
+    if(ed){ const r=(KP.cache[Object.keys(KP.cache).find(k=>(KP.cache[k]||[]).some(x=>x.id===ed.dataset.kedit))]||[]).find(x=>x.id===ed.dataset.kedit); if(!r) return;
+      $('#kpf-date').value=r.date; $('#kpf-h').value=r.hid; kpFillDept(r.dept); await kpPrefill(); $('#kp-form').scrollIntoView({behavior:'smooth',block:'start'}); return; }
+    if(dl){ if(!await confirmAction('KPI 기록을 삭제할까요?','삭제하면 되돌릴 수 없습니다.')) return;
+      try{ await call('deleteKpi', TOKEN, dl.dataset.kdel); KP.cache={}; toast('삭제했습니다.'); await kpPrefill(); await kpRender(true); }catch(err){ xFail(err); } }
+  });
+  /* KPI:END */
   /* V5:END */
 
   function v5ActOk(a){
