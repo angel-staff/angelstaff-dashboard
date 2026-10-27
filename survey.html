@@ -229,7 +229,10 @@ var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzWsJzb8tXVqD_IT9UE5I
    survey.html?h=gd → 강동성심병원 / ?h=uj → 의정부성모병원 / ?h=gn → 강남하트스캔의원
    병원 추가 = 아래 SURVEY_HOSPITALS 에 한 줄 추가 (파일 복사 불필요)              */
 var SURVEY_HOSPITALS = { gd:"강동성심병원", uj:"의정부성모병원", gn:"강남하트스캔의원" };
-var FIXED_HOSPITAL = SURVEY_HOSPITALS[(new URLSearchParams(location.search).get("h")||"").trim().toLowerCase()] || "";
+/* 목록에 없는 사업장은 ?hn=사업장이름 (대시보드 '설문 링크 만들기'가 만든 링크). 글자·숫자·공백·()·- 만 허용 */
+function cleanHospital(x){ return String(x||"").replace(/[^\uAC00-\uD7A3A-Za-z0-9 ()·\-]/g,"").replace(/\s+/g," ").trim().slice(0,30); }
+var _qs = new URLSearchParams(location.search);
+var FIXED_HOSPITAL = SURVEY_HOSPITALS[(_qs.get("h")||"").trim().toLowerCase()] || cleanHospital(_qs.get("hn"));
 if (FIXED_HOSPITAL) document.title = "엔젤스태프 · " + FIXED_HOSPITAL + " 근무 만족도 조사";
 /* ▲▲▲ ▲▲▲ */
 var HOSPITALS = [FIXED_HOSPITAL];
@@ -638,6 +641,7 @@ function showHospitalPicker(type){
   var p=params.get("type"), h=params.get("h");
   if(!FIXED_HOSPITAL){ showHospitalPicker(p); return; }                 // 병원 코드가 없거나 틀린 링크
   if(h){ var _h=h.trim().toLowerCase(); window.__PRESET_HOSPITAL = CODE2HOSP[_h] || _h; }
+  else if(FIXED_HOSPITAL){ window.__PRESET_HOSPITAL = FIXED_HOSPITAL; }
   if(p==="resident"||p==="exit"||p==="pulse"){ showCover(p); }
   else { showChooser(); }
 })();

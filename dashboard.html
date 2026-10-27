@@ -706,6 +706,15 @@
   @media (max-width:720px){ #view-evals .head .actions{flex-wrap:wrap;gap:8px} }
   /* 만족도 조사 — 병원별 링크 카드 */
   #sv-links{display:none !important}
+  .sv-gen{border:1px solid var(--line);border-radius:14px;background:#fff;padding:16px 18px;margin:6px 0 18px}
+  .sv-gen .g-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin-bottom:12px}
+  .sv-gen .g-h b{font-size:15px}.sv-gen .g-h span{font-size:12.5px;color:var(--ink-3)}
+  .sv-gen .g-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:12px}
+  .sv-gen label{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--ink-3);font-weight:600;min-width:200px;flex:1 1 200px}
+  .sv-gen label[hidden]{display:none}
+  .sv-gen .g-out{display:flex;gap:8px;align-items:center}
+  .sv-gen .g-out input{flex:1;min-width:0;font:500 12.5px var(--gr);background:var(--paper,#F7F6F2)}
+  .sv-gen .g-note{font-size:12px;color:var(--ink-3);margin-top:8px}
   .sv3-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin:6px 0 16px}
   .sv3-card{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff;cursor:pointer;transition:border-color .15s}
   .sv3-card:hover{border-color:#C9C4BA}
@@ -1595,6 +1604,16 @@
       </div>
       <div class="sv-alert" id="sv-alert"></div>
       <div class="sv-links" id="sv-links"></div>
+      <div class="sv-gen" id="sv-gen">
+        <div class="g-h"><b>설문 링크 만들기</b><span>우리 사업장을 고르면 근무자에게 보낼 링크가 바로 만들어집니다</span></div>
+        <div class="g-row">
+          <label>사업장<select id="svg-h" class="filter-sel"></select></label>
+          <label id="svg-c-wrap" hidden>사업장 이름<input id="svg-c" class="x-search" maxlength="30" placeholder="예: 서울OO병원 (한글·영문·숫자)"></label>
+          <label>설문 종류<select id="svg-t" class="filter-sel"><option value="">처음에 근무자가 선택</option><option value="resident">재직자 만족도 조사</option><option value="pulse">월 1문항</option><option value="exit">퇴직자 인터뷰</option></select></label>
+        </div>
+        <div class="g-out"><input id="svg-u" class="x-search" readonly aria-label="만들어진 설문 링크"><button class="x-btn" id="svg-copy">링크 복사</button><button class="x-btn" id="svg-open">열어보기</button></div>
+        <div class="g-note" id="svg-note"></div>
+      </div>
       <div class="b-head" style="margin-top:4px"><h3>병원별 설문 링크</h3><span class="meta">카드를 누르면 그 병원 결과만 봅니다 · 링크 하나로 재직자/월 1문항/퇴직자 설문을 고릅니다</span></div>
       <div class="sv3-cards" id="sv3-cards"></div>
       <div class="sv3-types" id="sv3-types"></div>
@@ -4098,14 +4117,26 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   const SV3_LINKS=[ ['강동성심병원','gd'], ['강남하트스캔의원','gn'], ['의정부성모병원','uj'] ];
   const SV3_BASE='https://angel-staff.github.io/angelstaff-dashboard/survey.html?h=';
   let sv3Type='';
+  const SV3_BASE_HN='https://angel-staff.github.io/angelstaff-dashboard/survey.html?hn=';
+  const svClean=x=>String(x||'').replace(/[^\uAC00-\uD7A3A-Za-z0-9 ()·\-]/g,'').replace(/\s+/g,' ').trim().slice(0,30);
+  /* 병원 이름 → 설문 링크 (기존 3곳은 짧은 코드, 그 밖은 ?hn=이름) */
+  function svUrl(name, type){
+    const f=SV3_LINKS.find(x=>v5SameH(x[0],name));
+    const base=f ? SV3_BASE+f[1] : SV3_BASE_HN+encodeURIComponent(svClean(name));
+    return base+(type?'&type='+type:'');
+  }
+  function svExtraHosp(){
+    return (hospitalCache||[]).map(h=>String(h['병원명']||'')).filter(n=>n && v5HospOk(n) && !SV3_LINKS.some(x=>v5SameH(x[0],n)) && svClean(n));
+  }
   function sv3TypeOf(s){ const f=s && s.raw && s.raw.formType; return f==='pulse'?'pulse':(f==='exit'||s.type==='퇴직'?'exit':'resident'); }
   function renderSurveys(all0){
     const all=Array.isArray(all0)?all0:[];
     const sel=svFilter.hospital;
-    const cards=SV3_LINKS.filter(x=>v5HospOk(x[0])).map(([h,code])=>{
+    const extra=svExtraHosp().map(n=>[n,null]);
+    const cards=SV3_LINKS.filter(x=>v5HospOk(x[0])).concat(extra).map(([h,code])=>{
       const arr=all.filter(s=>String(s.hospital||'').replace(/\s/g,'')===h.replace(/\s/g,''));
       const ov=arr.map(s=>Number(s.overall)).filter(v=>v>0), avg=ov.length?(ov.reduce((a,b)=>a+b,0)/ov.length).toFixed(2):'–';
-      const url=SV3_BASE+code;
+      const url=svUrl(h,'');
       return `<div class="sv3-card ${sel===h?'on':''}" data-sv3h="${esc(h)}"><div class="t"><b>${esc(h)}</b>${sel===h?'<span class="v3-dd g">선택됨</span>':''}</div><div class="u">${esc(url)}</div>`+
         `<div class="m"><div><b>${arr.length}</b>응답</div><div><b>${avg}</b>평균 만족도</div><div><b>${esc((arr[0]&&arr[0].date)||'–')}</b>최근 응답</div></div>`+
         `<div class="bt"><button data-sv3copy="${esc(url)}">링크 복사</button><button data-sv3open="${esc(url)}">설문 열기</button></div></div>`;
@@ -4116,7 +4147,34 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     $('#sv3-types').innerHTML=[['','전체',scope.length],['resident','재직자 조사',cnt('resident')],['exit','퇴직자 인터뷰',cnt('exit')],['pulse','월 1문항',cnt('pulse')]]
       .map(([k,l,n])=>`<button class="${sv3Type===k?'on':''}" data-sv3t="${k}">${l}<small>${n}</small></button>`).join('');
     renderSurveysBase(sv3Type ? all.filter(s=>sv3TypeOf(s)===sv3Type) : all);
+    svgOptions();
+    if(!hospitalCache && !renderSurveys._h){ renderSurveys._h=1; ensureHospitals().then(()=>{ if(DATA['sv']) renderSurveys(DATA['sv'].v); }).catch(()=>{}); }
   }
+  /* 설문 링크 만들기 */
+  let svgSig='';
+  function svgOptions(){
+    const names=[...SV3_LINKS.map(x=>x[0]).filter(v5HospOk), ...svExtraHosp()];
+    const admin=!ME || !ME.scope || ME.scope.all, sig=names.join('|')+admin;
+    if(sig!==svgSig){
+      svgSig=sig; const sel=$('#svg-h'), cur=sel.value;
+      sel.innerHTML=names.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join('')+(admin?'<option value="__custom">직접 입력…</option>':'');
+      if(cur && [...sel.options].some(o=>o.value===cur)) sel.value=cur;
+    }
+    svgUpdate();
+  }
+  function svgUpdate(){
+    const sel=$('#svg-h'), custom=sel.value==='__custom';
+    $('#svg-c-wrap').hidden=!custom;
+    const name=custom?svClean($('#svg-c').value):sel.value;
+    const u=$('#svg-u'), note=$('#svg-note');
+    if(!name){ u.value=''; note.textContent=custom?'사업장 이름을 입력하면 링크가 만들어집니다.':'담당 병원이 없습니다. 관리자에게 병원 배정을 요청하세요.'; return; }
+    u.value=svUrl(name, $('#svg-t').value);
+    note.textContent='응답은 "'+name+'" 이름으로 쌓이고, 아래 결과·사업장 카드에서 바로 확인됩니다.';
+  }
+  $('#sv-gen').addEventListener('input', svgUpdate);
+  $('#sv-gen').addEventListener('change', svgUpdate);
+  $('#svg-copy').addEventListener('click', async ()=>{ const v=$('#svg-u').value; if(!v){ toast('사업장을 먼저 선택하세요.'); return; } if(await xCopy(v)) toast('설문 링크를 복사했습니다.'); });
+  $('#svg-open').addEventListener('click', ()=>{ const v=$('#svg-u').value; if(v) window.open(v,'_blank'); });
   $('#view-surveys').addEventListener('click', async e=>{
     const cp=e.target.closest('[data-sv3copy]'); if(cp){ e.stopPropagation(); if(await xCopy(cp.dataset.sv3copy)) toast('설문 링크를 복사했습니다.'); return; }
     const op=e.target.closest('[data-sv3open]'); if(op){ e.stopPropagation(); window.open(op.dataset.sv3open,'_blank'); return; }
