@@ -750,6 +750,10 @@
   /* KPI 대시보드 (상승 빨강 · 하락 파랑, 그 밖에는 무채색) */
   #view-kpi{--kd-up:#C62828;--kd-dn:#1F5FC9}
   #view-kpi .kp-pill.edit{background:var(--ink);color:#fff}
+  .kp-dc{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .kp-oh{font-size:11px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .kd-x{border:1px solid var(--ink);background:#fff;border-radius:4px;font-size:12px;font-weight:600;padding:4px 10px}
+  .kd-ot td:nth-child(-n+5),.kd-ot th:nth-child(-n+5){text-align:left;font-family:inherit}
   .kp-grid{min-width:1080px}
   .kp-rg,.kp-rh,.kp-row{display:grid;grid-template-columns:minmax(120px,1.2fr) repeat(6,minmax(58px,.62fr)) 10px repeat(3,minmax(58px,.62fr)) minmax(110px,1.3fr) 34px;gap:8px;align-items:center}
   .kp-rg{font-size:11.5px;font-weight:700;margin-bottom:2px}.kp-rg .g{grid-column:span 6;border-bottom:2px solid var(--ink);padding:4px 0}.kp-rg .g.t{grid-column:span 3;color:var(--ink-2);border-bottom-color:var(--ink-3)}
@@ -1847,7 +1851,7 @@
           <div id="kpf-chips" class="kp-chips"></div>
           <div class="kp-nd"><input id="kpf-nd" class="x-search" maxlength="30" placeholder="새 부서 이름 (예: 원무, 약제)"><button type="button" class="x-btn" id="kpf-nd-add">목록에 추가</button></div>
         </div>
-        <div class="kp-fa"><span class="muted" id="kp-hint" style="font-size:12.5px">필요 인원은 부서마다 한 번 적어 두면 다음 날에도 이어집니다(병원·부서 공용). 타사는 접수 ≥ 참석 ≥ 합격. 같은 날짜·병원으로 다시 저장하면 이 화면 내용으로 덮어씁니다.</span><button class="btn-sm" id="kpf-save">저장</button></div>
+        <div class="kp-fa"><span class="muted" id="kp-hint" style="font-size:12.5px">필요 인원 = 그 부서 채용 건의 필요 인원. 한 번 적으면 건이 끝날 때까지 이어지고, 누적 합격이 필요 인원에 닿으면 건이 자동 완료돼 다음 입력부터 새 건이 됩니다. 타사는 접수 ≥ 참석 ≥ 합격. 같은 날짜·병원으로 다시 저장하면 덮어씁니다.</span><button class="btn-sm" id="kpf-save">저장</button></div>
         </div>
       </div>
       <div id="kp-out" style="margin-top:26px"><div class="loading">불러오는 중…</div></div>
@@ -5826,7 +5830,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   /* KPI:BEGIN ═══ 채용 KPI: 데일리 입력 + 사업장 대시보드 (Sync2.gs 의 kpiInfo / listKpi / saveKpiBatch 와 짝) ═══ */
   views.kpi=$('#view-kpi');
   const kpAll=s=>[...document.querySelectorAll(s)];   // 페이지의 $$ 는 NodeList라 map/find가 없다
-  const KP={ info:null, cache:{}, d:{ period:'weekly', hosp:'', metric:'p', anchor:'', open:{1:true,2:true,3:true,4:false,5:false} }, formOpen:true };
+  const KP={ info:null, cache:{}, d:{ period:'weekly', hosp:'', metric:'p', anchor:'', open:{1:true,2:true,3:true,4:true,5:false,6:false} }, formOpen:true };
   const KP_F=[['search','인재 서치'],['online','온라인 지원'],['resume','이력서 취합'],['interview','면접 진행'],['pass','합격']];
   const KP_T=[['ta','타사 면접 접수'],['tb','타사 면접 참석'],['tc','타사 합격']];
   const kpPad=n=>String(n).padStart(2,'0');
@@ -5849,19 +5853,25 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     KP.cache[key]=(Array.isArray(rs)?rs:[]).map(r=>({ ...r, search:+r.search||0, online:+r.online||0, resume:+r.resume||0, interview:+r.interview||0, pass:+r.pass||0, ta:+r.ta||0, tb:+r.tb||0, tc:+r.tc||0 }));
     return KP.cache[key];
   }
-  async function kpInfo(force){ if(KP.info && !force) return KP.info; KP.info=await call('kpiInfo', TOKEN); KP.info.needs=KP.info.needs||{}; return KP.info; }
+  async function kpInfo(force){ if(KP.info && !force) return KP.info; KP.info=await call('kpiInfo', TOKEN); return KP.info; }
+  async function kpOrders(force){ if(KP.orders && !force) return KP.orders; const r=await call('listKpiOrders', TOKEN); KP.orders=Array.isArray(r)?r:[]; return KP.orders; }
+  // 서버와 같은 규칙: 그 날짜에 열려 있던 건 → 없으면 그 날짜 뒤에 시작한 진행 중 건 → 없으면 새 건
+  const kpOrderAt=(hid,dept,date)=>{ const os=(KP.orders||[]).filter(o=>o.hid===hid&&o.dept===dept);
+    return os.filter(o=>o.start<=date&&(o.status==='진행'||o.end>=date)).sort((a,b)=>a.start<b.start?1:-1)[0]||os.find(o=>o.status==='진행'&&o.start>date)||null; };
+  const kpODays=(o,now)=>kpDays(o.start,o.status==='진행'?now:o.end);
+  const kpOTag=(o,now)=>o.status==='진행'?`${o.no}번째 건 · ${kpODays(o,now)}일째 · 합격 ${o.p}/${o.need||'?'}`:o.status==='완료'?`${o.no}번째 건 완료 · ${kpODays(o,now)}일 소요`:`${o.no}번째 건 종료 · ${o.reason||''}`;
   const kpHosps=()=>(KP.info.hospitals||[]).filter(h=>!xHospOut(h.name));
 
   /* ── 입력 폼 (하루 · 한 병원 · 여러 부서) ── */
   const kpDepts=hid=>((KP.info.depts||{})[hid]||(KP.info.depts||{}).__default||[]);
-  const kpNeed=(hid,d)=>((KP.info.needs||{})[hid]||{})[d];
+  const kpNeed=(hid,d)=>{ const o=kpOrderAt(hid,d,$('#kpf-date').value||kpTodayS()); return o&&o.need?o.need:undefined; };
   function kpFillHosp(){
     const hs=kpHosps(), sel=$('#kpf-h'), cur=sel.value;
     sel.innerHTML=hs.length?hs.map(h=>`<option value="${esc(h.id)}">${esc(h.name)}</option>`).join(''):'<option value="">담당 병원이 없습니다</option>';
     if(cur && hs.some(h=>h.id===cur)) sel.value=cur;
   }
   const kpNum=(k,l,v,cls)=>`<label class="kc" data-l="${l}"><input class="kn${cls?' '+cls:''}" data-k="${k}" type="number" min="0" max="9999" step="1" inputmode="numeric" value="${v===''||v==null?'':Number(v)}" aria-label="${l}"></label>`;
-  const kpRowHtml=r=>`<div class="kp-row"><select class="filter-sel kd" aria-label="부서"></select>`+
+  const kpRowHtml=r=>`<div class="kp-row"><div class="kp-dc"><select class="filter-sel kd" aria-label="부서"></select><small class="kp-oh"></small></div>`+
     kpNum('need','필요 인원',r.need===undefined?'':r.need,'kneed')+
     KP_F.map(([k,l])=>kpNum(k,l,r[k]||0)).join('')+'<span class="kp-gap"></span>'+
     KP_T.map(([k,l])=>kpNum(k,l,r[k]||0,'kt')).join('')+
@@ -5874,6 +5884,8 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
       sel.value=cur;
       const ni=sel.closest('.kp-row').querySelector('[data-k=need]');
       if(ni && ni.dataset.touched!=='1'){ const n=kpNeed(hid,cur); ni.value=n==null?'':n; }
+      const oh=sel.closest('.kp-row').querySelector('.kp-oh'), date=$('#kpf-date').value||kpTodayS();
+      if(oh){ if(cur==='__'){ oh.textContent=''; } else { const o=kpOrderAt(hid,cur,date); oh.textContent=o?(o.status==='진행'||o.end>=date?kpOTag(o,kpTodayS()):'새 채용 건으로 시작'):'새 채용 건으로 시작 · 필요 인원을 적어 주세요'; } }
     });
   }
   function kpSum2(){
@@ -5943,14 +5955,19 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     const HS=kpHosps(), hIds=new Set(HS.map(h=>h.id)), hName=id=>(HS.find(h=>h.id===id)||{}).name||'';
     const one=!!D.hosp && hIds.has(D.hosp);
     const rows=all.filter(r=>hIds.has(r.hid) && (!one || r.hid===D.hosp));
-    const needs=KP.info.needs||{};
-    const T=kdAgg(kdIn(rows,R.P0,R.P1)), Q=kdAgg(kdIn(rows,R.Q0,R.Q1)), MT=kdAgg(kdIn(rows,R.M0,R.P1));
+    const OR=(KP.orders||[]).filter(o=>hIds.has(o.hid)&&(!one||o.hid===D.hosp));
+    const openO=OR.filter(o=>o.status==='진행');
+    const needs={}; openO.forEach(o=>{ (needs[o.hid]=needs[o.hid]||{})[o.dept]=((needs[o.hid]||{})[o.dept]||0)+o.need; });
+    const inPer=o=>o.start<=R.P1&&(o.status==='진행'||o.end>=R.P0);   // 이 기간에 열려 있던 건
+    const doneIn=OR.filter(o=>o.status==='완료'&&o.end>=R.P0&&o.end<=R.P1);
+    const avgDays=os=>os.length?Math.round(os.reduce((a,o)=>a+kpODays(o,now),0)/os.length*10)/10:null;
+    const T=kdAgg(kdIn(rows,R.P0,R.P1)), Q=kdAgg(kdIn(rows,R.Q0,R.Q1));
     const mgrOf=rs=>[...new Set(rs.map(r=>r.uname).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'ko'));
     // 사업장(전체) 또는 부서(사업장 하나) 단위
-    const hospIds=HS.map(h=>h.id).filter(id=>(!one||id===D.hosp) && (rows.some(r=>r.hid===id) || Object.keys(needs[id]||{}).length));
-    const deptsOf=hid=>{ const s=new Set(rows.filter(r=>r.hid===hid).map(r=>r.dept)); Object.keys(needs[hid]||{}).forEach(d=>s.add(d)); return [...s].sort((a,b)=>a.localeCompare(b,'ko')); };
+    const hospIds=HS.map(h=>h.id).filter(id=>(!one||id===D.hosp) && (rows.some(r=>r.hid===id) || OR.some(o=>o.hid===id&&inPer(o))));
+    const deptsOf=hid=>{ const s=new Set(rows.filter(r=>r.hid===hid).map(r=>r.dept)); OR.filter(o=>o.hid===hid&&inPer(o)).forEach(o=>s.add(o.dept)); return [...s].sort((a,b)=>a.localeCompare(b,'ko')); };
     const needOf=(hid,ds)=>ds.reduce((a,d)=>a+(Number((needs[hid]||{})[d])||0),0);
-    const units=one?deptsOf(D.hosp).map(d=>({ name:d||'부서 구분 없음', rs:rows.filter(r=>r.dept===d), need:needOf(D.hosp,[d]), isH:false })):
+    const units=one?deptsOf(D.hosp).map(d=>({ name:d||'부서 구분 없음', dept:d, rs:rows.filter(r=>r.dept===d), need:needOf(D.hosp,[d]), isH:false })):
       hospIds.map(id=>({ id, name:hName(id), rs:rows.filter(r=>r.hid===id), need:needOf(id,deptsOf(id)), isH:true }));
     const needSum=units.reduce((a,u)=>a+u.need,0);
     // 입력 누락: 팀 입력이 있었던 평일에, 최근 2주 안에 입력한 적 있는 담당자·부서의 기록이 없는 건
@@ -5962,39 +5979,45 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     const pc=kdChg(T.p,Q.p);
     // 머리
     let h=`<div class="kd-bar"><div class="kd-fl">기간<div class="kd-nav"><button type="button" class="kd-nb" data-kd="prev" aria-label="이전 기간">‹</button><div style="min-width:210px"><b>${R.pLong}</b><div class="kd-sd">${R.status||(T.n?'입력 '+T.n+'건':'입력 없음')}</div></div><button type="button" class="kd-nb" data-kd="next" aria-label="다음 기간"${R.canNext?'':' disabled'}>›</button><button type="button" class="kd-tg" data-kd="today" style="border-color:var(--line)">오늘</button></div></div>`+
-      `<div class="kd-fl">사업장<div class="kd-tabs">`+[{id:'',name:'전체 사업장'}].concat(HS.filter(x=>x.id===D.hosp||all.some(r=>r.hid===x.id)||Object.keys(needs[x.id]||{}).length)).map(x=>`<button type="button" class="kd-tab${(x.id===''?!one:D.hosp===x.id)?' on':''}" data-kd="hosp" data-v="${esc(x.id)}">${esc(x.name)}</button>`).join('')+`</div></div></div>`;
+      `<div class="kd-fl">사업장<div class="kd-tabs">`+[{id:'',name:'전체 사업장'}].concat(HS.filter(x=>x.id===D.hosp||all.some(r=>r.hid===x.id)||(KP.orders||[]).some(o=>o.hid===x.id))).map(x=>`<button type="button" class="kd-tab${(x.id===''?!one:D.hosp===x.id)?' on':''}" data-kd="hosp" data-v="${esc(x.id)}">${esc(x.name)}</button>`).join('')+`</div></div></div>`;
     const scopeTxt=(one?hName(D.hosp)+' · 부서 '+units.length+'개 · 담당 '+(mgrOf(rows).join(', ')||'–'):'사업장 '+units.length+'곳 · 부서 '+units.reduce((a,u)=>a+deptsOf(u.id).length,0)+'개')+' · '+R.pLong;
     h+=`<div class="kd-scope"><b>${esc(scopeTxt)}</b><span>데이터 기준 ${kpLab(last)} 입력분까지${last<now?' (오늘 입력이 들어오면 자동 포함)':''}</span><span>모든 숫자 = 이 범위에서 담당자들이 입력한 일일 KPI ${kpN(T.n)}건의 합</span><span>비교 · ${R.cmpName} ${R.qLong} (같은 사업장, 같은 일수)</span><span class="kd-chip ${missAll.length?'warn':'flat'}">${missAll.length?'입력 누락 '+missAll.length+'건':'입력 누락 없음'}</span></div>`;
     if(!units.length){ out.innerHTML=h+`<div class="empty-row" style="padding:30px 2px">${esc(R.pLong)}에 입력된 KPI가 없습니다. 위 입력 칸에서 실적을 저장하면 여기에 바로 집계됩니다.</div>`; return; }
     // 한 줄 요약 + 눈여겨볼 것
     const ins=[];
     if(T.n && units.length>1){ const b=units.map(u=>({ n:u.name, v:kdAgg(kdIn(u.rs,R.P0,R.P1)).p })).sort((a,b)=>b.v-a.v)[0]; ins.push([one?'합격 최다 부서':'합격 최다 사업장', b.n+' · '+b.v+'명']); }
-    const lows=[]; (one?[D.hosp]:hospIds).forEach(id=>deptsOf(id).forEach(d=>{ const nd=Number((needs[id]||{})[d])||0; if(!nd) return; const v=kdAgg(kdIn(rows.filter(r=>r.hid===id&&r.dept===d),R.M0,R.P1)).p; lows.push({ r:v/nd, t:(one?'':hName(id)+' ')+d+' · '+v+' / '+nd+'명' }); }));
-    if(lows.length){ lows.sort((a,b)=>a.r-b.r); ins.push(['충원율 가장 낮은 부서 ('+R.mtdS+')', lows[0].t]); }
+    if(openO.length){ const o=openO.slice().sort((a,b)=>a.start<b.start?-1:1)[0]; ins.push(['가장 오래 진행 중인 채용 건', (one?'':hName(o.hid)+' ')+(o.dept||'부서 구분 없음')+' '+o.no+'번째 · '+kpODays(o,now)+'일째 · '+o.p+'/'+(o.need||'?')+'명']); }
     h+=`<div class="kd-hl"><div><span class="kd-big">합격 ${kpN(T.p)}명</span><span class="kd-hlb">${T.n?esc(R.cmpName+' '+R.qS+' '+Q.p+'명 → '+(T.p===Q.p?'변화 없음':Math.abs(T.p-Q.p)+'명 '+(T.p>Q.p?'증가':'감소')+(pc.rate?' ('+pc.rate+')':''))):'이 기간에는 입력된 KPI가 없습니다'}</span></div><div class="kd-ins">${ins.map(([k,v])=>`<div><div class="kd-sd">${esc(k)}</div><b>${esc(v)}</b></div>`).join('')}</div></div>`;
     // 01 퍼널
     const box=(t,sub,c,p,u,last)=>{ const x=kdChg(c,p); return `<div class="kd-fbx"${last?' style="background:var(--line-2)"':''}><div class="kd-ft">${t}</div><div><span class="kd-fv">${kpN(c)}</span>${u?`<span class="kd-sd"> ${u}</span>`:''}</div><div class="kd-row">${kdChip(x)}<span class="kd-sd">${esc(R.cmpName)} ${kpN(p)}</span></div><div class="kd-mu">${sub}</div></div>`; };
     const arw=(lab,n,d,qn,qd)=>{ const cv=d?n/d*100:0, qv=qd?qn/qd*100:0, dd=cv-qv; return `<div class="kd-far"><span class="kd-sd">${lab}</span><b class="kd-cv">${kdPct(n,d)}</b><span class="kd-mu">${n} ÷ ${d}</span><span class="kd-sd" style="font-size:11.5px">비교 ${kdPct(qn,qd)}</span>${d&&qd?`<b style="font-size:11.5px;color:${dd>0?'var(--kd-up)':dd<0?'var(--kd-dn)':'var(--ink-2)'}">${dd>=0?'▲ ':'▼ '}${Math.abs(dd).toFixed(1)}%p</b>`:''}</div>`; };
     const s1=`<div class="kd-fun">${box('인재 서치 + 온라인 지원','서치 '+kpN(T.s)+'명 + 온라인 '+kpN(T.o)+'건',T.so,Q.so,'')}${arw('이력서로',T.r,T.so,Q.r,Q.so)}${box('이력서 취합','입력 ‘이력서 취합’ 합',T.r,Q.r,'건')}${arw('면접으로',T.i,T.r,Q.i,Q.r)}${box('면접 진행','입력 ‘면접 진행’ 합',T.i,Q.i,'건')}${arw('합격으로',T.p,T.i,Q.p,Q.i)}${box('합격','입력 ‘합격’ 합',T.p,Q.p,'명',1)}</div>`+
-      `<div class="kd-g2"><div class="kd-card"><div class="kd-ct"><b>필요 인원 대비 충원</b><span class="kd-sd">${R.mtdS}</span></div><div class="kd-row" style="align-items:baseline"><span class="kd-mid">${needSum?Math.round(MT.p/needSum*100)+'%':'–'}</span><span class="kd-sd">합격 <b>${kpN(MT.p)}</b> / 필요 <b>${kpN(needSum)}</b>명</span></div><div class="kd-trk"><div style="width:${Math.min(100,needSum?MT.p/needSum*100:0).toFixed(0)}%"></div></div><div class="kd-mu">${needSum?'충원율 = 그 달 1일부터 누적 합격 ÷ 부서별 필요 인원의 합 · 일간·주간·월간 어디서 봐도 같은 기준':'필요 인원이 아직 없습니다. 입력 칸의 ‘필요 인원’에 부서별로 한 번 적어 두세요.'}</div></div>`+
+      `<div class="kd-g2"><div class="kd-card"><div class="kd-ct"><b>채용 건 현황</b><span class="kd-sd">지금 기준 · 완료는 ${R.pS}</span></div><div class="kd-row" style="align-items:baseline"><span class="kd-mid">진행 ${openO.length}건</span><span class="kd-sd">필요 <b>${kpN(openO.reduce((a,o)=>a+o.need,0))}</b>명 중 합격 <b>${kpN(openO.reduce((a,o)=>a+Math.min(o.p,o.need||o.p),0))}</b>명</span></div><div class="kd-trk"><div style="width:${(()=>{ const n=openO.reduce((a,o)=>a+o.need,0), p=openO.reduce((a,o)=>a+Math.min(o.p,o.need||o.p),0); return Math.min(100,n?p/n*100:0).toFixed(0); })()}%"></div></div><div class="kd-mu">이 기간 완료 ${doneIn.length}건${doneIn.length?' · 평균 '+avgDays(doneIn)+'일 소요':''}${openO.some(o=>!o.need)?' · 필요 인원 미정 '+openO.filter(o=>!o.need).length+'건':''}</div></div>`+
       `<div class="kd-card"><div class="kd-ct"><b>합격 중 당사 비중</b><span class="kd-sd">비교 기간 ${kdShare(Q.p,Q.tc)}</span></div><div class="kd-row" style="align-items:baseline"><span class="kd-mid">${kdShare(T.p,T.tc)}</span><span class="kd-sd">당사 <b>${kpN(T.p)}</b>명 · 타사 <b>${kpN(T.tc)}</b>명</span></div><div class="kd-trk" style="background:#C9C5BB"><div style="width:${(T.p+T.tc?T.p/(T.p+T.tc)*100:0).toFixed(0)}%"></div></div><div class="kd-mu">${R.pS} · 타사 면접 접수 ${kpN(T.ta)} → 참석 ${kpN(T.tb)} → 합격 ${kpN(T.tc)}</div></div></div>`;
     h+=kdSec(1,'채용 퍼널',`${R.pS} 합계 · 화살표 = 다음 단계로 넘어간 비율 · 칩 = ${esc(R.cmpName)} ${R.qS} 대비`,'',s1);
     // 02 사업장(부서) 카드
     const cards=units.map(u=>{
-      const t=kdAgg(kdIn(u.rs,R.P0,R.P1)), q=kdAgg(kdIn(u.rs,R.Q0,R.Q1)), mt=kdAgg(kdIn(u.rs,R.M0,R.P1)), c=kdChg(t.p,q.p), ms=missOf(u.rs);
+      const t=kdAgg(kdIn(u.rs,R.P0,R.P1)), q=kdAgg(kdIn(u.rs,R.Q0,R.Q1)), c=kdChg(t.p,q.p), ms=missOf(u.rs), uo=OR.filter(o=>(u.isH?o.hid===u.id:o.dept===u.dept)), uOpen=uo.filter(o=>o.status==='진행'), uN=uOpen.reduce((a,o)=>a+o.need,0), uP=uOpen.reduce((a,o)=>a+Math.min(o.p,o.need||o.p),0), uDone=uo.filter(o=>o.status==='완료'&&o.end>=R.P0&&o.end<=R.P1);
       const fr=[['서치 + 온라인',t.so,''],['이력서',t.r,t.so?Math.round(t.r/t.so*100)+'%':'–'],['면접',t.i,t.r?Math.round(t.i/t.r*100)+'%':'–'],['합격',t.p,t.i?Math.round(t.p/t.i*100)+'%':'–']];
-      const depts=u.isH?deptsOf(u.id).map(d=>{ const x=kdAgg(kdIn(u.rs.filter(r=>r.dept===d),R.M0,R.P1)), nd=Number((needs[u.id]||{})[d])||0; return `<div class="kd-dr"><span>${esc(d||'부서 구분 없음')}</span><div class="kd-trk"><div style="width:${Math.min(100,nd?x.p/nd*100:0).toFixed(0)}%"></div></div><span class="kd-num">${x.p} / ${nd||'–'}</span><span class="kd-num kd-mu">${nd?Math.round(x.p/nd*100)+'%':'–'}</span></div>`; }).join(''):'';
+      const oRow=o=>`<div class="kd-dr"><span>${esc(u.isH?(o.dept||'부서 구분 없음'):o.no+'번째 건')}</span><div class="kd-trk"><div style="width:${Math.min(100,o.need?o.p/o.need*100:0).toFixed(0)}%"></div></div><span class="kd-num">${o.p} / ${o.need||'?'}</span><span class="kd-mu" style="text-align:right">${o.status==='진행'?kpODays(o,now)+'일째':o.status==='완료'?kpODays(o,now)+'일 완료':'종료'}</span></div>`;
+      const depts=uOpen.length?uOpen.slice().sort((a,b)=>a.start<b.start?-1:1).map(oRow).join(''):'<div class="kd-mu">진행 중인 채용 건이 없습니다</div>';
       const mg=u.isH?mgrOf(u.rs):[];
-      return `<div class="kd-card kd-hc"><div class="kd-ct" style="align-items:flex-start"><div><div class="kd-hn">${esc(u.name)}</div><div class="kd-sd">${u.isH?'부서 '+deptsOf(u.id).length+'개':'필요 '+(u.need||'–')+'명'}</div></div>${u.isH?`<button type="button" class="kd-lk" data-kd="hosp" data-v="${esc(u.id)}">부서별 보기 ›</button>`:''}</div>`+
+      return `<div class="kd-card kd-hc"><div class="kd-ct" style="align-items:flex-start"><div><div class="kd-hn">${esc(u.name)}</div><div class="kd-sd">${u.isH?'부서 '+deptsOf(u.id).length+'개':(uOpen[0]?uOpen[0].no+'번째 건 진행 중':'진행 중인 건 없음')}</div></div>${u.isH?`<button type="button" class="kd-lk" data-kd="hosp" data-v="${esc(u.id)}">부서별 보기 ›</button>`:''}</div>`+
         (u.isH?`<div class="kd-row"><span class="kd-sd">담당</span>${mg.length?mg.map(n=>`<span class="kd-mp">${esc(n)}</span>`).join(''):'<span class="kd-mu">이 기간 입력한 담당자 없음</span>'}</div>`:'')+
         `<div class="kd-ct" style="align-items:flex-end"><div><div class="kd-sd">합격 · ${R.pS}</div><span class="kd-hero">${kpN(t.p)}</span><span class="kd-sd">명</span></div><div style="text-align:right">${kdChip(c)}<div class="kd-sd">${esc(R.cmpName)} ${q.p}명</div></div></div>`+
         `<div class="kd-mini">${fr.map(([l,v,cv])=>`<div><div class="kd-mu">${l}</div><b class="kd-num">${kpN(v)}</b> <span class="kd-mu">${cv}</span></div>`).join('')}</div>`+
-        `<div><div class="kd-ct kd-sd"><span>충원율 · ${R.mtdS}</span><span class="kd-num"><b>${u.need?Math.round(mt.p/u.need*100)+'%':'–'}</b> · ${mt.p} / ${u.need||'–'}명</span></div><div class="kd-trk" style="height:10px"><div style="width:${Math.min(100,u.need?mt.p/u.need*100:0).toFixed(0)}%"></div></div></div>`+
-        (depts?`<div class="kd-dl">${depts}</div>`:'')+
+        `<div><div class="kd-ct kd-sd"><span>진행 중 채용 건 ${uOpen.length}건</span><span class="kd-num">합격 <b>${uP}</b> / 필요 ${uN||'?'}명</span></div><div class="kd-trk" style="height:10px"><div style="width:${Math.min(100,uN?uP/uN*100:0).toFixed(0)}%"></div></div><div class="kd-mu" style="margin-top:4px">이 기간 완료 ${uDone.length}건${uDone.length?' · 평균 '+avgDays(uDone)+'일 소요':''}</div></div>`+
+        `<div class="kd-dl">${depts}</div>`+
         `<div class="kd-foot"><span>타사 합격 <b>${t.tc}</b>명 · 합격 중 당사 비중 <b>${kdShare(t.p,t.tc)}</b></span><span><b style="font-weight:${ms.length?700:500}">${ms.length?'입력 누락 '+ms.length+'건':'입력 누락 없음'}</b> <span class="kd-mu">${ms.length?esc(ms.slice(0,3).join(', '))+(ms.length>3?' 외 '+(ms.length-3)+'건':''):'평일 '+workDays.length+'일 모두 입력'}</span></span></div></div>`;
     }).join('');
     h+=kdSec(2,one?esc(hName(D.hosp))+' · 부서별 현황':'사업장별 현황',(one?'담당 '+esc(mgrOf(rows).join(', ')||'–')+' · ':'‘부서별 보기’를 누르면 그 사업장의 부서 카드로 바뀝니다 · ')+R.pS+' · 증감 = '+esc(R.cmpName)+' '+R.qS+' 대비',one?'<button type="button" class="kd-tg" data-kd="hosp" data-v="" style="border-color:var(--line)">‹ 전체 사업장</button>':'',`<div class="kd-cards">${cards}</div>`);
-    // 03 흐름: 합계 + 단위별 작은 차트 (단위끼리 같은 눈금)
+    // 03 채용 건: 이 기간에 열려 있던 건 (진행 → 완료·종료 순)
+    const ol=OR.filter(inPer).sort((a,b)=>(a.status==='진행')!==(b.status==='진행')?(a.status==='진행'?-1:1):a.status==='진행'?(a.start<b.start?-1:1):(a.end<b.end?1:-1));
+    const oTable=ol.length?`<div class="kd-card" style="padding:4px 0"><div class="tbl-scroll"><table class="kd-dt kd-ot"><thead><tr><th>사업장 · 부서</th><th>건</th><th>상태</th><th>시작</th><th>완료 · 경과</th><th>필요</th><th>합격</th><th>서치+온라인</th><th>이력서</th><th>면접</th><th>면접→합격</th><th>입력일</th><th></th></tr></thead><tbody>`+
+      ol.map(o=>`<tr><td>${esc(hName(o.hid))} · ${esc(o.dept||'부서 구분 없음')}</td><td>${o.no}번째</td><td><span class="kd-chip ${o.status==='진행'?'warn':'flat'}">${o.status}</span></td><td>${kpLab(o.start)}</td><td>${o.status==='진행'?kpODays(o,now)+'일째':(o.end?kpLab(o.end):'')+' · '+kpODays(o,now)+'일'+(o.status==='종료'&&o.reason?' · '+esc(o.reason):'')}</td><td><b>${o.need||'미정'}</b></td><td><b>${o.p}</b></td><td>${o.s+o.o}</td><td>${o.r}</td><td>${o.i}</td><td>${o.i?Math.round(o.p/o.i*100)+'%':'–'}</td><td>${o.inputDays}일</td><td>${o.status==='진행'?`<button type="button" class="kd-x" data-kd="close" data-v="${esc(o.id)}">종료</button>`:''}</td></tr>`).join('')+
+      `</tbody></table></div></div>`:'<div class="empty-row" style="padding:18px 2px">이 기간에 열려 있던 채용 건이 없습니다.</div>';
+    h+=kdSec(3,'채용 건',`${R.pS}에 열려 있던 건 · 한 건 = 한 부서가 필요 인원을 채울 때까지 · 숫자는 건 전체 누적`,'',`<div class="kd-row" style="gap:6px 22px"><span class="kd-sd">진행 <b>${ol.filter(o=>o.status==='진행').length}</b>건</span><span class="kd-sd">완료 <b>${ol.filter(o=>o.status==='완료').length}</b>건${doneIn.length?' (이 기간 완료 '+doneIn.length+'건 · 평균 '+avgDays(doneIn)+'일)':''}</span><span class="kd-sd">종료 <b>${ol.filter(o=>o.status==='종료').length}</b>건</span></div>`+oTable);
+    // 04 흐름: 합계 + 단위별 작은 차트 (단위끼리 같은 눈금)
     const m=D.metric, mk={s:'search',o:'online',r:'resume',i:'interview',p:'pass'}[m];
     const sumM=(rs,a,b)=>kdIn(rs,a,b).reduce((x,r)=>x+r[mk],0);
     const wkLab=(cc,n)=>(n+1)+'주'+(cc.b>today?' · 진행 중':kpDays(cc.a,cc.b)<7?' · '+kpDays(cc.a,cc.b)+'일':'');
@@ -6009,7 +6032,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
         `<div class="kd-xl" style="grid-template-columns:repeat(${nc},minmax(0,1fr))">${R.cols.map((cc,n)=>{ const [a,b]=colLab(cc,n); return `<div><b>${a}</b><span>${b}</span></div>`; }).join('')}</div></div>`; }).join('');
     const pills=KD_K.map(([k,l])=>`<button type="button" class="kd-pill${m===k?' on':''}" data-kd="metric" data-v="${k}">${l}</button>`).join('');
     const s3=`<div class="kd-row" style="gap:6px 20px"><span class="kd-lgd"><i style="background:var(--ink)"></i>막대 = 입력 합계</span>${D.period==='monthly'?'':'<span class="kd-lgd"><i style="height:0;border-top:2px solid #9A958B;border-radius:0;width:16px"></i>회색 선 = 1주 전 같은 요일</span>'}<span class="kd-lgd"><span class="kd-chip up">▲ 상승</span><span class="kd-chip dn">▼ 하락</span>비교 기간 대비</span></div><div class="kd-panels">${panels}</div>`;
-    h+=kdSec(3,D.period==='monthly'?'주별 흐름':'요일별 흐름',(D.period==='monthly'?R.pLong+' ('+R.pS+')를 월–일 단위 주로 나눔':kpRngL(R.cols[0].a,R.cols[6].a)+(D.period==='daily'?' · '+kpLab(R.A)+' 진하게':''))+' · 지표 ‘'+KD_MN[m]+'’ · '+(one?'부서':'사업장')+' 차트끼리 같은 눈금',`<span class="kd-pills">${pills}</span>`,s3);
+    h+=kdSec(4,D.period==='monthly'?'주별 흐름':'요일별 흐름',(D.period==='monthly'?R.pLong+' ('+R.pS+')를 월–일 단위 주로 나눔':kpRngL(R.cols[0].a,R.cols[6].a)+(D.period==='daily'?' · '+kpLab(R.A)+' 진하게':''))+' · 지표 ‘'+KD_MN[m]+'’ · '+(one?'부서':'사업장')+' 차트끼리 같은 눈금',`<span class="kd-pills">${pills}</span>`,s3);
     // 04 상세 숫자
     const groups=[]; (one?[D.hosp]:hospIds).forEach(id=>{ const gr=rows.filter(r=>r.hid===id); groups.push({ t:'g', label:hName(id), sub:'담당 '+(mgrOf(gr).join(', ')||'–'), rs:gr, id }); deptsOf(id).forEach(d=>groups.push({ t:'l', label:d||'부서 구분 없음', sub:'필요 '+((needs[id]||{})[d]||'–')+'명', rs:gr.filter(r=>r.dept===d), id, d })); });
     if(groups.filter(g=>g.t==='g').length>1) groups.push({ t:'x', label:'전체 합계', sub:'사업장 합계 행의 합', rs:rows });
@@ -6025,10 +6048,10 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     const s4=`<div class="kd-card" style="padding:16px 0 8px"><div style="padding:0 20px 12px"><b>${D.period==='monthly'?'주별':'요일별'} ‘${KD_MN[m]}’ · 사업장 → 부서</b><div class="kd-sd">칸 = 그 부서에 ${D.period==='monthly'?'그 주(월–일)':'그날'} 입력된 ‘${KD_MN[m]}’ 합계 (담당자 입력 합산)</div></div>`+
       `<div class="tbl-scroll"><div style="min-width:900px"><div class="kd-mx kd-mh" style="grid-template-columns:${gcols}"><span style="text-align:left">사업장 · 부서</span>${R.cols.map((cc,n)=>{ const [a,b]=colLab(cc,n); return `<span><b>${a}</b><i>${b}</i></span>`; }).join('')}<span style="text-align:right"><b>${D.period==='daily'?'선택일':'합계'}</b><i>${R.pS}</i></span><span style="text-align:right"><b>비교</b><i>${R.qS}</i></span><span style="text-align:right"><b>증감</b><i>&nbsp;</i></span></div>${mxRows}</div></div>`+
       `<div class="kd-note"><span class="kd-lgd">적음${RAMP.map(c=>`<i style="background:${c}"></i>`).join('')}많음</span><span>${D.period==='daily'?'합계 칸 = 굵은 테두리 '+kpLab(R.A)+' 값':'합계 = 왼쪽 칸의 합 ('+R.pS+')'} · 비교 = ${esc(R.cmpName)} ${R.qS} · – 입력 없음 · 빈칸 아직 오지 않은 날</span></div><div class="kd-note" style="padding-top:0"><b>검산 · 표 합계 ${sumM(rows,R.P0,R.P1)}${KD_UN[m]} = 위 퍼널의 ‘${KD_MN[m]}’ ${({s:T.s,o:T.o,r:T.r,i:T.i,p:T.p})[m]}${KD_UN[m]}</b></div></div>`+
-      `<div class="kd-card" style="padding:4px 0"><div class="tbl-scroll"><table class="kd-dt"><thead><tr><th>사업장 / 부서</th><th>담당</th><th>필요 인원</th><th>서치</th><th>온라인 지원</th><th>이력서</th><th>면접</th><th>합격</th><th>타사 접수</th><th>타사 참석</th><th>타사 합격</th><th>비교 합격</th><th>합격 증감</th></tr></thead><tbody>${dt}</tbody></table></div></div>`;
-    h+=kdSec(4,'상세 숫자',`날짜별 표(사업장 → 부서)와 전체 항목 표 · ${R.pS}`,'',s4);
-    const defs=[['원천 데이터','담당자가 매일 사업장·부서별로 입력한 KPI 한 건. 주간은 일간의 합, 월간은 그 달 일간의 합입니다.'],['인재 서치 · 온라인 지원 · 이력서 취합 · 면접 진행 · 합격','같은 이름의 입력 항목을 기간 동안 더한 값'],['전환율','이력서 ÷ (서치 + 온라인 지원), 면접 ÷ 이력서, 합격 ÷ 면접'],['비교 기간','같은 일수의 직전 기간 — 주간: 직전 주 같은 요일까지, 월간: 전월 같은 날짜까지, 일간: 1주 전 같은 요일'],['증감 %','비교 값이 5 미만이면 %가 과장되므로 숨기고 증감 수(▲ / ▼)만 표시'],['충원율','그 달 1일부터 보고 있는 기간의 마지막 날까지 누적 합격 ÷ 부서별 필요 인원(입력 칸에 적은 현재 값)의 합'],['합격 중 당사 비중','당사 합격 ÷ (당사 합격 + 타사 합격). 타사 = 같은 사업장·부서에 인력을 보내는 다른 업체'],['입력 누락','팀 입력이 있었던 평일에, 최근 2주 안에 입력한 적 있는 담당자·부서의 기록이 비어 있는 건 (주말·휴무일·오늘 제외)'],['색','빨강 ▲ = 상승, 파랑 ▼ = 하락. 그 밖에는 색을 쓰지 않습니다']];
-    h+=kdSec(5,'지표 정의','이 화면의 모든 숫자가 어떻게 계산되는지','',`<div class="kd-card kd-def">${defs.map(([a,b])=>`<b>${a}</b><span>${b}</span>`).join('')}</div>`);
+      `<div class="kd-card" style="padding:4px 0"><div class="tbl-scroll"><table class="kd-dt"><thead><tr><th>사업장 / 부서</th><th>담당</th><th>진행 건 필요</th><th>서치</th><th>온라인 지원</th><th>이력서</th><th>면접</th><th>합격</th><th>타사 접수</th><th>타사 참석</th><th>타사 합격</th><th>비교 합격</th><th>합격 증감</th></tr></thead><tbody>${dt}</tbody></table></div></div>`;
+    h+=kdSec(5,'상세 숫자',`날짜별 표(사업장 → 부서)와 전체 항목 표 · ${R.pS}`,'',s4);
+    const defs=[['원천 데이터','담당자가 매일 사업장·부서별로 입력한 KPI 한 건. 주간은 일간의 합, 월간은 그 달 일간의 합입니다.'],['인재 서치 · 온라인 지원 · 이력서 취합 · 면접 진행 · 합격','같은 이름의 입력 항목을 기간 동안 더한 값'],['전환율','이력서 ÷ (서치 + 온라인 지원), 면접 ÷ 이력서, 합격 ÷ 면접'],['비교 기간','같은 일수의 직전 기간 — 주간: 직전 주 같은 요일까지, 월간: 전월 같은 날짜까지, 일간: 1주 전 같은 요일'],['증감 %','비교 값이 5 미만이면 %가 과장되므로 숨기고 증감 수(▲ / ▼)만 표시'],['채용 건','한 부서가 필요 인원을 채울 때까지를 한 건으로 묶습니다. 입력하면 그 날짜에 열려 있던 건에 자동으로 붙고, 없으면 새 건이 열립니다. 누적 합격이 필요 인원에 닿는 날 자동 완료되고, 다음 날부터 같은 부서 입력은 다음 건이 됩니다. 병원 철회 등은 ‘종료’로 닫습니다.'],['소요일 · 경과일','시작일부터 완료일(진행 중이면 오늘)까지의 달력 일수'],['합격 중 당사 비중','당사 합격 ÷ (당사 합격 + 타사 합격). 타사 = 같은 사업장·부서에 인력을 보내는 다른 업체'],['입력 누락','팀 입력이 있었던 평일에, 최근 2주 안에 입력한 적 있는 담당자·부서의 기록이 비어 있는 건 (주말·휴무일·오늘 제외)'],['색','빨강 ▲ = 상승, 파랑 ▼ = 하락. 그 밖에는 색을 쓰지 않습니다']];
+    h+=kdSec(6,'지표 정의','이 화면의 모든 숫자가 어떻게 계산되는지','',`<div class="kd-card kd-def">${defs.map(([a,b])=>`<b>${a}</b><span>${b}</span>`).join('')}</div>`);
     KP.lastA=R.A;
     out.innerHTML=h;
   }
@@ -6038,7 +6061,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
       $('#kp-who').textContent=KP.info.me.name+' 님';
       if(!$('#kpf-date').value) $('#kpf-date').value=kpTodayS();
       $('#kpf-date').max=kpTodayS();
-      kpFillHosp(); kpChips(); await kpPrefill(); await kpRender(force);
+      await kpOrders(force); kpFillHosp(); kpChips(); await kpPrefill(); await kpRender(force);
     }catch(e){ xFail(e); $('#kp-out').innerHTML='<div class="empty-row">불러오지 못했습니다.</div>'; }
   };
   $('#kpf-h').addEventListener('change', ()=>{ kpChips(); kpPrefill(); });
@@ -6086,7 +6109,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     if(bad){ toast((bad.dept||'부서 구분 없음')+': 타사는 접수 ≥ 참석 ≥ 합격이어야 합니다.'); return; }
     try{
       const r=await xRun(e.currentTarget,'저장 중…',()=>call('saveKpiBatch', TOKEN, { date, hospitalId:hid, rows }));
-      if(r.needs) KP.info.needs=r.needs;
+      await kpOrders(true);
       KP.cache={}; toast(r.saved+'개 부서를 저장했습니다.'+(r.removed?' ('+r.removed+'개 정리)':''));
       await kpPrefill(); await kpRender(true);
     }catch(err){ xFail(err); }
@@ -6098,13 +6121,15 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     else if(act==='hosp'){ D.hosp=b.dataset.v; }
     else if(act==='metric'){ D.metric=b.dataset.v; }
     else if(act==='today'){ D.anchor=''; }
+    else if(act==='close'){ (async()=>{ if(!await confirmAction('이 채용 건을 종료할까요?','필요 인원을 채우지 못하고 끝난 건(병원 철회 등)에 씁니다. 종료하면 이후 같은 부서 입력은 새 건이 됩니다.')) return;
+        try{ await call('closeKpiOrder', TOKEN, b.dataset.v, '종료'); await kpOrders(true); toast('채용 건을 종료했습니다.'); kpRender(); }catch(err){ xFail(err); } })(); return; }
     else if(act==='prev'||act==='next'){ const n=act==='prev'?-1:1, a=KP.lastA||D.anchor||kpTodayS();
       if(D.period==='daily') D.anchor=kpAdd(a,n); else if(D.period==='weekly') D.anchor=kpAdd(kpMon(a),7*n); else { const d=kpDate(a); D.anchor=kpStr(new Date(d.getFullYear(),d.getMonth()+n,1)); }
       if(D.anchor>kpTodayS()) D.anchor=''; }
     kpRender();
   });
   $('#kp-tabs').addEventListener('click', e=>{ const b=e.target.closest('[data-p]'); if(!b) return; KP.d.period=b.dataset.p; KP.d.anchor=''; kpAll('#kp-tabs .kd-tab').forEach(x=>x.classList.toggle('on',x===b)); kpRender(); });
-  $('#kp-all').addEventListener('click', e=>{ const o=e.target.closest('[data-all]'); if(!o) return; const v=o.dataset.all==='1'; [1,2,3,4,5].forEach(n=>KP.d.open[n]=v); kpRender(); });
+  $('#kp-all').addEventListener('click', e=>{ const o=e.target.closest('[data-all]'); if(!o) return; const v=o.dataset.all==='1'; [1,2,3,4,5,6].forEach(n=>KP.d.open[n]=v); kpRender(); });
   /* KPI:END */
   /* V5:END */
 
