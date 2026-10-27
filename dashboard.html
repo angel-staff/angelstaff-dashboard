@@ -5825,6 +5825,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
 
   /* KPI:BEGIN ═══ 채용 KPI: 데일리 입력 + 사업장 대시보드 (Sync2.gs 의 kpiInfo / listKpi / saveKpiBatch 와 짝) ═══ */
   views.kpi=$('#view-kpi');
+  const kpAll=s=>[...document.querySelectorAll(s)];   // 페이지의 $$ 는 NodeList라 map/find가 없다
   const KP={ info:null, cache:{}, d:{ period:'weekly', hosp:'', metric:'p', anchor:'', open:{1:true,2:true,3:true,4:false,5:false} }, formOpen:true };
   const KP_F=[['search','인재 서치'],['online','온라인 지원'],['resume','이력서 취합'],['interview','면접 진행'],['pass','합격']];
   const KP_T=[['ta','타사 면접 접수'],['tb','타사 면접 참석'],['tc','타사 합격']];
@@ -5866,7 +5867,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
     KP_T.map(([k,l])=>kpNum(k,l,r[k]||0,'kt')).join('')+
     `<input class="x-search km" maxlength="200" placeholder="메모" value="${esc(r.memo||'')}" aria-label="메모"><button type="button" class="kdrop" title="이 부서 빼기" aria-label="이 부서 빼기">✕</button></div>`;
   function kpSyncSel(){
-    const hid=$('#kpf-h').value, list=kpDepts(hid), sels=$$('#kpf-rows .kd'), used=sels.map(x=>x.dataset.v);
+    const hid=$('#kpf-h').value, list=kpDepts(hid), sels=kpAll('#kpf-rows .kd'), used=sels.map(x=>x.dataset.v);
     sels.forEach(sel=>{
       const cur=sel.dataset.v, opts=list.slice(); if(cur && cur!=='__' && opts.indexOf(cur)<0) opts.push(cur);
       sel.innerHTML='<option value="__"'+(cur==='__'?' selected':'')+' disabled>부서 선택</option>'+opts.map(d=>`<option value="${esc(d)}"${used.some((u,i)=>u===d&&sels[i]!==sel)?' disabled':''}${d===cur?' selected':''}>${esc(d)}</option>`).join('')+'<option value=""'+(cur===''?' selected':'')+'>부서 구분 없음</option>';
@@ -5877,8 +5878,8 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   }
   function kpSum2(){
     const t={}; [...KP_F,...KP_T].forEach(([k])=>t[k]=0);
-    $$('#kpf-rows .kn').forEach(i=>{ if(i.dataset.k in t) t[i.dataset.k]+=Number(i.value||0); });
-    $('#kp-sum').textContent=$$('#kpf-rows .kp-row').length+'개 부서 · 서치 '+kpN(t.search)+' · 온라인 '+kpN(t.online)+' · 이력서 '+kpN(t.resume)+' · 면접 '+kpN(t.interview)+' · 합격 '+kpN(t.pass)+' · 타사 합격 '+kpN(t.tc);
+    kpAll('#kpf-rows .kn').forEach(i=>{ if(i.dataset.k in t) t[i.dataset.k]+=Number(i.value||0); });
+    $('#kp-sum').textContent=kpAll('#kpf-rows .kp-row').length+'개 부서 · 서치 '+kpN(t.search)+' · 온라인 '+kpN(t.online)+' · 이력서 '+kpN(t.resume)+' · 면접 '+kpN(t.interview)+' · 합격 '+kpN(t.pass)+' · 타사 합격 '+kpN(t.tc);
   }
   function kpSetRows(rows){
     const box=$('#kpf-rows'), hid=$('#kpf-h').value; box.innerHTML='';
@@ -6048,13 +6049,13 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   kpRowsEl.addEventListener('focusin', e=>{ if(e.target.matches('.kn')) setTimeout(()=>e.target.select(),0); });
   kpRowsEl.addEventListener('click', e=>{
     const b=e.target.closest('.kdrop'); if(!b) return; const row=b.closest('.kp-row');
-    if($$('#kpf-rows .kp-row').length<=1){ row.querySelector('.kd').dataset.v='__'; row.querySelectorAll('.kn').forEach(i=>{ i.value=i.dataset.k==='need'?'':0; }); row.querySelector('.km').value=''; }
+    if(kpAll('#kpf-rows .kp-row').length<=1){ row.querySelector('.kd').dataset.v='__'; row.querySelectorAll('.kn').forEach(i=>{ i.value=i.dataset.k==='need'?'':0; }); row.querySelector('.km').value=''; }
     else row.remove();
     kpSyncSel(); kpSum2();
   });
   $('#kpf-addrow').addEventListener('click', ()=>{
-    const list=kpDepts($('#kpf-h').value), used=$$('#kpf-rows .kd').map(x=>x.dataset.v), next=list.find(d=>used.indexOf(d)<0);
-    const empty=$$('#kpf-rows .kd').find(x=>x.dataset.v==='__');
+    const list=kpDepts($('#kpf-h').value), used=kpAll('#kpf-rows .kd').map(x=>x.dataset.v), next=list.find(d=>used.indexOf(d)<0);
+    const empty=kpAll('#kpf-rows .kd').find(x=>x.dataset.v==='__');
     if(empty){ empty.focus(); return; }
     kpRowsEl.insertAdjacentHTML('beforeend',kpRowHtml({dept:next===undefined?'__':next})); const r=kpRowsEl.lastElementChild; r.querySelector('.kd').dataset.v=next===undefined?'__':next;
     kpSyncSel(); kpSum2(); r.querySelector('[data-k=search]').focus();
@@ -6075,7 +6076,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   });
   $('#kpf-save').addEventListener('click', async e=>{
     const v=(r,k)=>r.querySelector('[data-k='+k+']').value;
-    const rows=$$('#kpf-rows .kp-row').map(r=>({ dept:r.querySelector('.kd').dataset.v, memo:r.querySelector('.km').value.trim(), need:v(r,'need'),
+    const rows=kpAll('#kpf-rows .kp-row').map(r=>({ dept:r.querySelector('.kd').dataset.v, memo:r.querySelector('.km').value.trim(), need:v(r,'need'),
       search:v(r,'search'), online:v(r,'online'), resume:v(r,'resume'), interview:v(r,'interview'), pass:v(r,'pass'), ta:v(r,'ta'), tb:v(r,'tb'), tc:v(r,'tc') }));
     const date=$('#kpf-date').value, hid=$('#kpf-h').value;
     if(!date){ toast('날짜를 선택하세요.'); return; }
@@ -6102,7 +6103,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
       if(D.anchor>kpTodayS()) D.anchor=''; }
     kpRender();
   });
-  $('#kp-tabs').addEventListener('click', e=>{ const b=e.target.closest('[data-p]'); if(!b) return; KP.d.period=b.dataset.p; KP.d.anchor=''; $$('#kp-tabs .kd-tab').forEach(x=>x.classList.toggle('on',x===b)); kpRender(); });
+  $('#kp-tabs').addEventListener('click', e=>{ const b=e.target.closest('[data-p]'); if(!b) return; KP.d.period=b.dataset.p; KP.d.anchor=''; kpAll('#kp-tabs .kd-tab').forEach(x=>x.classList.toggle('on',x===b)); kpRender(); });
   $('#kp-all').addEventListener('click', e=>{ const o=e.target.closest('[data-all]'); if(!o) return; const v=o.dataset.all==='1'; [1,2,3,4,5].forEach(n=>KP.d.open[n]=v); kpRender(); });
   /* KPI:END */
   /* V5:END */
