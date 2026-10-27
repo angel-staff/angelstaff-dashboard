@@ -5497,15 +5497,15 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   V2_LOAD.users = async function(force){
     const L=$('#us-list'); if(!L) return;
     if(usData && !force) renderUsers(); else L.innerHTML='<div class="loading">불러오는 중…</div>';
-    try{ usData=await call('listUsers', TOKEN); renderUsers(); }
+    try{ usData=await call('listUsers', TOKEN); try{ usData.limited=((await call('limitedInfo', TOKEN))||{}).ids||[]; }catch(_){ usData.limited=[]; } renderUsers(); }
     catch(e){ xFail(e); if(!usData) L.innerHTML='<div class="empty-row">불러오지 못했습니다.</div>'; }
   };
   function renderUsers(){
     const d=usData; if(!d) return;
     $('#us-list').innerHTML=`<div class="v5-ul">${d.list.map(u=>{
-      const adm=u.role==='관리자';
-      const tags=adm?'<span>모든 메뉴</span>':u.menus.map(m=>{ const v=d.views.find(x=>x.id===m); return v?`<span>${esc(v.t)}</span>`:''; }).join('');
-      return `<div class="v5-ur ${u.active?'':'off'}"><div class="p"><div class="av ${adm?'adm':''}">${esc(v5Ini(u.name))}</div><div><b>${esc(u.name)}<span class="v5-badge ${adm?'adm':''}">${esc(u.role)}</span>${u.active?'':'<span class="v5-badge r">중지</span>'}${u.locked?'<span class="v5-badge r">잠김</span>':''}${u.mustChange&&u.active?'<span class="v5-badge a">첫 로그인 전</span>':''}</b><small>${esc(u.login?'아이디 '+u.login:'아이디 없음 — 이름으로 로그인')} · 폴더 ${esc(u.folder||'-')}</small></div></div>
+      const adm=u.role==='관리자', lim=adm && (d.limited||[]).indexOf(String(u.id))>=0;
+      const tags=adm?(lim?'<span>모든 사업장 자료</span><span class="x">계정·권한 제외</span>':'<span>모든 메뉴</span>'):u.menus.map(m=>{ const v=d.views.find(x=>x.id===m); return v?`<span>${esc(v.t)}</span>`:''; }).join('');
+      return `<div class="v5-ur ${u.active?'':'off'}"><div class="p"><div class="av ${adm?'adm':''}">${esc(v5Ini(u.name))}</div><div><b>${esc(u.name)}<span class="v5-badge ${adm?'adm':''}">${esc(lim?'관리자 · 사업장 전용':u.role)}</span>${u.active?'':'<span class="v5-badge r">중지</span>'}${u.locked?'<span class="v5-badge r">잠김</span>':''}${u.mustChange&&u.active?'<span class="v5-badge a">첫 로그인 전</span>':''}</b><small>${esc(u.login?'아이디 '+u.login:'아이디 없음 — 이름으로 로그인')} · 폴더 ${esc(u.folder||'-')}</small></div></div>
         <div><div class="tags" style="margin-bottom:6px">${u.hospitals.length?u.hospitals.map(h=>`<span class="${(u.extra||[]).some(x=>h.indexOf(x)>=0||x===h)?'x':''}">${esc(v5HospShort(h))}</span>`).join(''):'<span class="x">담당 병원 없음</span>'}</div><div class="tags">${tags}</div></div>
         <div class="m">마지막 로그인<br><b>${esc(u.lastLogin||'없음')}</b>${u.lastActive?'<br>최근 활동 <b>'+esc(u.lastActive)+'</b>':''}</div>
         <div class="b"><button type="button" data-ue="${esc(u.id)}">수정</button><button type="button" data-ur="${esc(u.id)}">비밀번호 초기화</button>${u.locked?`<button type="button" data-uu="${esc(u.id)}">잠금 해제</button>`:''}</div></div>`;
@@ -5529,6 +5529,7 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
   }
   function usEdit(u){
     const d=usData, isNew=!u;
+    const isLim=!isNew && u.role==='관리자' && (d.limited||[]).indexOf(String(u.id))>=0;
     u=u||{ name:'', login:'', role:'담당자', active:true, folder:'', extra:[], menus:d.staffDefault.slice(), email:'' };
     const folders=d.folders.slice(); if(u.folder && folders.indexOf(u.folder)<0) folders.push(u.folder);
     const hospOpts=d.hospitals.map(h=>`<label><input type="checkbox" data-hx="${esc(h.name)}" ${(u.extra||[]).some(x=>x===h.name||x===h.id)?'checked':''}>${esc(v5HospShort(h.name))}</label>`).join('');
@@ -5536,16 +5537,16 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
       body:`<div class="v5-form">
         <div class="v5-row"><div class="f"><label>이름</label><input id="ue-name" value="${esc(u.name)}" maxlength="20" placeholder="예: 홍길동"></div>
           <div class="f"><label>아이디 (선택)</label><input id="ue-login" value="${esc(u.login||'')}" maxlength="30" placeholder="영문·숫자 (예: hgd)" autocapitalize="off"><div class="hint">이름 또는 아이디로 로그인합니다.</div></div></div>
-        <div class="v5-row"><div class="f"><label>역할</label><select id="ue-role"><option value="담당자" ${u.role!=='관리자'?'selected':''}>담당자 — 담당 병원 자료만</option><option value="관리자" ${u.role==='관리자'?'selected':''}>관리자 — 팀 전체 + 계정 관리</option></select></div>
+        <div class="v5-row"><div class="f"><label>역할</label><select id="ue-role"><option value="담당자" ${u.role!=='관리자'?'selected':''}>담당자 — 담당 병원 자료만</option><option value="관리자-사업장" ${u.role==='관리자' && isLim?'selected':''}>관리자 (사업장 전용) — 팀 전체 사업장 · 계정·권한 제외</option><option value="관리자" ${u.role==='관리자' && !isLim?'selected':''}>관리자 — 팀 전체 + 계정 관리</option></select></div>
           <div class="f"><label>공유자료실 담당자 폴더</label><select id="ue-folder"><option value="">이름과 같은 폴더</option>${folders.map(f=>`<option value="${esc(f)}" ${f===u.folder?'selected':''}>${esc(f)}</option>`).join('')}</select><div class="hint">이 폴더 안의 병원 폴더가 곧 담당 병원입니다.</div></div></div>
         ${isNew?'':`<div class="f"><label><input type="checkbox" id="ue-active" ${u.active?'checked':''} style="width:auto;margin-right:6px">계정 사용 (끄면 바로 로그아웃되고 로그인할 수 없습니다)</label></div>`}
         <div class="sec">추가 병원 <span style="font-weight:500;color:var(--ink-3)">폴더 밖 병원을 함께 맡길 때</span></div>
         <div class="v5-checks">${hospOpts}</div>
         <div class="sec">메뉴 권한 <button type="button" id="ue-def">기본값으로</button></div>
         <div id="ue-mwrap">${usMenusHtml(d, u.role==='관리자'?d.views.map(v=>v.id):u.menus, u.role==='관리자')}</div>
-        <div class="hint">관리자는 모든 메뉴와 계정·권한·팀 관제·활동 기록을 씁니다. 메뉴를 숨겨도 데이터 범위(담당 병원)는 서버가 따로 지킵니다.</div></div>`,
+        <div class="hint">관리자는 모든 메뉴와 계정·권한·팀 관제·활동 기록을 씁니다. <b>관리자 (사업장 전용)</b>은 계정·권한·활동 기록만 빼고 같습니다. 메뉴를 숨겨도 데이터 범위(담당 병원)는 서버가 따로 지킵니다.</div></div>`,
       foot:(isNew||u.id===ME.user.id?[]:[{ label:'계정 삭제', ghost:true, id:'ue-del', onClick:()=>{ setTimeout(()=>usDelete(u),30); } }]).concat([{ label:'취소', ghost:true }, { label:isNew?'계정 만들기':'저장', onClick: async (btn)=>{
-        const role=$('#ue-role').value;
+        const roleSel=$('#ue-role').value, role=roleSel==='담당자'?'담당자':'관리자', wantLim=roleSel==='관리자-사업장';
         const menus=[...document.querySelectorAll('#ue-menus [data-mn]')].filter(x=>x.checked).map(x=>x.dataset.mn);
         const extra=[...document.querySelectorAll('[data-hx]')].filter(x=>x.checked).map(x=>x.dataset.hx);
         const body={ id:isNew?'':u.id, name:$('#ue-name').value.trim(), login:$('#ue-login').value.trim(), role, folder:$('#ue-folder').value || $('#ue-name').value.trim(),
@@ -5556,12 +5557,16 @@ ${poV('po-emp')?`<div style="margin-bottom:16px;"><div style="color:${C.mut};fon
         try{
           const r=await call('saveUser', TOKEN, body);
           await V2_LOAD.users(true);
+          if(wantLim!==isLim && !(isNew && !wantLim) && !(!isNew && u.id===ME.user.id)){
+            const uid=body.id || ((usData.list.find(x=>x.name===body.name)||{}).id);
+            if(uid){ await call('setAdminLimit', TOKEN, uid, wantLim); await V2_LOAD.users(true); }
+          }
           if(r.tempPassword) setTimeout(()=>usShowTemp(body.name, body.login, r.tempPassword, true), 50); else toast('저장했습니다.');
         }catch(e){ btn.disabled=false; btn.textContent=isNew?'계정 만들기':'저장'; xFail(e); return true; }
       } }]),
       onOpen:()=>{
-        $('#ue-role').onchange=()=>{ const adm=$('#ue-role').value==='관리자'; $('#ue-mwrap').innerHTML=usMenusHtml(d, adm?d.views.map(v=>v.id):d.staffDefault, adm); };
-        $('#ue-def').onclick=()=>{ const adm=$('#ue-role').value==='관리자'; $('#ue-mwrap').innerHTML=usMenusHtml(d, adm?d.views.map(v=>v.id):d.staffDefault, adm); };
+        $('#ue-role').onchange=()=>{ const adm=$('#ue-role').value!=='담당자'; $('#ue-mwrap').innerHTML=usMenusHtml(d, adm?d.views.map(v=>v.id):d.staffDefault, adm); };
+        $('#ue-def').onclick=()=>{ const adm=$('#ue-role').value!=='담당자'; $('#ue-mwrap').innerHTML=usMenusHtml(d, adm?d.views.map(v=>v.id):d.staffDefault, adm); };
         setTimeout(()=>$('#ue-name').focus(),30);
       } });
   }
